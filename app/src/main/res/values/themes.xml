@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tema base mínimo para que la app arranque. Compose manejará el resto. -->
+    <style name="Theme.ParaTiApp" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>

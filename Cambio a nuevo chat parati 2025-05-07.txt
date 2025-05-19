@@ -1,0 +1,28 @@
+Para asegurarme de que retomamos exactamente donde estamos y con toda la información correcta, esto es lo que idealmente necesitaría que me pases al inicio del nuevo chat:
+1. Breve Resumen del Estado Actual (¡Muy Importante!):
+Algo conciso, por ejemplo:
+"Continuamos con ParaTiApp03. El modelo 3D (caja_base.glb) ya se carga y visualiza en PantallaPreview3D. El ViewModel se comparte correctamente entre pantallas. Acabamos de discutir cómo manejar las diferentes formas de los lazos (LazoEstrella, LazoFlor) teniéndolos como objetos separados en el GLB y usando una función JS cambiarFormaLazo para alternar su visibilidad. La tarea actual es implementar esta lógica para los lazos y luego continuar con la aplicación de texturas/colores a la forma del lazo activo. Las texturas de Caja, Papel y Tarjeta parecen aplicarse correctamente a sus mallas." (Adapta este resumen si mi última suposición sobre las texturas es incorrecta).
+2. Código Final de Archivos Clave (Tal como los tienes AHORA, después de todos los ajustes):
+Esto es esencial para tener la misma base. Los más críticos son:
+viewer.html: El archivo completo que contiene la lógica de Three.js, incluyendo las funciones applyTexture, applyColor, la carga del GLB, y cualquier borrador de cambiarFormaLazo si ya lo empezaste.
+RegaloViewModel.kt: Con todos los StateFlow (incluyendo el potencial _formaLazoSeleccionada) y las funciones actualizar... con sus logs.
+PantallaPreview3D.kt: La versión que obtiene el ViewModel con scope de NavGraph y llama a las funciones JS dentro de onPageFinished con la lógica de reintentos.
+PantallaSelectorTextura.kt: La versión que obtiene el ViewModel con scope y la lógica para (eventualmente) llamar a viewModel.actualizarFormaLazo y viewModel.actualizarTexturaLazo.
+MainActivity.kt (AppNavigation): Para confirmar la estructura de navegación.
+Si es más fácil, puedes ponerlos todos en un solo bloque de texto, separados por un encabezado claro como --- START OF FILE NombreArchivo.kt ---.
+3. Estructura de Carpetas de assets (Confirmación):
+Una breve descripción o captura de pantalla de cómo tienes organizados los archivos .js de Three.js y los decodificadores Draco dentro de assets/html3d/libs/ para asegurar que las rutas en viewer.html son correctas. (Ya me pasaste una captura, pero si ha cambiado, házmelo saber).
+4. Nombres de Objetos/Mallas en Blender (Confirmación):
+Confirma los nombres exactos que tienen los objetos 3D en Blender para:
+* La caja principal (ej: "Caja")
+* El papel de regalo (ej: "Papel")
+* El lazo estrella (ej: "LazoEstrella")
+* El lazo flor (ej: "LazoFlor")
+* La tarjeta (ej: "Tarjeta")
+* (Y cualquier otra parte relevante como "Tapa", "Cinta1", "Solapa", "Sobre")
+Esto es crucial para que las funciones JS los encuentren.
+5. (Opcional) Checklist Actualizado:
+Si actualizaste el checklist parati.txt con los últimos avances, adjuntarlo siempre ayuda. Si no, no te preocupes, lo podemos reconstruir.
+Prioridad Inmediata para el Nuevo Chat:
+Con el resumen del estado y el código de viewer.html y RegaloViewModel.kt tendríamos un buen punto de partida. Los otros archivos de pantalla y MainActivity nos darían la imagen completa.
+Estoy lista para el nuevo chat. Cuando lo crees, pega esta información y nos pondremos manos a la obra con la lógica de los lazos y luego a pulir la aplicación de todas las texturas. ¡Gracias por tu paciencia!

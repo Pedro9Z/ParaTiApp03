@@ -1,0 +1,54 @@
+﻿FreeCommander - Lista de carpetas 09/04/2025 13:27:32
+
+[dm]	[attr]	[s_bytes]	[ne]
+        D:\Pedro\Documents\androidestudio\paratiapp03\app\src\main\assets\texturas
+        D:\Pedro\Documents\androidestudio\paratiapp03\app\src\main\assets\texturas\backgrounds
+2024.11.23 19:01:50	A-------	37.974	despedida.png
+2024.11.23 19:01:50	A-------	580.642	inputs.png
+2024.11.23 19:01:50	A-------	151.593	interaccion.png
+2024.11.23 19:01:50	A-------	478.359	paquete.png
+2024.11.23 19:01:50	A-------	573.482	presentacion.png
+2024.11.23 19:01:50	A-------	1.168.360	seleccion.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "backgrounds"          Número de archivos: 6          Tamaño de los archivos: 2.990.410
+
+        D:\Pedro\Documents\androidestudio\paratiapp03\app\src\main\assets\texturas\bows
+2025.03.25 11:04:06	A-------	118.444	lazo_estrella.glb
+2025.03.26 08:30:25	A-------	29.733	lazo_estrella.png
+2025.03.24 10:40:08	A-------	46.496	lazo_flor.glb
+2025.03.26 08:31:27	A-------	103.108	lazo_flor.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "bows"          Número de archivos: 4          Tamaño de los archivos: 297.781
+
+        D:\Pedro\Documents\androidestudio\paratiapp03\app\src\main\assets\texturas\cards
+2024.11.21 21:09:13	A-------	6.046	card01.png
+2024.11.21 19:42:31	A-------	47.542	card02.png
+2024.11.21 19:42:31	A-------	32.959	card03.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "cards"          Número de archivos: 3          Tamaño de los archivos: 86.547
+
+        D:\Pedro\Documents\androidestudio\paratiapp03\app\src\main\assets\texturas\misc
+2025.03.26 17:58:21	A-------	1.311.648	para_ti.ico
+----------------------------------------------------------------------------------------------------
+Carpetas: "misc"          Número de archivos: 1          Tamaño de los archivos: 1.311.648
+
+        D:\Pedro\Documents\androidestudio\paratiapp03\app\src\main\assets\texturas\packages
+2025.03.25 18:09:38	A-------	61.304	caja_base.glb
+2025.02.17 13:28:09	A-------	300.191	wrap_texture_brown.png
+2025.02.17 13:27:34	A-------	272.363	wrap_texture_white.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "packages"          Número de archivos: 3          Tamaño de los archivos: 633.858
+
+        D:\Pedro\Documents\androidestudio\paratiapp03\app\src\main\assets\texturas\paper
+2024.11.21 10:44:27	A-------	95.531	paper01.png
+2024.11.21 10:44:27	A-------	56.973	paper02.png
+2024.11.21 10:44:27	A-------	108.546	paper05.png
+2024.11.21 10:44:27	A-------	42.655	paper15.png
+2024.11.21 10:44:27	A-------	94.590	paper21.png
+2024.11.21 10:44:27	A-------	73.198	paper22.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "paper"          Número de archivos: 6          Tamaño de los archivos: 471.493
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Resumen - Carpetas: 7          Archivos: 23          Tamaño de los archivos: 5.791.737 Bytes

@@ -1,0 +1,64 @@
+📦 INFORME COMPLETO DEL ARCHIVO BLENDER
+============================================================
+
+🗂️ COLECCIONES Y OBJETOS:
+🔹 Colección: Caja_regalo
+
+🚫 OBJETOS FUERA DE COLECCIONES:
+    ▫️ Caja (MESH)
+    ▫️ Cinta1 (MESH)
+    ▫️ Cinta2 (MESH)
+    ▫️ Lazoestrella (MESH)
+    ▫️ Lazoflor (MESH)
+    ▫️ Papel (MESH)
+    ▫️ Sobre (MESH)
+    ▫️ Solapa (MESH)
+    ▫️ Tapa (MESH)
+    ▫️ Tarjeta (MESH)
+
+🔷 MALLAS:
+    ▫️ MallaCaja (Vértices: 16, Caras: 13)
+    ▫️ MallaCinta1 (Vértices: 16, Caras: 16)
+    ▫️ MallaCinta2 (Vértices: 16, Caras: 16)
+    ▫️ Mallalazoestrella (Vértices: 2916, Caras: 3952)
+    ▫️ MallaLazoflor (Vértices: 1020, Caras: 2040)
+    ▫️ MallaPapel (Vértices: 8, Caras: 6)
+    ▫️ MallaSobre (Vértices: 8, Caras: 6)
+    ▫️ MallaSolapa (Vértices: 4, Caras: 1)
+    ▫️ MallaTapa (Vértices: 8, Caras: 6)
+    ▫️ MallaTarjeta (Vértices: 8, Caras: 6)
+
+🎨 MATERIALES:
+    ▫️ Material
+    ▫️ Material.001
+    ▫️ Material.002
+    ▫️ MaterialCaja
+    ▫️ Materialcinta1
+    ▫️ Materialcinta1.001
+    ▫️ Materialcinta1.002
+    ▫️ Materialcinta2
+    ▫️ Materiallazoestrella
+    ▫️ Materiallazoflor
+    ▫️ Materialpapel
+    ▫️ Materialpapel.001
+    ▫️ Materialsobre
+    ▫️ Materialsolapa
+    ▫️ Materialtapa
+    ▫️ Materialtarjeta
+
+🖼️ IMÁGENES:
+    ▫️ Render Result (0x0)
+    ▫️ Viewer Node (256x256)
+
+📄 TEXTOS INTERNOS:
+    ▫️ Texto (234 líneas)
+    ▫️ Texto.001 (65 líneas)
+
+🎬 ESCENAS:
+    ▫️ Scene (Objetos: 10)
+
+🎞️ ACCIONES (Animaciones):
+    ▫️ Solapa_acción (Fotogramas: 0)
+    ▫️ Solapa_acción.001 (Fotogramas: 20)
+    ▫️ Tarjeta_acción.085 (Fotogramas: 20)
+

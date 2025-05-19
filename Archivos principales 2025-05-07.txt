@@ -1,0 +1,1290 @@
+Archivos principales:
+
+
+--- START OF FILE viewer.html ---
+
+
+--- START OF FILE RegaloViewModel.kt ---
+
+
+--- START OF FILE PantallaFormulario.kt ---
+
+
+--- START OF FILE PantallaPreview3D.kt ---
+
+
+--- START OF FILE PantallaSelectorTextura.kt ---
+
+
+--- START OF FILE MainActivity.kt.kt ---
+
+
+
+
+
+--- START OF FILE viewer.html ---
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Visor 3D Regalo (ImportMap v7)</title>
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; background-color: #f0f0f0; /* Fondo gris claro */ }
+        canvas { width: 100%; height: 100%; display: block; }
+        #loading-indicator {
+             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+             color: black; font-family: sans-serif; font-size: 1.2em; display: block; /* Visible por defecto */
+             background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+             padding: 10px; border-radius: 5px;
+             text-align: center;
+        }
+    </style>
+    <!-- IMPORT MAP - Asegúrate que las rutas /assets/... coinciden con tu estructura -->
+    <!-- Deben apuntar a la ubicación de los archivos JS dentro de la carpeta 'assets' de Android -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "/assets/html3d/libs/three/build/three.module.js",
+                "three/addons/": "/assets/html3d/libs/three/examples/jsm/"
+            }
+        }
+    </script>
+    <!-- FIN IMPORT MAP -->
+
+</head>
+<body>
+<div id="loading-indicator">Cargando visor v7 (ImportMap)...</div>
+
+<script type="module">
+    console.log("VIEWER.HTML: Script module started (ImportMap v7).");
+    const loadingIndicator = document.getElementById('loading-indicator');
+    loadingIndicator.textContent = 'Importando módulos JS con ImportMap v7...';
+
+    try {
+        // Importar usando los BARE SPECIFIERS (mapeados por importmap)
+        console.log("VIEWER.HTML: Definiendo imports v7...");
+        // ¡OJO! Usamos 'three' y 'three/addons/...' directamente gracias al importmap
+        const THREE = await import('three');
+        const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+        const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+        // Importar DRACOLoader explícitamente para obtener el constructor
+        const { DRACOLoader } = await import('three/addons/libs/draco/gltf/DRACOLoader.js');
+        console.log("VIEWER.HTML: Módulos importados OK v7.", { THREE, GLTFLoader, OrbitControls, DRACOLoader });
+        loadingIndicator.textContent = 'Módulos JS OK v7. Inicializando 3D...';
+
+        // Verificar importaciones
+        if (!THREE || !GLTFLoader || !OrbitControls || !DRACOLoader) {
+             throw new Error("VIEWER.HTML: ¡Fallo al importar uno o más módulos necesarios!");
+        }
+
+        // --- Variables Globales ---
+        let scene, camera, renderer, controls, gltfModel = null, mixer, animations = [];
+        const textureLoader = new THREE.TextureLoader();
+
+        // --- Inicialización ---
+        init();
+        animate();
+
+        function init() {
+            console.log("VIEWER.HTML: init() function started v7.");
+            scene = new THREE.Scene();
+            scene.background = null; // Transparente para ver fondo de la app
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // Habilitar alpha
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 1.8, 5); camera.lookAt(0, 0.5, 0);
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            document.body.appendChild(renderer.domElement);
+
+            // Luces
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0); directionalLight.position.set(5, 10, 7); scene.add(directionalLight);
+
+            // Controles
+            controls = new OrbitControls(camera, renderer.domElement); controls.enableDamping = true; controls.target.set(0, 0.5, 0);
+
+            // --- CONFIGURACIÓN DRACO LOADER ---
+            console.log("VIEWER.HTML: Instanciando DRACOLoader (ImportMap)...");
+            const dracoLoader = new DRACOLoader(); // Usa el constructor importado
+
+            // ¡Usa la ruta ABSOLUTA VIRTUAL a la carpeta de los decodificadores!
+            // Esta ruta DEBE coincidir con donde están draco_decoder.wasm y draco_decoder.js
+            // dentro de tu carpeta 'assets' de Android.
+            const dracoDecoderPath = '/assets/html3d/libs/three/examples/jsm/libs/draco/gltf/';
+            console.log(`VIEWER.HTML: Configurando dracoLoader.setDecoderPath a: ${dracoDecoderPath}`);
+            dracoLoader.setDecoderPath(dracoDecoderPath);
+
+            // --- CONFIGURACIÓN GLTF LOADER ---
+            const loader = new GLTFLoader();
+            console.log("VIEWER.HTML: Asignando dracoLoader a GLTFLoader v7.");
+            loader.setDRACOLoader(dracoLoader);
+
+            // --- Carga del Modelo GLB ---
+            const modelPath = '/assets/texturas/packages/caja_base.glb'; // Ruta absoluta virtual
+            console.log(`VIEWER.HTML: Iniciando carga de GLB desde: ${modelPath} v7`);
+            loadingIndicator.textContent = 'Cargando modelo 3D v7...';
+            loader.load( modelPath,
+                 function (gltf) { // onSuccess
+                     console.log("VIEWER.HTML: ¡¡GLB loaded successfully v7!!");
+                     loadingIndicator.style.display = 'none'; // Ocultar indicador
+                     scene.add(gltf.scene);
+                     gltfModel = gltf.scene; // Guardar referencia
+                     const box = new THREE.Box3().setFromObject(gltf.scene);
+                     const center = box.getCenter(new THREE.Vector3());
+                     gltf.scene.position.y -= center.y; // Centrar verticalmente
+                     console.log("VIEWER.HTML: Modelo centrado v7.");
+                     // Preparar visibilidad y animaciones
+                     let foundMeshes={};
+                     gltf.scene.traverse(function(child){
+                         if(child.isMesh){
+                             foundMeshes[child.name]=true;
+                             if(['Papel','Lazo','Tarjeta'].includes(child.name)) {
+                                 child.visible=false; console.log(`Ocultando ${child.name}`);
+                             } else if(child.name==='Caja') {
+                                 child.visible=true;
+                             }
+                         }
+                     });
+                     console.log("Mallas encontradas:",Object.keys(foundMeshes));
+                     if (!foundMeshes['Caja']) console.warn("¡ADVERTENCIA! Malla 'Caja' NO ENCONTRADA.");
+                     if (!foundMeshes['Papel']) console.warn("¡ADVERTENCIA! Malla 'Papel' NO ENCONTRADA.");
+                     if (!foundMeshes['Lazo']) console.warn("¡ADVERTENCIA! Malla 'Lazo' NO ENCONTRADA.");
+                     if (!foundMeshes['Tarjeta']) console.warn("¡ADVERTENCIA! Malla 'Tarjeta' NO ENCONTRADA.");
+                     if(gltf.animations && gltf.animations.length>0){
+                         mixer=new THREE.AnimationMixer(gltf.scene);
+                         animations=gltf.animations;
+                         console.log("Animaciones encontradas v7:", animations.map(a=>a.name));
+                     } else { console.log("No animations found in GLB."); }
+
+                     // --- ¡NUEVO! Señalizar que el modelo está LISTO ---
+                     window.modeloEstaListo = true; // Poner bandera global
+                     console.log("VIEWER.HTML: Bandera window.modeloEstaListo = true");
+                     // Opcional: Si usaras JavascriptInterface "AndroidBridge"
+                     // if (window.AndroidBridge && typeof window.AndroidBridge.onModelReady === 'function') {
+                     //    window.AndroidBridge.onModelReady();
+                     // }
+                     // --- FIN NUEVO ---
+
+                 },
+                 (xhr) => { // onProgress
+                      const percentComplete = xhr.total > 0 ? (xhr.loaded / xhr.total * 100) : 0;
+                      loadingIndicator.textContent = `Cargando modelo: ${percentComplete.toFixed(0)}%`;
+                  },
+                 (error) => { // onError
+                      console.error('VIEWER.HTML: Error loading GLB v7:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
+                      loadingIndicator.textContent = 'Error al cargar modelo 3D';
+                  }
+            );
+            window.addEventListener('resize', onWindowResize, false);
+            console.log("VIEWER.HTML: init() function finished v7.");
+        } // Fin init
+
+        // --- Función de Redimensionado ---
+        function onWindowResize() {
+            if(camera && renderer) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        }
+
+        // --- Bucle de Animación ---
+        function animate() {
+            requestAnimationFrame(animate);
+            const delta = 0.016; // Asumir delta fijo
+
+            if (controls) controls.update();
+            if (mixer) mixer.update(delta); // Actualizar animación
+
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera);
+            }
+        }
+
+        // --- Funciones Genéricas para Aplicar Textura/Color ---
+        function applyTexture(meshName, relativeTexturePath, makeVisible = false) {
+             console.log(`JS: applyTexture llamada para: ${meshName} con ${relativeTexturePath}`);
+             if (!gltfModel || !relativeTexturePath) {
+                 console.warn(`JS: applyTexture(${meshName}) saltada - Modelo no listo o sin ruta de textura.`);
+                 return;
+             }
+             // Construir la ruta ABSOLUTA VIRTUAL para el textureLoader
+             const fullTexturePath = `/assets/texturas/${relativeTexturePath}`;
+             console.log(`JS: Cargando textura desde: ${fullTexturePath}`);
+             textureLoader.load(fullTexturePath, (texture) => { // onSuccess
+                 texture.flipY = false;
+                 texture.colorSpace = THREE.SRGBColorSpace;
+                 let applied = false;
+                 gltfModel.traverse((child) => {
+                     if (child.isMesh && child.name === meshName) {
+                         console.log(`JS: Malla encontrada '${meshName}', aplicando textura.`);
+                         // Añadir Log del Material ID para depurar
+                         console.log(`--> Aplicando textura ${texture.source.data.src} a malla ${meshName} con material ID: ${child.material?.uuid || 'N/A'}`);
+
+                         if (!child.material) {
+                             console.log(`JS: Creando nuevo MeshStandardMaterial para '${meshName}'`);
+                             child.material = new THREE.MeshStandardMaterial({ color: 0xFFFFFF }); // Asegurar color blanco base
+                         } else {
+                             // Asegurar que el color base del material existente sea blanco si no es ya un mapa
+                             if (!child.material.map && child.material.color) {
+                                 child.material.color.set(0xFFFFFF);
+                             }
+                         }
+
+                         if (child.material.map !== undefined) {
+                             console.log(`JS: Asignando textura a ${meshName}.map`);
+                             child.material.map = texture;
+                             console.log(`JS: Textura asignada a ${meshName}.map`);
+                             console.log(`JS: Estableciendo ${meshName}.material.needsUpdate = true`);
+                             child.material.needsUpdate = true;
+                             console.log(`JS: ${meshName}.material.needsUpdate establecido`);
+                             // --- CORRECCIÓN: Hacer visible la malla ---
+                             if(makeVisible && !child.visible) {
+                                 child.visible = true;
+                                 console.log(`JS: Malla '${meshName}' hecha visible.`);
+                             }
+                             // --- FIN CORRECCIÓN ---
+                             applied = true;
+                             console.log(`JS: Textura aplicada COMPLETAMENTE a ${meshName}`);
+                         } else {
+                              console.warn(`JS: Material de '${meshName}' no soporta .map (Tipo: ${child.material.type})`);
+                         }
+                         // No necesitamos seguir recorriendo si ya encontramos la malla (asumiendo nombres únicos)
+                         // return; // Descomentar si estás 100% seguro de nombres únicos y quieres optimizar un poco
+                     }
+                 });
+                 if (!applied) console.warn(`JS: Malla llamada '${meshName}' no encontrada para aplicar textura.`);
+             }, undefined, (err) => { console.error(`JS: Error cargando textura '${fullTexturePath}' para ${meshName}:`, err); }
+             );
+         }
+
+        function applyColor(meshName, colorHex, makeVisible = false) {
+              console.log(`JS: applyColor llamada para: ${meshName} con ${colorHex}`);
+              if (!gltfModel || !colorHex) {
+                  console.warn(`JS: applyColor(${meshName}) saltada - Modelo no listo o sin color.`);
+                  return;
+              }
+              try {
+                  const newColor = new THREE.Color(colorHex); // THREE maneja "#RRGGBB"
+                  let applied = false;
+                  gltfModel.traverse((child) => {
+                      if (child.isMesh && child.name === meshName) {
+                          console.log(`JS: Malla encontrada '${meshName}', aplicando color.`);
+                          if (!child.material) { child.material = new THREE.MeshStandardMaterial(); }
+                          if (child.material.color) {
+                               child.material.color.set(newColor);
+                               if (child.material.map) { // Quitar textura si existe
+                                   console.log(`JS: Quitada textura de '${meshName}' al aplicar color.`);
+                                   child.material.map = null;
+                               }
+                               child.material.needsUpdate = true;
+                               if(makeVisible) { child.visible = true; console.log(`JS: Malla '${meshName}' hecha visible.`); }
+                               applied = true; console.log(`JS: Color '${colorHex}' aplicado a '${meshName}'.`);
+                          } else { console.warn(`JS: Material de '${meshName}' no soporta .color (Tipo: ${child.material.type})`); }
+                      }
+                  });
+                  if (!applied) console.warn(`JS: Malla llamada '${meshName}' no encontrada para aplicar color.`);
+              } catch (e) { console.error(`JS: Error aplicando color '${colorHex}' a '${meshName}'. ¿Formato inválido?`, e); }
+          }
+
+        // --- Funciones Globales para Android ---
+        // Pasan la ruta relativa DENTRO de /texturas/
+        window.aplicarTexturaCaja = function(t) { console.log(`Android -> JS: aplicarTexturaCaja('${t}')`); applyTexture('Caja', `packages/${t}`, true); };
+        window.aplicarTexturaPapel = function(t) { console.log(`Android -> JS: aplicarTexturaPapel('${t}')`); applyTexture('Papel', `paper/${t}`, true); };
+        window.aplicarTexturaLazo = function(t) { console.log(`Android -> JS: aplicarTexturaLazo('${t}')`); applyTexture('Lazo', `bows/${t}`, true); };
+        window.aplicarTexturaTarjeta = function(t) { console.log(`Android -> JS: aplicarTexturaTarjeta('${t}')`); applyTexture('Tarjeta', `cards/${t}`, true); };
+        window.aplicarColorLazo = function(c) { console.log(`Android -> JS: aplicarColorLazo('${c}')`); applyColor('Lazo', c, true); };
+        window.playAnimacion = function(nombreAnim) {
+             console.log(`Android -> JS: playAnimacion('${nombreAnim}')`);
+             if (!mixer || !animations || !nombreAnim) { console.warn('JS: playAnimacion saltada - sin mixer/animaciones/nombre.'); return; }
+             const clip = THREE.AnimationClip.findByName(animations, nombreAnim);
+             if (clip) {
+                 const action = mixer.clipAction(clip);
+                 mixer.stopAllAction(); action.reset().play();
+                 console.log(`JS: Animación '${nombreAnim}' iniciada.`);
+             } else { console.warn(`JS: Animación '${nombreAnim}' no encontrada.`); }
+         };
+
+        console.log("VIEWER.HTML: Funciones globales para Android definidas v7.");
+
+    } catch (error) {
+        // Captura errores durante la importación o inicialización
+        console.error("VIEWER.HTML: Error FATAL en el script module v7:", error);
+        loadingIndicator.textContent = 'Error crítico en JavaScript!';
+        if (error.stack) { console.error("Stack trace v7:", error.stack); }
+    }
+</script>
+</body>
+</html>
+
+--- START OF FILE RegaloViewModel.kt ---
+
+package com.example.paratiapp.ui.viewmodel // Verifica que el paquete sea correcto
+
+// --- Imports Necesarios ---
+import android.net.Uri // Asegúrate de importar Uri correctamente
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.paratiapp.data.Regalo // Importa tu data class
+import com.example.paratiapp.data.RegaloRepository // Importa tu repositorio
+// import com.google.firebase.Timestamp // Puedes quitarlo si no lo usas directamente aquí
+// import com.google.firebase.firestore.FieldValue // Puedes quitarlo si no lo usas directamente aquí
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+// --- Sealed Class para el Estado de Guardado ---
+sealed class EstadoGuardado {
+    object Idle : EstadoGuardado()
+    object Loading : EstadoGuardado()
+    data class Success(val id: String) : EstadoGuardado()
+    data class Error(val mensaje: String) : EstadoGuardado()
+}
+
+// --- ViewModel ---
+@HiltViewModel
+class RegaloViewModel @Inject constructor(
+    private val regaloRepository: RegaloRepository
+) : ViewModel() {
+
+    // --- Estados para los Datos del Regalo (usando StateFlow) ---
+    private val _nombreDestinatario = MutableStateFlow("")
+    val nombreDestinatario: StateFlow<String> = _nombreDestinatario.asStateFlow()
+
+    private val _telefonoDestinatario = MutableStateFlow("")
+    val telefonoDestinatario: StateFlow<String> = _telefonoDestinatario.asStateFlow()
+
+    private val _mensaje = MutableStateFlow("")
+    val mensaje: StateFlow<String> = _mensaje.asStateFlow()
+
+    private val _archivoUriSeleccionado = MutableStateFlow<Uri?>(null) // Usar Uri directamente
+    val archivoUriSeleccionado: StateFlow<Uri?> = _archivoUriSeleccionado.asStateFlow()
+
+    private val _texturaCajaSeleccionada = MutableStateFlow("")
+    val texturaCajaSeleccionada: StateFlow<String> = _texturaCajaSeleccionada.asStateFlow()
+
+    private val _texturaPapelSeleccionada = MutableStateFlow("")
+    val texturaPapelSeleccionada: StateFlow<String> = _texturaPapelSeleccionada.asStateFlow()
+
+    private val _texturaLazoSeleccionada = MutableStateFlow("")
+    val texturaLazoSeleccionada: StateFlow<String> = _texturaLazoSeleccionada.asStateFlow()
+
+    private val _texturaTarjetaSeleccionada = MutableStateFlow("")
+    val texturaTarjetaSeleccionada: StateFlow<String> = _texturaTarjetaSeleccionada.asStateFlow()
+
+    private val _colorLazoSeleccionado = MutableStateFlow("")
+    val colorLazoSeleccionado: StateFlow<String> = _colorLazoSeleccionado.asStateFlow()
+
+    // --- Estado para la Operación de Guardado ---
+    private val _estadoGuardado = MutableStateFlow<EstadoGuardado>(EstadoGuardado.Idle)
+    val estadoGuardado: StateFlow<EstadoGuardado> = _estadoGuardado.asStateFlow()
+
+    // --- Funciones para Actualizar el Estado desde la UI (¡SIN DUPLICADOS!) ---
+    fun actualizarNombre(nombre: String) {
+        Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] ACTUALIZANDO Nombre -> '$nombre'")
+        _nombreDestinatario.value = nombre
+    }
+
+    fun actualizarTelefono(telefono: String) {
+        Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] ACTUALIZANDO Telefono -> '$telefono'")
+        _telefonoDestinatario.value = telefono
+    }
+
+    fun actualizarMensaje(mensaje: String) {
+        Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] ACTUALIZANDO Mensaje -> '$mensaje'")
+        _mensaje.value = mensaje
+    }
+
+    fun actualizarArchivoUri(uri: Uri?) { // Usar Uri? directamente
+        Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] ACTUALIZANDO Archivo URI -> '$uri'")
+        _archivoUriSeleccionado.value = uri
+    }
+
+    fun actualizarTexturaCaja(textura: String) {
+        Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] ACTUALIZANDO TexturaCaja -> '$textura'")
+        _texturaCajaSeleccionada.value = textura
+    }
+
+    fun actualizarTexturaPapel(textura: String) {
+        Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] ACTUALIZANDO TexturaPapel -> '$textura'")
+        _texturaPapelSeleccionada.value = textura
+    }
+
+    fun actualizarTexturaLazo(textura: String) {
+        Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] ACTUALIZANDO TexturaLazo -> '$textura'")
+        _texturaLazoSeleccionada.value = textura
+    }
+
+    fun actualizarTexturaTarjeta(textura: String) {
+        Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] ACTUALIZANDO TexturaTarjeta -> '$textura'")
+        _texturaTarjetaSeleccionada.value = textura
+    }
+
+    fun actualizarColorLazo(color: String) {
+        Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] ACTUALIZANDO ColorLazo -> '$color'")
+        _colorLazoSeleccionado.value = color
+    }
+
+    // --- Función para Guardar el Regalo en Firestore ---
+    fun guardarRegalo() {
+        // TODO: Implementar subida de archivo a Storage y obtener URL
+        val archivoUrlTemporal = null // Placeholder
+
+        viewModelScope.launch {
+            _estadoGuardado.value = EstadoGuardado.Loading
+            Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] Intentando guardar regalo...")
+            try {
+                val regaloParaGuardar = Regalo(
+                    destinatarioNombre = _nombreDestinatario.value,
+                    destinatarioWhatsApp = _telefonoDestinatario.value,
+                    mensaje = _mensaje.value,
+                    archivoUrl = archivoUrlTemporal,
+                    texturaCaja = _texturaCajaSeleccionada.value,
+                    texturaPapel = _texturaPapelSeleccionada.value,
+                    texturaLazo = _texturaLazoSeleccionada.value,
+                    texturaTarjeta = _texturaTarjetaSeleccionada.value,
+                    colorLazo = _colorLazoSeleccionado.value
+                    // El timestamp se añade automáticamente en el repositorio con serverTimestamp()
+                )
+                Log.d("RegaloViewModel_DEBUG", "Regalo a guardar: $regaloParaGuardar")
+
+                val idDevuelto: String? = regaloRepository.guardarRegaloEnFirestore(regaloParaGuardar)
+
+                if (idDevuelto != null) {
+                    Log.i("RegaloViewModel_DEBUG", "Regalo guardado con éxito. ID: $idDevuelto")
+                    _estadoGuardado.value = EstadoGuardado.Success(idDevuelto)
+                } else {
+                    Log.e("RegaloViewModel_DEBUG", "Error al guardar: ID nulo devuelto por el repositorio.")
+                    _estadoGuardado.value = EstadoGuardado.Error("Error al guardar en Firestore (ID nulo devuelto por Repo)")
+                }
+            } catch (e: Exception) {
+                Log.e("RegaloViewModel_DEBUG", "Excepción al guardar regalo", e)
+                _estadoGuardado.value = EstadoGuardado.Error(e.message ?: "Error desconocido")
+            }
+        }
+    }
+
+    // --- Función para resetear el estado de guardado ---
+    fun resetearEstadoGuardado() {
+        Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] Reseteando estado de guardado a Idle.")
+        _estadoGuardado.value = EstadoGuardado.Idle
+    }
+}
+
+--- START OF FILE PantallaFormulario.kt ---
+
+package com.example.paratiapp.ui.screens
+
+// --- Imports (Lista Completa y Correcta) ---
+import android.net.Uri // Importar Uri si se usa en actualizarArchivoUri
+import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.Saver // Necesario para listSaver
+import androidx.compose.runtime.saveable.listSaver // Necesario para el saver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel // Para obtener VM con scope
+import androidx.navigation.NavBackStackEntry // Para obtener el scope del NavGraph
+import androidx.navigation.NavController // Para recibirlo como parámetro
+import com.example.paratiapp.R
+import com.example.paratiapp.ui.theme.ParaTiAppTheme
+import com.example.paratiapp.ui.viewmodel.RegaloViewModel
+
+// --- Saver para TextFieldValue ---
+val textFieldValueSaver: Saver<TextFieldValue, *> = listSaver(
+    save = { listOf(it.text, it.selection.start, it.selection.end) },
+    restore = {
+        TextFieldValue(
+            text = it[0] as String,
+            selection = TextRange(it[1] as Int, it[2] as Int)
+        )
+    }
+)
+
+// --- Composable Principal ---
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PantallaFormulario(
+    navController: NavController, // <-- AÑADIDO: Recibe NavController
+    onSiguienteClick: () -> Unit // Callback para navegar
+    // Quitado viewModel = hiltViewModel() de la firma
+) {
+    // --- Obtener ViewModel con Scope del NavGraph ---
+    val parentEntry = remember(navController.currentBackStackEntry) {
+        navController.getBackStackEntry(navController.graph.id)
+    }
+    val viewModel: RegaloViewModel = hiltViewModel(parentEntry)
+    // --- FIN Obtener ViewModel ---
+
+    Log.d("PantallaFormulario", "[VM ID: ${viewModel.hashCode()}] Composable INICIADO.") // Log de ID
+
+    // --- Estados leídos del ViewModel ---
+    val nombre by viewModel.nombreDestinatario.collectAsState()
+    val telefono by viewModel.telefonoDestinatario.collectAsState()
+    val mensaje by viewModel.mensaje.collectAsState()
+
+    // --- Estado local para el TextField del teléfono ---
+    var telefonoTfv by rememberSaveable(stateSaver = textFieldValueSaver) {
+        mutableStateOf(TextFieldValue(telefono, TextRange(telefono.length)))
+    }
+    LaunchedEffect(telefono) {
+        if (telefonoTfv.text != telefono) {
+            Log.d("PantallaFormulario", "Actualizando telefonoTfv desde ViewModel: '$telefono'")
+            telefonoTfv = TextFieldValue(telefono, TextRange(telefono.length))
+        }
+    }
+
+    // --- Estado local para el error de validación del teléfono ---
+    var telefonoError by rememberSaveable { mutableStateOf<String?>(null) }
+
+    // --- Función de Validación ---
+    fun validarTelefono(texto: String): Boolean {
+        val numeroReal = when {
+            texto.startsWith("+34") -> texto.substring(3)
+            texto.startsWith("+") -> texto.substring(1)
+            else -> texto
+        }
+        val soloDigitos = numeroReal.all { it.isDigit() }
+        val longitudCorrecta = numeroReal.length >= 9
+        val nuevoError = when {
+            // Modificación: No mostrar error si está vacío Y el usuario aún no ha interactuado significativamente
+            // Para simplificar, validamos siempre que no esté vacío
+            texto.isBlank() -> null // Si está vacío, no hay error de formato aún
+            !texto.startsWith("+") -> "Debe empezar con prefijo (+34)" // Mejor validar prefijo
+            !soloDigitos -> "El número solo puede contener dígitos (después del +)"
+            !longitudCorrecta -> "El número debe tener al menos 9 dígitos (sin prefijo)"
+            else -> null
+        }
+        if (telefonoError != nuevoError) {
+            telefonoError = nuevoError
+            Log.d("PantallaFormulario", "Estado de error teléfono: $telefonoError")
+        }
+        return telefonoError == null
+    }
+
+
+    // --- Estado para habilitar el botón "Siguiente" ---
+    // La validación ahora depende del estado del ViewModel y del error local
+    val isFormValid = nombre.isNotBlank() &&
+            telefono.isNotBlank() &&
+            mensaje.isNotBlank() &&
+            telefonoError == null && // Importante: check local de error
+            validarTelefono(telefono) // Re-validar el estado del VM por si acaso
+
+    // --- UI ---
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.bg_formulario),
+            contentDescription = "Fondo Formulario",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillHeight
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            OutlinedTextField(
+                value = nombre,
+                onValueChange = { viewModel.actualizarNombre(it) },
+                label = { Text("Nombre del destinatario") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+
+            OutlinedTextField(
+                value = telefonoTfv,
+                onValueChange = { newValue ->
+                    // Permitir borrar completamente o empezar con +
+                    if (newValue.text.isEmpty() || newValue.text == "+") {
+                        telefonoTfv = newValue
+                        viewModel.actualizarTelefono(newValue.text) // Actualizar VM aunque esté "mal"
+                        validarTelefono(newValue.text) // Validar para limpiar error si procede
+                    } else {
+                        val textoFiltrado = "+" + newValue.text.filter { it.isDigit() } // Forzar + y solo dígitos
+                        if (textoFiltrado != telefonoTfv.text) {
+                            if (validarTelefono(textoFiltrado)) { // Validar ANTES de actualizar VM
+                                telefonoTfv = TextFieldValue(textoFiltrado, TextRange(textoFiltrado.length))
+                                viewModel.actualizarTelefono(textoFiltrado)
+                            } else {
+                                // Si no es válido pero el usuario sigue escribiendo, actualizamos Tfv local
+                                // pero NO el viewModel principal hasta que sea válido? O sí?
+                                // Por simplicidad, actualizamos Tfv local, y la validación mostrará error.
+                                // El botón "Siguiente" usará el estado del VM que SÍ es válido.
+                                // -> Vamos a actualizar el Tfv local para que el usuario vea lo que escribe
+                                //    y el error se muestre/oculte según la validación
+                                telefonoTfv = TextFieldValue(textoFiltrado, TextRange(textoFiltrado.length))
+                                // Podríamos NO actualizar el VM aquí si quisiéramos que solo guarde valores válidos
+                                // viewModel.actualizarTelefono(textoFiltrado) // <- Comentado opcionalmente
+                            }
+                        } else {
+                            telefonoTfv = newValue // Solo cambió cursor
+                        }
+                    }
+                },
+                label = { Text("Número de WhatsApp (+34)") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                singleLine = true,
+                isError = telefonoError != null,
+                supportingText = { if (telefonoError != null) Text(telefonoError!!) }
+            )
+
+            OutlinedTextField(
+                value = mensaje,
+                onValueChange = { viewModel.actualizarMensaje(it) },
+                label = { Text("Mensaje personalizado") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 120.dp),
+                minLines = 3
+            )
+
+            OutlinedButton(
+                onClick = { Log.d("PantallaFormulario", "TODO: Implementar selección de archivo") },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Seleccionar archivo")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = onSiguienteClick,
+                enabled = isFormValid,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Siguiente")
+            }
+        } // Fin Column
+    } // Fin Box
+}
+
+// --- Preview ---
+@Preview(showBackground = true, name = "Pantalla Formulario Preview")
+@Composable
+fun PantallaFormularioPreview() {
+    ParaTiAppTheme {
+        // CORRECTO: Crear NavController básico usando LocalContext para la Preview
+        val context = LocalContext.current
+        val previewNavController = remember(context) { // Usar remember aquí es SEGURO
+            NavController(context)
+        }
+
+        PantallaFormulario(
+            navController = previewNavController, // Pasar el NavController dummy
+            onSiguienteClick = {}
+            // El hiltViewModel(parentEntry) dentro de PantallaFormulario
+            // NO se ejecutará en modo Preview.
+        )
+    }
+}
+
+--- START OF FILE PantallaPreview3D.kt ---
+
+package com.example.paratiapp.ui.screens
+
+// --- Imports ---
+import android.annotation.SuppressLint
+import android.util.Log
+import android.webkit.ConsoleMessage
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column // Para Preview
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment // Para Preview
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview // Para Preview
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.webkit.WebViewAssetLoader
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry // Importar
+import androidx.navigation.NavController // Importar
+import androidx.navigation.compose.rememberNavController // Importar para Preview
+import com.example.paratiapp.R
+import com.example.paratiapp.ui.theme.ParaTiAppTheme // Para Preview
+import com.example.paratiapp.ui.viewmodel.RegaloViewModel
+
+@SuppressLint("SetJavaScriptEnabled")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PantallaPreview3D(
+    navController: NavController // <-- Recibe NavController
+    // Quitado viewModel = hiltViewModel() de la firma
+) {
+    // --- Obtener ViewModel con Scope del NavGraph ---
+    val parentEntry = remember(navController.currentBackStackEntry) {
+        navController.getBackStackEntry(navController.graph.id)
+    }
+    val viewModel: RegaloViewModel = hiltViewModel(parentEntry)
+    Log.d("PantallaPreview3D", "[VM ID: ${viewModel.hashCode()}] Composable INICIADO.")
+    // --- FIN Obtener ViewModel ---
+
+    val context = LocalContext.current
+
+    // Lee los estados del ViewModel correcto
+    val texturaCaja by viewModel.texturaCajaSeleccionada.collectAsState()
+    val texturaPapel by viewModel.texturaPapelSeleccionada.collectAsState()
+    val texturaLazo by viewModel.texturaLazoSeleccionada.collectAsState()
+    val texturaTarjeta by viewModel.texturaTarjetaSeleccionada.collectAsState()
+    val colorLazo by viewModel.colorLazoSeleccionado.collectAsState()
+
+    // Log para ver cuándo cambian estos valores a nivel del Composable
+    LaunchedEffect(texturaCaja, texturaPapel, texturaLazo, texturaTarjeta, colorLazo) {
+        Log.d("PantallaPreview3D", "[VM ID: ${viewModel.hashCode()}] State updated: Caja='$texturaCaja', Papel='$texturaPapel', Lazo='$texturaLazo', Tarjeta='$texturaTarjeta', Color='$colorLazo'")
+    }
+
+    // Configurar WebViewAssetLoader
+    val assetLoader = remember {
+        WebViewAssetLoader.Builder()
+            .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(context))
+            .addPathHandler("/res/", WebViewAssetLoader.ResourcesPathHandler(context))
+            .build()
+    }
+
+    // --- UI con Scaffold ---
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Vista Previa del Regalo") },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        Log.d("PantallaPreview3D", "Botón Atrás pulsado.")
+                        navController.navigateUp()
+                    }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Atrás")
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Fondo
+            Image(
+                painter = painterResource(id = R.drawable.bg_preview),
+                contentDescription = "Fondo Preview",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillHeight
+            )
+
+            // Contenedor para el WebView
+            Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+                // WebView para mostrar el contenido 3D
+                AndroidView(
+                    factory = { ctx ->
+                        Log.d("PantallaPreview3D Factory", "Creando WebView...")
+                        WebView(ctx).apply {
+                            // Configuración del WebView
+                            settings.apply {
+                                javaScriptEnabled = true; allowFileAccess = true; allowContentAccess = true
+                                mediaPlaybackRequiresUserGesture = false; databaseEnabled = true; domStorageEnabled = true
+                                cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE // Limpieza caché
+                                Log.i("PantallaPreview3D Settings", "Cache Mode: LOAD_NO_CACHE")
+                                WebView.setWebContentsDebuggingEnabled(true) // Habilitar depuración remota
+                            }
+                            // Limpieza adicional de datos
+                            clearCache(true); clearFormData(); clearHistory(); clearSslPreferences()
+                            Log.i("PantallaPreview3D Factory", "WebView cache and data cleared.")
+
+                            // Cliente para interceptar cargas y manejar errores/finalización
+                            webViewClient = object : WebViewClient() {
+                                override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+                                    return request?.url?.let { assetLoader.shouldInterceptRequest(it) }
+                                }
+                                override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
+                                    Log.e("PantallaPreview3D_WebView", "HTTP Error: ${errorResponse?.statusCode} for ${request?.url}")
+                                    super.onReceivedHttpError(view, request, errorResponse)
+                                }
+
+                                // *** LA LÓGICA PRINCIPAL VA AQUÍ AHORA ***
+                                override fun onPageFinished(view: WebView?, url: String?) {
+                                    super.onPageFinished(view, url)
+                                    Log.d("PantallaPreview3D_WebView", "onPageFinished: $url")
+
+                                    if (url == "https://appassets.androidplatform.net/assets/html3d/viewer.html" && view != null) {
+                                        Log.d("PantallaPreview3D", "[VM ID: ${viewModel.hashCode()}] onPageFinished - Iniciando intento de aplicar selecciones...")
+
+                                        // --- Función Recursiva con Retardo para Esperar al Modelo JS ---
+                                        fun intentarAplicarTexturas(intento: Int = 1, maxIntentos: Int = 7, delayMs: Long = 300) {
+                                            Log.d("PantallaPreview3D", "intentarAplicarTexturas (Intento $intento / $maxIntentos)")
+                                            // Comprobar si la variable global JS existe y es true
+                                            view.evaluateJavascript("javascript:window.modeloEstaListo") { result ->
+                                                val modeloListo = result == "true" // JS devuelve "true" como string
+                                                Log.d("PantallaPreview3D", "Resultado de window.modeloEstaListo: $modeloListo (raw: $result)")
+
+                                                if (modeloListo) {
+                                                    // ¡Modelo listo! Aplicar las texturas leídas del ViewModel
+                                                    Log.i("PantallaPreview3D", "Modelo LISTO en JS. Aplicando texturas...")
+                                                    if (texturaCaja.isNotBlank()) view.evaluateJavascript("javascript:aplicarTexturaCaja('$texturaCaja')", null) else Log.w("PantallaPreview3D", "Textura Caja vacía.")
+                                                    if (texturaPapel.isNotBlank()) view.evaluateJavascript("javascript:aplicarTexturaPapel('$texturaPapel')", null) else Log.w("PantallaPreview3D", "Textura Papel vacía.")
+                                                    if (texturaLazo.isNotBlank()) view.evaluateJavascript("javascript:aplicarTexturaLazo('$texturaLazo')", null) else Log.w("PantallaPreview3D", "Textura Lazo vacía.")
+                                                    if (texturaTarjeta.isNotBlank()) view.evaluateJavascript("javascript:aplicarTexturaTarjeta('$texturaTarjeta')", null) else Log.w("PantallaPreview3D", "Textura Tarjeta vacía.")
+                                                    if (colorLazo.isNotBlank()) view.evaluateJavascript("javascript:aplicarColorLazo('$colorLazo')", null) else Log.w("PantallaPreview3D", "Color Lazo vacío.")
+                                                    Log.i("PantallaPreview3D", "Llamadas JS para aplicar texturas/colores REALIZADAS.")
+                                                } else if (intento < maxIntentos) {
+                                                    // Modelo aún no listo, reintentar después de un delay
+                                                    Log.w("PantallaPreview3D", "Modelo aún no listo. Reintentando en ${delayMs}ms...")
+                                                    view.postDelayed({ intentarAplicarTexturas(intento + 1, maxIntentos, delayMs) }, delayMs)
+                                                } else {
+                                                    // Se superó el número máximo de intentos
+                                                    Log.e("PantallaPreview3D", "El modelo JS no estuvo listo después de $maxIntentos intentos.")
+                                                }
+                                            }
+                                        }
+                                        // --- Fin Función Recursiva ---
+
+                                        // Iniciar el primer intento de aplicar texturas
+                                        intentarAplicarTexturas()
+
+                                    } else if (url != null && !url.startsWith("https://appassets")) {
+                                        Log.w("PantallaPreview3D_WebView", "onPageFinished para URL inesperada (podría ser CDN o redirect): $url")
+                                    }
+                                } // Fin onPageFinished
+                            } // Fin WebViewClient
+
+                            // Cliente para logs de la consola JS
+                            webChromeClient = object : WebChromeClient() {
+                                override fun onConsoleMessage(cm: ConsoleMessage?): Boolean {
+                                    cm?.let { Log.println(logPriority(it.messageLevel()), "PantallaPreview3D_JSConsole", "[${it.lineNumber()}] ${it.message()}") }; return true
+                                }
+                                fun logPriority(level: ConsoleMessage.MessageLevel?): Int {
+                                    return when (level) {
+                                        ConsoleMessage.MessageLevel.ERROR -> Log.ERROR
+                                        ConsoleMessage.MessageLevel.WARNING -> Log.WARN
+                                        else -> Log.INFO // Agrupar LOG, INFO, DEBUG, TIP como INFO
+                                    }
+                                }
+                            }
+                            // Cargar el HTML
+                            val htmlUrl = "https://appassets.androidplatform.net/assets/html3d/viewer.html"
+                            Log.d("PantallaPreview3D Factory", "Loading URL in WebView: $htmlUrl")
+                            loadUrl(htmlUrl)
+                        }
+                    },
+                    modifier = Modifier.fillMaxSize(), // WebView ocupa todo el espacio disponible
+                    update = { webView ->
+                        // El update lambda ahora puede estar vacío o solo con logs básicos
+                        Log.d("PantallaPreview3D Update", "[VM ID: ${viewModel.hashCode()}] Update lambda ejecutado (lógica principal en onPageFinished).")
+                        // Podríamos volver a llamar a `intentarAplicarTexturas()` aquí si quisiéramos
+                        // que se reapliquen si el estado de Compose cambia DESPUÉS de la carga inicial,
+                        // pero puede ser excesivo. Por ahora lo dejamos así.
+                    } // Fin update lambda
+                ) // Fin AndroidView
+            } // Fin Content Box
+        } // Fin Background Box
+    } // Fin Scaffold
+}
+
+// --- Preview ---
+@Preview(showBackground = true, name = "Pantalla Preview 3D Placeholder")
+@Composable
+fun PantallaPreview3DPreview() {
+    ParaTiAppTheme {
+        // CORRECTO: Crear NavController básico usando LocalContext para la Preview
+        val context = LocalContext.current
+        val previewNavController = remember(context) { NavController(context) }
+
+        // Llamar a la función principal pasando el NavController dummy
+        PantallaPreview3D(navController = previewNavController)
+
+        /* Alternativa: Mostrar solo un placeholder si la preview del WebView da problemas
+         Scaffold(
+             topBar = { TopAppBar(title = { Text("Vista Previa del Regalo (Preview)") }, navigationIcon = { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Atrás") }) }
+         ) { paddingValues ->
+             Box(modifier = Modifier.padding(paddingValues).fillMaxSize(), contentAlignment = Alignment.Center) {
+                 Text("Preview del Visor 3D (No se muestra en el editor)")
+             }
+         }
+        */
+    }
+}
+
+--- START OF FILE PantallaSelectorTextura.kt ---
+
+package com.example.paratiapp.ui.screens
+
+// --- Imports ---
+import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border // Importar border
+import androidx.compose.foundation.layout.* // Importar ExperimentalLayoutApi si se usa FlowRow
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState // Importar collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry // Importar
+import androidx.navigation.NavController // Importar
+import androidx.navigation.compose.rememberNavController // Importar para Preview
+import com.example.paratiapp.R
+import com.example.paratiapp.ui.components.SelectorDeTexturas // Importar componente
+import com.example.paratiapp.ui.theme.ParaTiAppTheme
+import com.example.paratiapp.ui.viewmodel.RegaloViewModel
+
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class) // Añadir ExperimentalLayoutApi si usas FlowRow en SelectorDeTexturas
+@Composable
+fun PantallaSelectorTextura(
+    navController: NavController, // <-- Recibe NavController
+    onSiguiente: () -> Unit
+    // Quitado viewModel = hiltViewModel() de la firma
+) {
+    // --- Obtener ViewModel con Scope del NavGraph ---
+    val parentEntry = remember(navController.currentBackStackEntry) {
+        // Asegúrate de que el ID del grafo sea el correcto si tienes grafos anidados.
+        // Para un NavHost simple, navController.graph.id suele ser suficiente.
+        navController.getBackStackEntry(navController.graph.id)
+    }
+    val viewModel: RegaloViewModel = hiltViewModel(parentEntry)
+    Log.d("PantallaSelectorTextura", "[VM ID: ${viewModel.hashCode()}] Composable INICIADO.")
+    // --- FIN Obtener ViewModel ---
+
+    // --- Estados leídos del ViewModel ---
+    val texturaCajaSeleccionada by viewModel.texturaCajaSeleccionada.collectAsState()
+    val texturaPapelSeleccionada by viewModel.texturaPapelSeleccionada.collectAsState()
+    val texturaLazoSeleccionada by viewModel.texturaLazoSeleccionada.collectAsState()
+    val texturaTarjetaSeleccionada by viewModel.texturaTarjetaSeleccionada.collectAsState()
+    // val colorLazoSeleccionado by viewModel.colorLazoSeleccionado.collectAsState() // Descomentar si se usa
+
+    // Log para ver el estado actual leído
+    LaunchedEffect(texturaCajaSeleccionada, texturaPapelSeleccionada, texturaLazoSeleccionada, texturaTarjetaSeleccionada) {
+        Log.d("PantallaSelectorTextura", "[VM ID: ${viewModel.hashCode()}] Estado leído: Caja='$texturaCajaSeleccionada', Papel='$texturaPapelSeleccionada', Lazo='$texturaLazoSeleccionada', Tarjeta='$texturaTarjetaSeleccionada'")
+    }
+
+
+    // --- Validación ---
+    val puedeContinuar = texturaCajaSeleccionada.isNotBlank() &&
+            texturaPapelSeleccionada.isNotBlank() &&
+            texturaLazoSeleccionada.isNotBlank() &&
+            texturaTarjetaSeleccionada.isNotBlank()
+    // && colorLazoSeleccionado.isNotBlank() // Descomentar si se usa
+
+    // --- UI con Scaffold ---
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Personaliza tu Regalo") },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        Log.d("PantallaSelectorTextura", "Botón Atrás pulsado.")
+                        navController.navigateUp() // Navegación Atrás
+                    }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Atrás"
+                        )
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Fondo
+            Image(
+                painter = painterResource(R.drawable.bg_seleccion),
+                contentDescription = "Fondo Selección",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillHeight
+            )
+
+            // Contenido principal desplazable
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues) // Aplicar padding del Scaffold
+                    .padding(horizontal = 16.dp) // Padding horizontal para el contenido
+                    .verticalScroll(rememberScrollState()), // Habilitar scroll vertical
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // --- Selector Caja ---
+                Text(
+                    text = "Elige la textura de la caja",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+                )
+                // Usar el componente SelectorDeTexturas
+                SelectorDeTexturas(
+                    assetPath = "texturas/packages",
+                    valorSeleccionado = texturaCajaSeleccionada, // Pasar estado actual
+                    onTexturaSeleccionada = { nombreTextura ->
+                        // Log antes de llamar al ViewModel
+                        Log.d("PantallaSelectorTextura", "[VM ID: ${viewModel.hashCode()}] Llamando viewModel.actualizarTexturaCaja con: $nombreTextura")
+                        // Actualizar el ViewModel compartido
+                        viewModel.actualizarTexturaCaja(nombreTextura)
+                    },
+                    modifier = Modifier.fillMaxWidth() // Ocupar ancho
+                )
+
+                Spacer(modifier = Modifier.height(16.dp)) // Espacio entre selectores
+
+                // --- Selector Papel ---
+                Text(
+                    text = "Elige el papel de regalo",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                SelectorDeTexturas(
+                    assetPath = "texturas/paper",
+                    valorSeleccionado = texturaPapelSeleccionada,
+                    onTexturaSeleccionada = { nombreTextura ->
+                        Log.d("PantallaSelectorTextura", "[VM ID: ${viewModel.hashCode()}] Llamando viewModel.actualizarTexturaPapel con: $nombreTextura")
+                        viewModel.actualizarTexturaPapel(nombreTextura)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // --- Selector Lazo ---
+                Text(
+                    text = "Elige el lazo",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                SelectorDeTexturas(
+                    assetPath = "texturas/bows",
+                    valorSeleccionado = texturaLazoSeleccionada,
+                    onTexturaSeleccionada = { nombreTextura ->
+                        Log.d("PantallaSelectorTextura", "[VM ID: ${viewModel.hashCode()}] Llamando viewModel.actualizarTexturaLazo con: $nombreTextura")
+                        viewModel.actualizarTexturaLazo(nombreTextura)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // --- Selector Tarjeta ---
+                Text(
+                    text = "Elige la tarjeta",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                SelectorDeTexturas(
+                    assetPath = "texturas/cards",
+                    valorSeleccionado = texturaTarjetaSeleccionada,
+                    onTexturaSeleccionada = { nombreTextura ->
+                        Log.d("PantallaSelectorTextura", "[VM ID: ${viewModel.hashCode()}] Llamando viewModel.actualizarTexturaTarjeta con: $nombreTextura")
+                        viewModel.actualizarTexturaTarjeta(nombreTextura)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // --- Selector Color Lazo (Placeholder) ---
+                Text(
+                    text = "Elige el color del lazo",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                // Contenedor para el futuro selector de color
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp) // Altura fija para el placeholder
+                        .padding(vertical = 8.dp) // Padding vertical
+                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp)), // Borde simple
+                    contentAlignment = Alignment.Center // Centrar el texto dentro del Box
+                ) {
+                    Text(text = "Selector de color (próximamente)",
+                        style = MaterialTheme.typography.bodyMedium)
+                }
+
+                // Spacer que ocupa el espacio restante para empujar el botón hacia abajo
+                Spacer(modifier = Modifier.weight(1f))
+
+                // --- Botón Siguiente ---
+                Button(
+                    onClick = {
+                        Log.d("PantallaSelectorTextura", "Botón Siguiente pulsado.")
+                        onSiguiente() // Ejecutar la acción de navegación
+                    },
+                    enabled = puedeContinuar, // Habilitar solo si todas las selecciones están hechas
+                    modifier = Modifier
+                        .fillMaxWidth() // Ocupar todo el ancho
+                        .padding(bottom = 16.dp, top = 8.dp) // Padding inferior y superior
+                ) {
+                    Text("Siguiente")
+                }
+            } // Fin Column
+        } // Fin Box Fondo
+    } // Fin Scaffold
+}
+
+// --- Preview ---
+@Preview(showBackground = true, name = "Pantalla Selección Texturas")
+@Composable
+fun PantallaSelectorTexturaPreview() {
+    ParaTiAppTheme {
+        // CORRECTO: Crear NavController básico usando LocalContext para la Preview
+        val context = LocalContext.current
+        val previewNavController = remember(context) { NavController(context) }
+
+        PantallaSelectorTextura(
+            navController = previewNavController, // Pasar el NavController dummy
+            onSiguiente = {}
+            // No se necesita ViewModel real en la Preview
+        )
+    }
+}
+
+--- START OF FILE MainActivity.kt.kt ---
+
+package com.example.paratiapp
+
+// --- Imports Necesarios ---
+import android.os.Bundle
+import android.util.Log // Importar Log para depuración
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember // Importar remember
+import androidx.compose.ui.tooling.preview.Preview
+// Quita la importación de hiltViewModel de aquí, se usa dentro de las pantallas
+// import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController // Importar NavController (ya estaba implícito)
+import androidx.navigation.NavHostController // Importar NavHostController
+import androidx.navigation.NavBackStackEntry // Importar si se usa getBackStackEntry aquí (no necesario ahora)
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+// import androidx.navigation.NavGraph.Companion.findStartDestination // No es necesario aquí
+import com.example.paratiapp.ui.screens.PantallaBienvenida
+import com.example.paratiapp.ui.screens.PantallaFormulario
+import com.example.paratiapp.ui.screens.PantallaPreview3D
+import com.example.paratiapp.ui.screens.PantallaSelectorTextura
+import com.example.paratiapp.ui.theme.ParaTiAppTheme
+// Quita la importación del ViewModel de aquí, las pantallas lo obtienen
+// import com.example.paratiapp.ui.viewmodel.RegaloViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import androidx.compose.material3.Text
+
+// --- Clase MainActivity ---
+@AndroidEntryPoint // Anotación Hilt necesaria
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            ParaTiAppTheme {
+                AppNavigation() // Llama al gestor de navegación
+            }
+        }
+    }
+}
+
+// --- Composable de Navegación ---
+@Composable
+fun AppNavigation() {
+    // El NavController se crea aquí y se pasa al NavHost y a las pantallas que lo necesiten
+    val navController: NavHostController = rememberNavController() // Especificar tipo
+
+    Log.d("AppNavigation", "NavController Instancia: ${navController.hashCode()}") // Log para ver ID del NavController
+
+    NavHost(
+        navController = navController,
+        startDestination = "bienvenida" // Empieza en Bienvenida
+    ) {
+        // --- Rutas y Pantallas ---
+        composable("bienvenida") {
+            // PantallaBienvenida no necesita el ViewModel compartido ni NavController
+            PantallaBienvenida(
+                onEmpezarClick = { navController.navigate("formulario") }
+            )
+        }
+
+        // --- Definición ÚNICA y CORRECTA para "formulario" ---
+        composable("formulario") {
+            Log.d("AppNavigation", "Cargando composable 'formulario'")
+            // Pasamos el NavController para que la pantalla pueda obtener el ViewModel con scope correcto
+            PantallaFormulario(
+                navController = navController, // <-- PASAR NavController
+                onSiguienteClick = { navController.navigate("selectorTexturas") }
+            )
+        }
+
+        // --- Definición CORRECTA para "selectorTexturas" ---
+        composable("selectorTexturas") {
+            Log.d("AppNavigation", "Cargando composable 'selectorTexturas'")
+            // Pasamos el NavController para navegación interna y para obtener el VM scope
+            PantallaSelectorTextura(
+                navController = navController, // <-- PASAR NavController
+                onSiguiente = {
+                    navController.navigate("preview3D")
+                    Log.i("AppNavigation", "Navegando desde Selector Texturas a Preview...") // Usar Log.i o Log.d
+                }
+            )
+        }
+
+        // --- Definición CORRECTA para "preview3D" ---
+        composable("preview3D") {
+            Log.d("AppNavigation", "Cargando composable 'preview3D'")
+            // Pasamos el NavController para navegación interna y para obtener el VM scope
+            PantallaPreview3D(
+                navController = navController // <-- PASAR NavController
+            )
+        }
+
+        // composable("resumenEnviar") { ... } // Futura pantalla
+    }
+}
+
+// --- Preview ---
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    ParaTiAppTheme {
+        // La preview no puede ejecutar la navegación real
+        Text("Preview de MainActivity (No navega)")
+    }
+}

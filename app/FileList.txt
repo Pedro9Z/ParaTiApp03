@@ -1,0 +1,1325 @@
+﻿FreeCommander - Lista de carpetas 17/04/2025 13:33:40
+
+[dm]	[attr]	[s_bytes]	[ne]
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build
+2025.04.16 13:29:42	A-------	2.785	build.gradle.kts
+----------------------------------------------------------------------------------------------------
+Carpetas: "app"          Número de archivos: 1          Tamaño de los archivos: 2.785
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java\com
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java\com\example
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java\com\example\paratiapp
+2025.04.17 13:24:54	A-------	3.339	Hilt_MainActivity.java
+2025.04.17 13:24:54	A-------	586	MainActivity_GeneratedInjector.java
+2025.04.17 13:24:54	A-------	605	ParaTiApplication_GeneratedInjector.java
+----------------------------------------------------------------------------------------------------
+Carpetas: "paratiapp"          Número de archivos: 3          Tamaño de los archivos: 4.530
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java\com\example\paratiapp\ui
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java\com\example\paratiapp\ui\viewmodel
+2025.04.17 13:24:54	A-------	1.355	RegaloViewModel_HiltModules.java
+2025.04.17 13:24:55	A-------	1.175	RegaloViewModel_HiltModules_KeyModule_ProvideFactory.java
+----------------------------------------------------------------------------------------------------
+Carpetas: "viewmodel"          Número de archivos: 2          Tamaño de los archivos: 2.530
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java\dagger
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java\dagger\hilt
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java\dagger\hilt\internal
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java\dagger\hilt\internal\aggregatedroot
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java\dagger\hilt\internal\aggregatedroot\codegen
+2025.04.17 13:24:54	A-------	840	_com_example_paratiapp_ParaTiApplication.java
+----------------------------------------------------------------------------------------------------
+Carpetas: "codegen"          Número de archivos: 1          Tamaño de los archivos: 840
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\java\hilt_aggregated_deps
+2025.04.17 13:24:55	A-------	594	_com_example_paratiapp_MainActivity_GeneratedInjector.java
+2025.04.17 13:24:55	A-------	597	_com_example_paratiapp_ParaTiApplication_GeneratedInjector.java
+2025.04.17 13:24:55	A-------	635	_com_example_paratiapp_ui_viewmodel_RegaloViewModel_HiltModules_BindsModule.java
+2025.04.17 13:24:55	A-------	638	_com_example_paratiapp_ui_viewmodel_RegaloViewModel_HiltModules_KeyModule.java
+----------------------------------------------------------------------------------------------------
+Carpetas: "hilt_aggregated_deps"          Número de archivos: 4          Tamaño de los archivos: 2.464
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\ksp\debug\kotlin
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\res
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\res\pngs
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\res\pngs\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\res\processDebugGoogleServices
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\res\processDebugGoogleServices\values
+2025.04.17 13:24:45	A-------	662	values.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values"          Número de archivos: 1          Tamaño de los archivos: 662
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\res\resValues
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\generated\res\resValues\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\gmpAppId
+2025.04.17 13:24:45	A-------	45	debug.txt
+----------------------------------------------------------------------------------------------------
+Carpetas: "gmpAppId"          Número de archivos: 1          Tamaño de los archivos: 45
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\aar_metadata_check
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\aar_metadata_check\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\annotation_processor_list
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\annotation_processor_list\debug
+2025.04.17 13:24:47	A-------	173	annotationProcessors.json
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 173
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\app_metadata
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\app_metadata\debug
+2025.04.17 13:24:47	A-------	56	app-metadata.properties
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 56
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\assets
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\assets\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\assets\debug\html3d
+2025.04.17 11:45:05	A-------	5.529	viewer.html
+----------------------------------------------------------------------------------------------------
+Carpetas: "html3d"          Número de archivos: 1          Tamaño de los archivos: 5.529
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\assets\debug\texturas
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\assets\debug\texturas\backgrounds
+2024.11.23 19:01:50	A-------	37.974	despedida.png
+2024.11.23 19:01:50	A-------	580.642	inputs.png
+2024.11.23 19:01:50	A-------	151.593	interaccion.png
+2024.11.23 19:01:50	A-------	478.359	paquete.png
+2024.11.23 19:01:50	A-------	573.482	presentacion.png
+2024.11.23 19:01:50	A-------	1.168.360	seleccion.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "backgrounds"          Número de archivos: 6          Tamaño de los archivos: 2.990.410
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\assets\debug\texturas\bows
+2025.03.25 11:04:06	A-------	118.444	lazo_estrella.glb
+2025.03.26 08:30:25	A-------	29.733	lazo_estrella.png
+2025.03.24 10:40:08	A-------	46.496	lazo_flor.glb
+2025.03.26 08:31:27	A-------	103.108	lazo_flor.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "bows"          Número de archivos: 4          Tamaño de los archivos: 297.781
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\assets\debug\texturas\cards
+2024.11.21 21:09:13	A-------	6.046	card01.png
+2024.11.21 19:42:31	A-------	47.542	card02.png
+2024.11.21 19:42:31	A-------	32.959	card03.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "cards"          Número de archivos: 3          Tamaño de los archivos: 86.547
+
+2025.04.09 13:27:32	A-------	3.400	FileList.txt
+----------------------------------------------------------------------------------------------------
+Carpetas: "texturas"          Número de archivos: 1          Tamaño de los archivos: 3.400
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\assets\debug\texturas\misc
+2025.03.26 17:58:21	A-------	1.311.648	para_ti.ico
+----------------------------------------------------------------------------------------------------
+Carpetas: "misc"          Número de archivos: 1          Tamaño de los archivos: 1.311.648
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\assets\debug\texturas\packages
+2025.04.10 08:42:39	A-------	2.044	caja_base.glb
+2025.02.17 13:28:09	A-------	300.191	wrap_texture_brown.png
+2025.02.17 13:27:34	A-------	272.363	wrap_texture_white.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "packages"          Número de archivos: 3          Tamaño de los archivos: 574.598
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\assets\debug\texturas\paper
+2024.11.21 10:44:27	A-------	95.531	paper01.png
+2024.11.21 10:44:27	A-------	56.973	paper02.png
+2024.11.21 10:44:27	A-------	108.546	paper05.png
+2024.11.21 10:44:27	A-------	42.655	paper15.png
+2024.11.21 10:44:27	A-------	94.590	paper21.png
+2024.11.21 10:44:27	A-------	73.198	paper22.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "paper"          Número de archivos: 6          Tamaño de los archivos: 471.493
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compatible_screen_manifest
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compatible_screen_manifest\debug
+2025.04.17 13:24:46	A-------	197	output-metadata.json
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 197
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\debug
+2025.04.17 13:24:48	A-------	182.267	R.jar
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 182.267
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets\debug\out
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets\debug\out\assets
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets\debug\out\assets\html3d
+2025.04.17 13:24:47	A-------	1.963	viewer.html.jar
+----------------------------------------------------------------------------------------------------
+Carpetas: "html3d"          Número de archivos: 1          Tamaño de los archivos: 1.963
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets\debug\out\assets\texturas
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets\debug\out\assets\texturas\backgrounds
+2025.04.17 13:24:47	A-------	38.154	despedida.png.jar
+2025.04.17 13:24:47	A-------	580.816	inputs.png.jar
+2025.04.17 13:24:47	A-------	151.777	interaccion.png.jar
+2025.04.17 13:24:47	A-------	478.535	paquete.png.jar
+2025.04.17 13:24:47	A-------	573.668	presentacion.png.jar
+2025.04.17 13:24:47	A-------	1.168.540	seleccion.png.jar
+----------------------------------------------------------------------------------------------------
+Carpetas: "backgrounds"          Número de archivos: 6          Tamaño de los archivos: 2.991.490
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets\debug\out\assets\texturas\bows
+2025.04.17 13:24:47	A-------	76.545	lazo_estrella.glb.jar
+2025.04.17 13:24:47	A-------	29.907	lazo_estrella.png.jar
+2025.04.17 13:24:47	A-------	31.096	lazo_flor.glb.jar
+2025.04.17 13:24:47	A-------	103.274	lazo_flor.png.jar
+----------------------------------------------------------------------------------------------------
+Carpetas: "bows"          Número de archivos: 4          Tamaño de los archivos: 240.822
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets\debug\out\assets\texturas\cards
+2025.04.17 13:24:47	A-------	6.208	card01.png.jar
+2025.04.17 13:24:47	A-------	47.704	card02.png.jar
+2025.04.17 13:24:47	A-------	33.121	card03.png.jar
+----------------------------------------------------------------------------------------------------
+Carpetas: "cards"          Número de archivos: 3          Tamaño de los archivos: 87.033
+
+2025.04.17 13:24:47	A-------	967	FileList.txt.jar
+----------------------------------------------------------------------------------------------------
+Carpetas: "texturas"          Número de archivos: 1          Tamaño de los archivos: 967
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets\debug\out\assets\texturas\misc
+2025.04.17 13:24:47	A-------	1.311.545	para_ti.ico.jar
+----------------------------------------------------------------------------------------------------
+Carpetas: "misc"          Número de archivos: 1          Tamaño de los archivos: 1.311.545
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets\debug\out\assets\texturas\packages
+2025.04.17 13:24:47	A-------	1.230	caja_base.glb.jar
+2025.04.17 13:24:47	A-------	300.383	wrap_texture_brown.png.jar
+2025.04.17 13:24:47	A-------	272.555	wrap_texture_white.png.jar
+----------------------------------------------------------------------------------------------------
+Carpetas: "packages"          Número de archivos: 3          Tamaño de los archivos: 574.168
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\compressed_assets\debug\out\assets\texturas\paper
+2025.04.17 13:24:47	A-------	95.695	paper01.png.jar
+2025.04.17 13:24:47	A-------	57.137	paper02.png.jar
+2025.04.17 13:24:47	A-------	108.710	paper05.png.jar
+2025.04.17 13:24:47	A-------	42.819	paper15.png.jar
+2025.04.17 13:24:47	A-------	94.754	paper21.png.jar
+2025.04.17 13:24:47	A-------	73.362	paper22.png.jar
+----------------------------------------------------------------------------------------------------
+Carpetas: "paper"          Número de archivos: 6          Tamaño de los archivos: 472.477
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\data_binding_layout_info_type_merge
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\data_binding_layout_info_type_merge\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\data_binding_layout_info_type_merge\debug\out
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\data_binding_layout_info_type_package
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\data_binding_layout_info_type_package\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\data_binding_layout_info_type_package\debug\out
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeExtDexDebug
+2025.04.17 13:24:52	A-------	16.134.440	classes.dex
+2025.04.17 13:24:52	A-------	8.432.180	classes2.dex
+2025.04.17 13:24:52	A-------	6.301.852	classes3.dex
+----------------------------------------------------------------------------------------------------
+Carpetas: "mergeExtDexDebug"          Número de archivos: 3          Tamaño de los archivos: 30.868.472
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\0
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\1
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\2
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\3
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\4
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\5
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\6
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\7
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\8
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\9
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\10
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\11
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\12
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\13
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\14
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\dex\debug\mergeLibDexDebug\15
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\duplicate_classes_check
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\duplicate_classes_check\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\external_file_lib_dex_archives
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\external_file_lib_dex_archives\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\global_synthetics_file_lib
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\global_synthetics_file_lib\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources
+2025.04.17 13:24:46	A-------	5.970	compile-file-map.properties
+----------------------------------------------------------------------------------------------------
+Carpetas: "mergeDebugResources"          Número de archivos: 1          Tamaño de los archivos: 5.970
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values
+2025.04.17 13:24:46	A-------	25.846	values.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values"          Número de archivos: 1          Tamaño de los archivos: 25.846
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-af
+2025.04.17 13:24:46	A-------	10.836	values-af.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-af"          Número de archivos: 1          Tamaño de los archivos: 10.836
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-am
+2025.04.17 13:24:46	A-------	12.255	values-am.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-am"          Número de archivos: 1          Tamaño de los archivos: 12.255
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ar
+2025.04.17 13:24:46	A-------	12.283	values-ar.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ar"          Número de archivos: 1          Tamaño de los archivos: 12.283
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-as
+2025.04.17 13:24:46	A-------	14.122	values-as.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-as"          Número de archivos: 1          Tamaño de los archivos: 14.122
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-az
+2025.04.17 13:24:46	A-------	11.335	values-az.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-az"          Número de archivos: 1          Tamaño de los archivos: 11.335
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-b+sr+Latn
+2025.04.17 13:24:46	A-------	10.989	values-b+sr+Latn.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-b+sr+Latn"          Número de archivos: 1          Tamaño de los archivos: 10.989
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-be
+2025.04.17 13:24:46	A-------	12.882	values-be.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-be"          Número de archivos: 1          Tamaño de los archivos: 12.882
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-bg
+2025.04.17 13:24:46	A-------	13.076	values-bg.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-bg"          Número de archivos: 1          Tamaño de los archivos: 13.076
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-bn
+2025.04.17 13:24:46	A-------	14.314	values-bn.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-bn"          Número de archivos: 1          Tamaño de los archivos: 14.314
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-bs
+2025.04.17 13:24:46	A-------	11.056	values-bs.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-bs"          Número de archivos: 1          Tamaño de los archivos: 11.056
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ca
+2025.04.17 13:24:46	A-------	11.229	values-ca.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ca"          Número de archivos: 1          Tamaño de los archivos: 11.229
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-cs
+2025.04.17 13:24:46	A-------	11.136	values-cs.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-cs"          Número de archivos: 1          Tamaño de los archivos: 11.136
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-da
+2025.04.17 13:24:46	A-------	10.822	values-da.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-da"          Número de archivos: 1          Tamaño de los archivos: 10.822
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-de
+2025.04.17 13:24:46	A-------	11.239	values-de.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-de"          Número de archivos: 1          Tamaño de los archivos: 11.239
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-el
+2025.04.17 13:24:46	A-------	13.396	values-el.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-el"          Número de archivos: 1          Tamaño de los archivos: 13.396
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-en-rAU
+2025.04.17 13:24:46	A-------	8.537	values-en-rAU.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-en-rAU"          Número de archivos: 1          Tamaño de los archivos: 8.537
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-en-rCA
+2025.04.17 13:24:46	A-------	8.526	values-en-rCA.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-en-rCA"          Número de archivos: 1          Tamaño de los archivos: 8.526
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-en-rGB
+2025.04.17 13:24:46	A-------	10.696	values-en-rGB.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-en-rGB"          Número de archivos: 1          Tamaño de los archivos: 10.696
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-en-rIN
+2025.04.17 13:24:46	A-------	8.537	values-en-rIN.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-en-rIN"          Número de archivos: 1          Tamaño de los archivos: 8.537
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-en-rXC
+2025.04.17 13:24:46	A-------	33.948	values-en-rXC.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-en-rXC"          Número de archivos: 1          Tamaño de los archivos: 33.948
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-es
+2025.04.17 13:24:46	A-------	11.314	values-es.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-es"          Número de archivos: 1          Tamaño de los archivos: 11.314
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-es-rUS
+2025.04.17 13:24:46	A-------	11.249	values-es-rUS.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-es-rUS"          Número de archivos: 1          Tamaño de los archivos: 11.249
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-et
+2025.04.17 13:24:46	A-------	10.979	values-et.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-et"          Número de archivos: 1          Tamaño de los archivos: 10.979
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-eu
+2025.04.17 13:24:46	A-------	11.193	values-eu.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-eu"          Número de archivos: 1          Tamaño de los archivos: 11.193
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-fa
+2025.04.17 13:24:46	A-------	12.360	values-fa.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-fa"          Número de archivos: 1          Tamaño de los archivos: 12.360
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-fi
+2025.04.17 13:24:46	A-------	11.044	values-fi.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-fi"          Número de archivos: 1          Tamaño de los archivos: 11.044
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-fr
+2025.04.17 13:24:46	A-------	11.398	values-fr.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-fr"          Número de archivos: 1          Tamaño de los archivos: 11.398
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-fr-rCA
+2025.04.17 13:24:46	A-------	11.551	values-fr-rCA.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-fr-rCA"          Número de archivos: 1          Tamaño de los archivos: 11.551
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-gl
+2025.04.17 13:24:46	A-------	11.263	values-gl.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-gl"          Número de archivos: 1          Tamaño de los archivos: 11.263
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-gu
+2025.04.17 13:24:46	A-------	13.902	values-gu.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-gu"          Número de archivos: 1          Tamaño de los archivos: 13.902
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-hi
+2025.04.17 13:24:46	A-------	14.198	values-hi.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-hi"          Número de archivos: 1          Tamaño de los archivos: 14.198
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-hr
+2025.04.17 13:24:46	A-------	11.025	values-hr.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-hr"          Número de archivos: 1          Tamaño de los archivos: 11.025
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-hu
+2025.04.17 13:24:46	A-------	11.518	values-hu.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-hu"          Número de archivos: 1          Tamaño de los archivos: 11.518
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-hy
+2025.04.17 13:24:46	A-------	12.883	values-hy.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-hy"          Número de archivos: 1          Tamaño de los archivos: 12.883
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-in
+2025.04.17 13:24:46	A-------	10.927	values-in.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-in"          Número de archivos: 1          Tamaño de los archivos: 10.927
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-is
+2025.04.17 13:24:46	A-------	10.939	values-is.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-is"          Número de archivos: 1          Tamaño de los archivos: 10.939
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-it
+2025.04.17 13:24:46	A-------	11.196	values-it.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-it"          Número de archivos: 1          Tamaño de los archivos: 11.196
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-iw
+2025.04.17 13:24:46	A-------	11.813	values-iw.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-iw"          Número de archivos: 1          Tamaño de los archivos: 11.813
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ja
+2025.04.17 13:24:46	A-------	11.766	values-ja.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ja"          Número de archivos: 1          Tamaño de los archivos: 11.766
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ka
+2025.04.17 13:24:46	A-------	14.268	values-ka.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ka"          Número de archivos: 1          Tamaño de los archivos: 14.268
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-kk
+2025.04.17 13:24:46	A-------	12.628	values-kk.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-kk"          Número de archivos: 1          Tamaño de los archivos: 12.628
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-km
+2025.04.17 13:24:46	A-------	14.650	values-km.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-km"          Número de archivos: 1          Tamaño de los archivos: 14.650
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-kn
+2025.04.17 13:24:46	A-------	14.950	values-kn.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-kn"          Número de archivos: 1          Tamaño de los archivos: 14.950
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ko
+2025.04.17 13:24:46	A-------	11.144	values-ko.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ko"          Número de archivos: 1          Tamaño de los archivos: 11.144
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ky
+2025.04.17 13:24:46	A-------	12.918	values-ky.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ky"          Número de archivos: 1          Tamaño de los archivos: 12.918
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-lo
+2025.04.17 13:24:46	A-------	14.116	values-lo.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-lo"          Número de archivos: 1          Tamaño de los archivos: 14.116
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-lt
+2025.04.17 13:24:46	A-------	11.310	values-lt.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-lt"          Número de archivos: 1          Tamaño de los archivos: 11.310
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-lv
+2025.04.17 13:24:46	A-------	11.368	values-lv.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-lv"          Número de archivos: 1          Tamaño de los archivos: 11.368
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-mk
+2025.04.17 13:24:46	A-------	12.822	values-mk.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-mk"          Número de archivos: 1          Tamaño de los archivos: 12.822
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ml
+2025.04.17 13:24:46	A-------	15.578	values-ml.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ml"          Número de archivos: 1          Tamaño de los archivos: 15.578
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-mn
+2025.04.17 13:24:46	A-------	12.598	values-mn.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-mn"          Número de archivos: 1          Tamaño de los archivos: 12.598
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-mr
+2025.04.17 13:24:46	A-------	13.973	values-mr.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-mr"          Número de archivos: 1          Tamaño de los archivos: 13.973
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ms
+2025.04.17 13:24:46	A-------	11.137	values-ms.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ms"          Número de archivos: 1          Tamaño de los archivos: 11.137
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-my
+2025.04.17 13:24:46	A-------	15.489	values-my.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-my"          Número de archivos: 1          Tamaño de los archivos: 15.489
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-nb
+2025.04.17 13:24:46	A-------	10.837	values-nb.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-nb"          Número de archivos: 1          Tamaño de los archivos: 10.837
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ne
+2025.04.17 13:24:46	A-------	15.128	values-ne.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ne"          Número de archivos: 1          Tamaño de los archivos: 15.128
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-nl
+2025.04.17 13:24:46	A-------	11.047	values-nl.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-nl"          Número de archivos: 1          Tamaño de los archivos: 11.047
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-or
+2025.04.17 13:24:46	A-------	14.694	values-or.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-or"          Número de archivos: 1          Tamaño de los archivos: 14.694
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-pa
+2025.04.17 13:24:46	A-------	13.930	values-pa.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-pa"          Número de archivos: 1          Tamaño de los archivos: 13.930
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-pl
+2025.04.17 13:24:46	A-------	11.140	values-pl.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-pl"          Número de archivos: 1          Tamaño de los archivos: 11.140
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-pt
+2025.04.17 13:24:46	A-------	8.766	values-pt.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-pt"          Número de archivos: 1          Tamaño de los archivos: 8.766
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-pt-rBR
+2025.04.17 13:24:46	A-------	11.045	values-pt-rBR.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-pt-rBR"          Número de archivos: 1          Tamaño de los archivos: 11.045
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-pt-rPT
+2025.04.17 13:24:46	A-------	11.309	values-pt-rPT.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-pt-rPT"          Número de archivos: 1          Tamaño de los archivos: 11.309
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ro
+2025.04.17 13:24:46	A-------	11.209	values-ro.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ro"          Número de archivos: 1          Tamaño de los archivos: 11.209
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ru
+2025.04.17 13:24:46	A-------	12.711	values-ru.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ru"          Número de archivos: 1          Tamaño de los archivos: 12.711
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-si
+2025.04.17 13:24:46	A-------	13.857	values-si.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-si"          Número de archivos: 1          Tamaño de los archivos: 13.857
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-sk
+2025.04.17 13:24:46	A-------	11.128	values-sk.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-sk"          Número de archivos: 1          Tamaño de los archivos: 11.128
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-sl
+2025.04.17 13:24:46	A-------	11.023	values-sl.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-sl"          Número de archivos: 1          Tamaño de los archivos: 11.023
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-sq
+2025.04.17 13:24:46	A-------	11.322	values-sq.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-sq"          Número de archivos: 1          Tamaño de los archivos: 11.322
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-sr
+2025.04.17 13:24:46	A-------	12.529	values-sr.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-sr"          Número de archivos: 1          Tamaño de los archivos: 12.529
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-sv
+2025.04.17 13:24:46	A-------	11.027	values-sv.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-sv"          Número de archivos: 1          Tamaño de los archivos: 11.027
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-sw
+2025.04.17 13:24:46	A-------	11.020	values-sw.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-sw"          Número de archivos: 1          Tamaño de los archivos: 11.020
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ta
+2025.04.17 13:24:46	A-------	15.648	values-ta.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ta"          Número de archivos: 1          Tamaño de los archivos: 15.648
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-te
+2025.04.17 13:24:46	A-------	14.922	values-te.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-te"          Número de archivos: 1          Tamaño de los archivos: 14.922
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-th
+2025.04.17 13:24:46	A-------	13.797	values-th.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-th"          Número de archivos: 1          Tamaño de los archivos: 13.797
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-tl
+2025.04.17 13:24:46	A-------	11.297	values-tl.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-tl"          Número de archivos: 1          Tamaño de los archivos: 11.297
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-tr
+2025.04.17 13:24:46	A-------	11.031	values-tr.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-tr"          Número de archivos: 1          Tamaño de los archivos: 11.031
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-uk
+2025.04.17 13:24:46	A-------	12.748	values-uk.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-uk"          Número de archivos: 1          Tamaño de los archivos: 12.748
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-ur
+2025.04.17 13:24:46	A-------	12.632	values-ur.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-ur"          Número de archivos: 1          Tamaño de los archivos: 12.632
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-uz
+2025.04.17 13:24:46	A-------	11.001	values-uz.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-uz"          Número de archivos: 1          Tamaño de los archivos: 11.001
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-v16
+2025.04.17 13:24:46	A-------	129	values-v16.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-v16"          Número de archivos: 1          Tamaño de los archivos: 129
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-v21
+2025.04.17 13:24:46	A-------	1.396	values-v21.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-v21"          Número de archivos: 1          Tamaño de los archivos: 1.396
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-vi
+2025.04.17 13:24:46	A-------	11.574	values-vi.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-vi"          Número de archivos: 1          Tamaño de los archivos: 11.574
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-zh-rCN
+2025.04.17 13:24:46	A-------	10.688	values-zh-rCN.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-zh-rCN"          Número de archivos: 1          Tamaño de los archivos: 10.688
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-zh-rHK
+2025.04.17 13:24:46	A-------	10.652	values-zh-rHK.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-zh-rHK"          Número de archivos: 1          Tamaño de los archivos: 10.652
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-zh-rTW
+2025.04.17 13:24:46	A-------	10.695	values-zh-rTW.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-zh-rTW"          Número de archivos: 1          Tamaño de los archivos: 10.695
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir\values-zu
+2025.04.17 13:24:46	A-------	11.117	values-zu.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values-zu"          Número de archivos: 1          Tamaño de los archivos: 11.117
+
+2025.04.17 13:24:46	A-------	1.179.840	merger.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "mergeDebugResources"          Número de archivos: 1          Tamaño de los archivos: 1.179.840
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\mergeDebugResources\stripped.dir
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\packageDebugResources
+2025.04.17 13:24:46	A-------	5.943	compile-file-map.properties
+----------------------------------------------------------------------------------------------------
+Carpetas: "packageDebugResources"          Número de archivos: 1          Tamaño de los archivos: 5.943
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir\values
+2025.04.17 13:24:46	A-------	960	values.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values"          Número de archivos: 1          Tamaño de los archivos: 960
+
+2025.04.17 13:24:46	A-------	8.914	merger.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "packageDebugResources"          Número de archivos: 1          Tamaño de los archivos: 8.914
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\mergeDebugAssets
+2025.04.17 13:24:47	A-------	4.412	merger.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "mergeDebugAssets"          Número de archivos: 1          Tamaño de los archivos: 4.412
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\mergeDebugJniLibFolders
+2025.04.17 13:24:47	A-------	488	merger.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "mergeDebugJniLibFolders"          Número de archivos: 1          Tamaño de los archivos: 488
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\incremental\mergeDebugShaders
+2025.04.17 13:24:47	A-------	488	merger.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "mergeDebugShaders"          Número de archivos: 1          Tamaño de los archivos: 488
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\local_only_symbol_list
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\local_only_symbol_list\debug
+2025.04.17 13:24:47	A-------	608	R-def.txt
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 608
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\manifest_merge_blame_file
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\manifest_merge_blame_file\debug
+2025.04.17 13:24:47	A-------	21.365	manifest-merger-blame-debug-report.txt
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 21.365
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_jni_libs
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_jni_libs\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_jni_libs\debug\out
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_manifest
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_manifest\debug
+2025.04.17 13:24:47	A-------	5.367	AndroidManifest.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 5.367
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_manifests
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_manifests\debug
+2025.04.17 13:24:47	A-------	5.367	AndroidManifest.xml
+2025.04.17 13:24:47	A-------	390	output-metadata.json
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 2          Tamaño de los archivos: 5.757
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_res
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_res\debug
+2025.04.17 13:24:46	A-------	2.027.576	drawable_bg_bienvenida.png.flat
+2025.04.17 13:24:46	A-------	1.072.092	drawable_bg_formulario.png.flat
+2025.04.17 13:24:46	A-------	1.858.024	drawable_bg_preview.png.flat
+2025.04.17 13:24:46	A-------	761.724	drawable_bg_receptor_apertura.png.flat
+2025.04.17 13:24:46	A-------	1.834.964	drawable_bg_receptor_carga.png.flat
+2025.04.17 13:24:46	A-------	61.588	drawable_bg_seleccion.png.flat
+2025.04.17 13:24:46	A-------	108	drawable_caja01.png.flat
+2025.04.17 13:24:46	A-------	1.092	layout_activity_main.xml.flat
+2025.04.17 13:24:46	A-------	572	mipmap-anydpi-v26_ic_launcher.xml.flat
+2025.04.17 13:24:46	A-------	11.412	mipmap-hdpi_ic_launcher.png.flat
+2025.04.17 13:24:46	A-------	2.112	mipmap-hdpi_ic_launcher_background.png.flat
+2025.04.17 13:24:46	A-------	29.140	mipmap-hdpi_ic_launcher_foreground.png.flat
+2025.04.17 13:24:46	A-------	28.932	mipmap-hdpi_ic_launcher_monochrome.png.flat
+2025.04.17 13:24:46	A-------	5.800	mipmap-mdpi_ic_launcher.png.flat
+2025.04.17 13:24:46	A-------	1.576	mipmap-mdpi_ic_launcher_background.png.flat
+2025.04.17 13:24:46	A-------	14.492	mipmap-mdpi_ic_launcher_foreground.png.flat
+2025.04.17 13:24:46	A-------	14.208	mipmap-mdpi_ic_launcher_monochrome.png.flat
+2025.04.17 13:24:46	A-------	19.236	mipmap-xhdpi_ic_launcher.png.flat
+2025.04.17 13:24:46	A-------	2.748	mipmap-xhdpi_ic_launcher_background.png.flat
+2025.04.17 13:24:46	A-------	50.016	mipmap-xhdpi_ic_launcher_foreground.png.flat
+2025.04.17 13:24:46	A-------	50.160	mipmap-xhdpi_ic_launcher_monochrome.png.flat
+2025.04.17 13:24:46	A-------	38.364	mipmap-xxhdpi_ic_launcher.png.flat
+2025.04.17 13:24:46	A-------	4.328	mipmap-xxhdpi_ic_launcher_background.png.flat
+2025.04.17 13:24:46	A-------	101.300	mipmap-xxhdpi_ic_launcher_foreground.png.flat
+2025.04.17 13:24:46	A-------	102.236	mipmap-xxhdpi_ic_launcher_monochrome.png.flat
+2025.04.17 13:24:46	A-------	65.448	mipmap-xxxhdpi_ic_launcher.png.flat
+2025.04.17 13:24:46	A-------	6.248	mipmap-xxxhdpi_ic_launcher_background.png.flat
+2025.04.17 13:24:46	A-------	176.404	mipmap-xxxhdpi_ic_launcher_foreground.png.flat
+2025.04.17 13:24:46	A-------	177.680	mipmap-xxxhdpi_ic_launcher_monochrome.png.flat
+2025.04.17 13:24:46	A-------	27.196	values_values.arsc.flat
+2025.04.17 13:24:46	A-------	7.992	values-af_values-af.arsc.flat
+2025.04.17 13:24:46	A-------	9.440	values-am_values-am.arsc.flat
+2025.04.17 13:24:46	A-------	9.444	values-ar_values-ar.arsc.flat
+2025.04.17 13:24:46	A-------	11.332	values-as_values-as.arsc.flat
+2025.04.17 13:24:46	A-------	8.492	values-az_values-az.arsc.flat
+2025.04.17 13:24:46	A-------	8.668	values-b+sr+Latn_values-b+sr+Latn.arsc.flat
+2025.04.17 13:24:46	A-------	10.072	values-be_values-be.arsc.flat
+2025.04.17 13:24:46	A-------	10.276	values-bg_values-bg.arsc.flat
+2025.04.17 13:24:46	A-------	11.548	values-bn_values-bn.arsc.flat
+2025.04.17 13:24:46	A-------	8.212	values-bs_values-bs.arsc.flat
+2025.04.17 13:24:46	A-------	8.356	values-ca_values-ca.arsc.flat
+2025.04.17 13:24:46	A-------	8.296	values-cs_values-cs.arsc.flat
+2025.04.17 13:24:46	A-------	7.980	values-da_values-da.arsc.flat
+2025.04.17 13:24:46	A-------	8.400	values-de_values-de.arsc.flat
+2025.04.17 13:24:46	A-------	10.600	values-el_values-el.arsc.flat
+2025.04.17 13:24:46	A-------	6.204	values-en-rAU_values-en-rAU.arsc.flat
+2025.04.17 13:24:46	A-------	6.192	values-en-rCA_values-en-rCA.arsc.flat
+2025.04.17 13:24:46	A-------	8.156	values-en-rGB_values-en-rGB.arsc.flat
+2025.04.17 13:24:46	A-------	6.204	values-en-rIN_values-en-rIN.arsc.flat
+2025.04.17 13:24:46	A-------	32.112	values-en-rXC_values-en-rXC.arsc.flat
+2025.04.17 13:24:46	A-------	8.472	values-es_values-es.arsc.flat
+2025.04.17 13:24:46	A-------	8.720	values-es-rUS_values-es-rUS.arsc.flat
+2025.04.17 13:24:46	A-------	8.136	values-et_values-et.arsc.flat
+2025.04.17 13:24:46	A-------	8.352	values-eu_values-eu.arsc.flat
+2025.04.17 13:24:46	A-------	9.548	values-fa_values-fa.arsc.flat
+2025.04.17 13:24:46	A-------	8.200	values-fi_values-fi.arsc.flat
+2025.04.17 13:24:46	A-------	8.544	values-fr_values-fr.arsc.flat
+2025.04.17 13:24:46	A-------	9.004	values-fr-rCA_values-fr-rCA.arsc.flat
+2025.04.17 13:24:46	A-------	8.420	values-gl_values-gl.arsc.flat
+2025.04.17 13:24:46	A-------	11.116	values-gu_values-gu.arsc.flat
+2025.04.17 13:24:46	A-------	11.428	values-hi_values-hi.arsc.flat
+2025.04.17 13:24:46	A-------	8.180	values-hr_values-hr.arsc.flat
+2025.04.17 13:24:46	A-------	8.680	values-hu_values-hu.arsc.flat
+2025.04.17 13:24:46	A-------	10.088	values-hy_values-hy.arsc.flat
+2025.04.17 13:24:46	A-------	8.084	values-in_values-in.arsc.flat
+2025.04.17 13:24:46	A-------	8.096	values-is_values-is.arsc.flat
+2025.04.17 13:24:46	A-------	8.344	values-it_values-it.arsc.flat
+2025.04.17 13:24:46	A-------	8.980	values-iw_values-iw.arsc.flat
+2025.04.17 13:24:46	A-------	8.944	values-ja_values-ja.arsc.flat
+2025.04.17 13:24:46	A-------	11.480	values-ka_values-ka.arsc.flat
+2025.04.17 13:24:46	A-------	9.812	values-kk_values-kk.arsc.flat
+2025.04.17 13:24:46	A-------	11.876	values-km_values-km.arsc.flat
+2025.04.17 13:24:46	A-------	12.184	values-kn_values-kn.arsc.flat
+2025.04.17 13:24:46	A-------	8.308	values-ko_values-ko.arsc.flat
+2025.04.17 13:24:46	A-------	10.112	values-ky_values-ky.arsc.flat
+2025.04.17 13:24:46	A-------	11.328	values-lo_values-lo.arsc.flat
+2025.04.17 13:24:46	A-------	8.468	values-lt_values-lt.arsc.flat
+2025.04.17 13:24:46	A-------	8.528	values-lv_values-lv.arsc.flat
+2025.04.17 13:24:46	A-------	10.012	values-mk_values-mk.arsc.flat
+2025.04.17 13:24:46	A-------	12.816	values-ml_values-ml.arsc.flat
+2025.04.17 13:24:46	A-------	9.788	values-mn_values-mn.arsc.flat
+2025.04.17 13:24:46	A-------	11.188	values-mr_values-mr.arsc.flat
+2025.04.17 13:24:46	A-------	8.296	values-ms_values-ms.arsc.flat
+2025.04.17 13:24:46	A-------	12.732	values-my_values-my.arsc.flat
+2025.04.17 13:24:46	A-------	7.996	values-nb_values-nb.arsc.flat
+2025.04.17 13:24:46	A-------	12.384	values-ne_values-ne.arsc.flat
+2025.04.17 13:24:46	A-------	8.204	values-nl_values-nl.arsc.flat
+2025.04.17 13:24:46	A-------	11.924	values-or_values-or.arsc.flat
+2025.04.17 13:24:46	A-------	11.136	values-pa_values-pa.arsc.flat
+2025.04.17 13:24:46	A-------	8.296	values-pl_values-pl.arsc.flat
+2025.04.17 13:24:46	A-------	6.176	values-pt_values-pt.arsc.flat
+2025.04.17 13:24:46	A-------	8.512	values-pt-rBR_values-pt-rBR.arsc.flat
+2025.04.17 13:24:46	A-------	8.780	values-pt-rPT_values-pt-rPT.arsc.flat
+2025.04.17 13:24:46	A-------	8.368	values-ro_values-ro.arsc.flat
+2025.04.17 13:24:46	A-------	9.888	values-ru_values-ru.arsc.flat
+2025.04.17 13:24:46	A-------	11.060	values-si_values-si.arsc.flat
+2025.04.17 13:24:46	A-------	8.284	values-sk_values-sk.arsc.flat
+2025.04.17 13:24:46	A-------	8.180	values-sl_values-sl.arsc.flat
+2025.04.17 13:24:46	A-------	8.460	values-sq_values-sq.arsc.flat
+2025.04.17 13:24:46	A-------	9.712	values-sr_values-sr.arsc.flat
+2025.04.17 13:24:46	A-------	8.184	values-sv_values-sv.arsc.flat
+2025.04.17 13:24:46	A-------	8.176	values-sw_values-sw.arsc.flat
+2025.04.17 13:24:46	A-------	12.904	values-ta_values-ta.arsc.flat
+2025.04.17 13:24:46	A-------	12.156	values-te_values-te.arsc.flat
+2025.04.17 13:24:46	A-------	11.008	values-th_values-th.arsc.flat
+2025.04.17 13:24:46	A-------	8.452	values-tl_values-tl.arsc.flat
+2025.04.17 13:24:46	A-------	8.188	values-tr_values-tr.arsc.flat
+2025.04.17 13:24:46	A-------	9.940	values-uk_values-uk.arsc.flat
+2025.04.17 13:24:46	A-------	9.820	values-ur_values-ur.arsc.flat
+2025.04.17 13:24:46	A-------	8.156	values-uz_values-uz.arsc.flat
+2025.04.17 13:24:46	A-------	260	values-v16_values-v16.arsc.flat
+2025.04.17 13:24:46	A-------	1.524	values-v21_values-v21.arsc.flat
+2025.04.17 13:24:46	A-------	8.740	values-vi_values-vi.arsc.flat
+2025.04.17 13:24:46	A-------	8.156	values-zh-rCN_values-zh-rCN.arsc.flat
+2025.04.17 13:24:46	A-------	8.120	values-zh-rHK_values-zh-rHK.arsc.flat
+2025.04.17 13:24:46	A-------	8.164	values-zh-rTW_values-zh-rTW.arsc.flat
+2025.04.17 13:24:46	A-------	8.272	values-zu_values-zu.arsc.flat
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 117          Tamaño de los archivos: 9.358.596
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_res_blame_folder
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_res_blame_folder\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_res_blame_folder\debug\out
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_res_blame_folder\debug\out\multi-v2
+2025.04.17 13:24:46	A-------	721.046	debug.json
+2025.04.17 13:24:46	A-------	27.064	values.json
+2025.04.17 13:24:46	A-------	8.280	values-af.json
+2025.04.17 13:24:46	A-------	8.247	values-am.json
+2025.04.17 13:24:46	A-------	8.282	values-ar.json
+2025.04.17 13:24:46	A-------	8.299	values-as.json
+2025.04.17 13:24:46	A-------	8.304	values-az.json
+2025.04.17 13:24:46	A-------	8.372	values-b+sr+Latn.json
+2025.04.17 13:24:46	A-------	8.290	values-be.json
+2025.04.17 13:24:46	A-------	8.304	values-bg.json
+2025.04.17 13:24:46	A-------	8.304	values-bn.json
+2025.04.17 13:24:46	A-------	8.288	values-bs.json
+2025.04.17 13:24:46	A-------	8.312	values-ca.json
+2025.04.17 13:24:46	A-------	8.292	values-cs.json
+2025.04.17 13:24:46	A-------	8.280	values-da.json
+2025.04.17 13:24:46	A-------	8.304	values-de.json
+2025.04.17 13:24:46	A-------	8.317	values-el.json
+2025.04.17 13:24:46	A-------	6.135	values-en-rAU.json
+2025.04.17 13:24:46	A-------	6.135	values-en-rCA.json
+2025.04.17 13:24:46	A-------	8.324	values-en-rGB.json
+2025.04.17 13:24:46	A-------	6.135	values-en-rIN.json
+2025.04.17 13:24:46	A-------	6.348	values-en-rXC.json
+2025.04.17 13:24:46	A-------	8.310	values-es.json
+2025.04.17 13:24:46	A-------	8.353	values-es-rUS.json
+2025.04.17 13:24:46	A-------	8.297	values-et.json
+2025.04.17 13:24:46	A-------	8.300	values-eu.json
+2025.04.17 13:24:46	A-------	8.285	values-fa.json
+2025.04.17 13:24:46	A-------	8.297	values-fi.json
+2025.04.17 13:24:46	A-------	8.310	values-fr.json
+2025.04.17 13:24:46	A-------	8.373	values-fr-rCA.json
+2025.04.17 13:24:46	A-------	8.313	values-gl.json
+2025.04.17 13:24:46	A-------	8.283	values-gu.json
+2025.04.17 13:24:46	A-------	8.289	values-hi.json
+2025.04.17 13:24:46	A-------	8.286	values-hr.json
+2025.04.17 13:24:46	A-------	8.305	values-hu.json
+2025.04.17 13:24:46	A-------	8.291	values-hy.json
+2025.04.17 13:24:46	A-------	8.291	values-in.json
+2025.04.17 13:24:46	A-------	8.289	values-is.json
+2025.04.17 13:24:46	A-------	8.306	values-it.json
+2025.04.17 13:24:46	A-------	8.265	values-iw.json
+2025.04.17 13:24:46	A-------	8.229	values-ja.json
+2025.04.17 13:24:46	A-------	8.298	values-ka.json
+2025.04.17 13:24:46	A-------	8.297	values-kk.json
+2025.04.17 13:24:46	A-------	8.298	values-km.json
+2025.04.17 13:24:46	A-------	8.305	values-kn.json
+2025.04.17 13:24:46	A-------	8.225	values-ko.json
+2025.04.17 13:24:46	A-------	8.301	values-ky.json
+2025.04.17 13:24:46	A-------	8.279	values-lo.json
+2025.04.17 13:24:46	A-------	8.295	values-lt.json
+2025.04.17 13:24:46	A-------	8.304	values-lv.json
+2025.04.17 13:24:46	A-------	8.295	values-mk.json
+2025.04.17 13:24:46	A-------	8.321	values-ml.json
+2025.04.17 13:24:46	A-------	8.287	values-mn.json
+2025.04.17 13:24:46	A-------	8.287	values-mr.json
+2025.04.17 13:24:46	A-------	8.300	values-ms.json
+2025.04.17 13:24:46	A-------	8.317	values-my.json
+2025.04.17 13:24:46	A-------	8.282	values-nb.json
+2025.04.17 13:24:46	A-------	8.310	values-ne.json
+2025.04.17 13:24:46	A-------	8.295	values-nl.json
+2025.04.17 13:24:46	A-------	8.309	values-or.json
+2025.04.17 13:24:46	A-------	8.288	values-pa.json
+2025.04.17 13:24:46	A-------	8.290	values-pl.json
+2025.04.17 13:24:46	A-------	6.103	values-pt.json
+2025.04.17 13:24:46	A-------	8.341	values-pt-rBR.json
+2025.04.17 13:24:46	A-------	8.349	values-pt-rPT.json
+2025.04.17 13:24:46	A-------	8.301	values-ro.json
+2025.04.17 13:24:46	A-------	8.288	values-ru.json
+2025.04.17 13:24:46	A-------	8.287	values-si.json
+2025.04.17 13:24:46	A-------	8.287	values-sk.json
+2025.04.17 13:24:46	A-------	8.289	values-sl.json
+2025.04.17 13:24:46	A-------	8.297	values-sq.json
+2025.04.17 13:24:46	A-------	8.288	values-sr.json
+2025.04.17 13:24:46	A-------	8.286	values-sv.json
+2025.04.17 13:24:46	A-------	8.297	values-sw.json
+2025.04.17 13:24:46	A-------	8.320	values-ta.json
+2025.04.17 13:24:46	A-------	8.312	values-te.json
+2025.04.17 13:24:46	A-------	8.281	values-th.json
+2025.04.17 13:24:46	A-------	8.304	values-tl.json
+2025.04.17 13:24:46	A-------	8.279	values-tr.json
+2025.04.17 13:24:46	A-------	8.295	values-uk.json
+2025.04.17 13:24:46	A-------	8.297	values-ur.json
+2025.04.17 13:24:46	A-------	8.307	values-uz.json
+2025.04.17 13:24:46	A-------	667	values-v16.json
+2025.04.17 13:24:46	A-------	873	values-v21.json
+2025.04.17 13:24:46	A-------	8.287	values-vi.json
+2025.04.17 13:24:46	A-------	8.271	values-zh-rCN.json
+2025.04.17 13:24:46	A-------	8.274	values-zh-rHK.json
+2025.04.17 13:24:46	A-------	8.269	values-zh-rTW.json
+2025.04.17 13:24:46	A-------	8.304	values-zu.json
+----------------------------------------------------------------------------------------------------
+Carpetas: "multi-v2"          Número de archivos: 89          Tamaño de los archivos: 1.444.270
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_res_blame_folder\debug\out\single
+2025.04.17 13:24:46	A-------	5.679	debug.json
+----------------------------------------------------------------------------------------------------
+Carpetas: "single"          Número de archivos: 1          Tamaño de los archivos: 5.679
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_shaders
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_shaders\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\merged_shaders\debug\out
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\navigation_json
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\navigation_json\debug
+2025.04.17 13:24:46	A-------	2	navigation.json
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 2
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_manifests
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_manifests\debug
+2025.04.17 13:24:47	A-------	5.367	AndroidManifest.xml
+2025.04.17 13:24:47	A-------	392	output-metadata.json
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 2          Tamaño de los archivos: 5.759
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_res
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_res\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_res\debug\drawable
+2025.04.12 14:07:10	A-------	2.027.451	bg_bienvenida.png
+2025.04.16 18:20:25	A-------	1.071.968	bg_formulario.png
+2025.04.12 14:08:24	A-------	1.857.907	bg_preview.png
+2025.04.16 18:16:29	A-------	761.586	bg_receptor_apertura.png
+2025.04.12 14:08:40	A-------	1.834.832	bg_receptor_carga.png
+2025.04.16 18:18:20	A-------	61.467	bg_seleccion.png
+2025.04.10 08:00:46	A-------	0	caja01.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "drawable"          Número de archivos: 7          Tamaño de los archivos: 7.615.211
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_res\debug\layout
+2025.04.10 08:00:46	A-------	569	activity_main.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "layout"          Número de archivos: 1          Tamaño de los archivos: 569
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_res\debug\mipmap-anydpi-v26
+2025.04.10 09:33:10	A-------	328	ic_launcher.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-anydpi-v26"          Número de archivos: 1          Tamaño de los archivos: 328
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_res\debug\mipmap-hdpi-v4
+2025.04.10 09:33:10	A-------	11.281	ic_launcher.png
+2025.04.10 09:33:10	A-------	1.964	ic_launcher_background.png
+2025.04.10 09:33:10	A-------	28.992	ic_launcher_foreground.png
+2025.04.10 09:33:10	A-------	28.782	ic_launcher_monochrome.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-hdpi-v4"          Número de archivos: 4          Tamaño de los archivos: 71.019
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_res\debug\mipmap-mdpi-v4
+2025.04.10 09:33:10	A-------	5.671	ic_launcher.png
+2025.04.10 09:33:10	A-------	1.425	ic_launcher_background.png
+2025.04.10 09:33:10	A-------	14.342	ic_launcher_foreground.png
+2025.04.10 09:33:10	A-------	14.058	ic_launcher_monochrome.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-mdpi-v4"          Número de archivos: 4          Tamaño de los archivos: 35.496
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_res\debug\mipmap-xhdpi-v4
+2025.04.10 09:33:10	A-------	19.105	ic_launcher.png
+2025.04.10 09:33:10	A-------	2.598	ic_launcher_background.png
+2025.04.10 09:33:10	A-------	49.865	ic_launcher_foreground.png
+2025.04.10 09:33:10	A-------	50.012	ic_launcher_monochrome.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-xhdpi-v4"          Número de archivos: 4          Tamaño de los archivos: 121.580
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_res\debug\mipmap-xxhdpi-v4
+2025.04.10 09:33:10	A-------	38.233	ic_launcher.png
+2025.04.10 09:33:10	A-------	4.176	ic_launcher_background.png
+2025.04.10 09:33:10	A-------	101.147	ic_launcher_foreground.png
+2025.04.10 09:33:10	A-------	102.081	ic_launcher_monochrome.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-xxhdpi-v4"          Número de archivos: 4          Tamaño de los archivos: 245.637
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_res\debug\mipmap-xxxhdpi-v4
+2025.04.10 09:33:10	A-------	65.319	ic_launcher.png
+2025.04.10 09:33:10	A-------	6.096	ic_launcher_background.png
+2025.04.10 09:33:10	A-------	176.249	ic_launcher_foreground.png
+2025.04.10 09:33:10	A-------	177.525	ic_launcher_monochrome.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-xxxhdpi-v4"          Número de archivos: 4          Tamaño de los archivos: 425.189
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\packaged_res\debug\values
+2025.04.17 13:24:46	A-------	960	values.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values"          Número de archivos: 1          Tamaño de los archivos: 960
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\processed_res
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\processed_res\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\processed_res\debug\out
+2025.04.17 13:24:48	A-------	387	output-metadata.json
+2025.04.17 13:24:48	A-------	9.156.062	resources-debug.ap_
+----------------------------------------------------------------------------------------------------
+Carpetas: "out"          Número de archivos: 2          Tamaño de los archivos: 9.156.449
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\runtime_symbol_list
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\runtime_symbol_list\debug
+2025.04.17 13:24:48	A-------	24.651	R.txt
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 24.651
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\signing_config_versions
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\signing_config_versions\debug
+2025.04.17 13:24:47	A-------	96	signing-config-versions.json
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 96
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\source_set_path_map
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\source_set_path_map\debug
+2025.04.17 13:24:45	A-------	10.408	file-map.txt
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 10.408
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\stable_resource_ids_file
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\stable_resource_ids_file\debug
+2025.04.17 13:24:48	A-------	27.106	stableIds.txt
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 27.106
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\symbol_list_with_package_name
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\symbol_list_with_package_name\debug
+2025.04.17 13:24:48	A-------	14.361	package-aware-r.txt
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 14.361
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\validate_signing_config
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\validate_signing_config\debug
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\variant_model
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\intermediates\variant_model\debug
+2025.04.17 13:24:44	A-------	27	variant_model.json
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 1          Tamaño de los archivos: 27
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\kotlin
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\kotlin\kspDebugKotlin
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\kotlin\kspDebugKotlin\cacheable
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\kotlin\kspDebugKotlin\classpath-snapshot
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\kotlin\kspDebugKotlin\local-state
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\kspCaches
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\kspCaches\debug
+2025.04.17 13:24:49	A-------	4.069	ap-classpath-entries.bin
+2025.04.17 13:24:49	A-------	12.551	classpath-entries.bin
+2025.04.17 13:24:49	A-------	2.621.356	classpath-structure.bin
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 3          Tamaño de los archivos: 2.637.976
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\kspCaches\debug\logs
+2025.04.17 13:24:53	A-------	4.096	sealed
+2025.04.17 13:24:53	A-------	8	sealed.keystream.len
+2025.04.17 13:24:53	A-------	8	sealed.len
+2025.04.17 13:24:52	A-------	8	sealed_i.len
+2025.04.17 13:24:52	A-------	4.096	sourceToOutputs
+2025.04.17 13:24:52	A-------	8	sourceToOutputs.keystream.len
+2025.04.17 13:24:52	A-------	8	sourceToOutputs.len
+2025.04.17 13:24:52	A-------	8	sourceToOutputs_i.len
+2025.04.17 13:24:53	A-------	4.096	symbols
+2025.04.17 13:24:53	A-------	8	symbols.keystream.len
+2025.04.17 13:24:53	A-------	8	symbols.len
+2025.04.17 13:24:53	A-------	8	symbols_i.len
+----------------------------------------------------------------------------------------------------
+Carpetas: "debug"          Número de archivos: 12          Tamaño de los archivos: 12.360
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\outputs
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\build\outputs\logs
+2025.04.17 13:24:47	A-------	81.607	manifest-merger-debug-report.txt
+----------------------------------------------------------------------------------------------------
+Carpetas: "logs"          Número de archivos: 1          Tamaño de los archivos: 81.607
+
+2025.04.12 09:03:42	A-------	681	google-services.json
+----------------------------------------------------------------------------------------------------
+Carpetas: "app"          Número de archivos: 1          Tamaño de los archivos: 681
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main
+2025.04.16 12:53:13	A-------	870	AndroidManifest.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "main"          Número de archivos: 1          Tamaño de los archivos: 870
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\assets
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\assets\html3d
+2025.04.17 11:45:05	A-------	5.529	viewer.html
+----------------------------------------------------------------------------------------------------
+Carpetas: "html3d"          Número de archivos: 1          Tamaño de los archivos: 5.529
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\assets\texturas
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\assets\texturas\backgrounds
+2024.11.23 19:01:50	A-------	37.974	despedida.png
+2024.11.23 19:01:50	A-------	580.642	inputs.png
+2024.11.23 19:01:50	A-------	151.593	interaccion.png
+2024.11.23 19:01:50	A-------	478.359	paquete.png
+2024.11.23 19:01:50	A-------	573.482	presentacion.png
+2024.11.23 19:01:50	A-------	1.168.360	seleccion.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "backgrounds"          Número de archivos: 6          Tamaño de los archivos: 2.990.410
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\assets\texturas\bows
+2025.03.25 11:04:06	A-------	118.444	lazo_estrella.glb
+2025.03.26 08:30:25	A-------	29.733	lazo_estrella.png
+2025.03.24 10:40:08	A-------	46.496	lazo_flor.glb
+2025.03.26 08:31:27	A-------	103.108	lazo_flor.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "bows"          Número de archivos: 4          Tamaño de los archivos: 297.781
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\assets\texturas\cards
+2024.11.21 21:09:13	A-------	6.046	card01.png
+2024.11.21 19:42:31	A-------	47.542	card02.png
+2024.11.21 19:42:31	A-------	32.959	card03.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "cards"          Número de archivos: 3          Tamaño de los archivos: 86.547
+
+2025.04.09 13:27:32	A-------	3.400	FileList.txt
+----------------------------------------------------------------------------------------------------
+Carpetas: "texturas"          Número de archivos: 1          Tamaño de los archivos: 3.400
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\assets\texturas\misc
+2025.03.26 17:58:21	A-------	1.311.648	para_ti.ico
+----------------------------------------------------------------------------------------------------
+Carpetas: "misc"          Número de archivos: 1          Tamaño de los archivos: 1.311.648
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\assets\texturas\packages
+2025.04.10 08:42:39	A-------	2.044	caja_base.glb
+2025.02.17 13:28:09	A-------	300.191	wrap_texture_brown.png
+2025.02.17 13:27:34	A-------	272.363	wrap_texture_white.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "packages"          Número de archivos: 3          Tamaño de los archivos: 574.598
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\assets\texturas\paper
+2024.11.21 10:44:27	A-------	95.531	paper01.png
+2024.11.21 10:44:27	A-------	56.973	paper02.png
+2024.11.21 10:44:27	A-------	108.546	paper05.png
+2024.11.21 10:44:27	A-------	42.655	paper15.png
+2024.11.21 10:44:27	A-------	94.590	paper21.png
+2024.11.21 10:44:27	A-------	73.198	paper22.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "paper"          Número de archivos: 6          Tamaño de los archivos: 471.493
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\java
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\java\com
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\java\com\example
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\java\com\example\paratiapp
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\java\com\example\paratiapp\data
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\java\com\example\paratiapp\di
+2025.04.17 13:20:12	A-------	3.146	MainActivity.kt
+2025.04.13 12:52:59	A-------	602	ParaTiApplication.kt
+----------------------------------------------------------------------------------------------------
+Carpetas: "paratiapp"          Número de archivos: 2          Tamaño de los archivos: 3.748
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\java\com\example\paratiapp\ui
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\java\com\example\paratiapp\ui\components
+2025.04.17 11:37:49	A-------	2.182	SelectorDeTexturas.kt
+----------------------------------------------------------------------------------------------------
+Carpetas: "components"          Número de archivos: 1          Tamaño de los archivos: 2.182
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\java\com\example\paratiapp\ui\screens
+2025.04.17 12:32:02	A-------	4.107	PantallaBienvenida.kt
+2025.04.17 12:33:51	A-------	8.627	PantallaFormulario.kt
+2025.04.17 11:37:49	A-------	776	PantallaPreview3D.kt
+2025.04.17 13:14:43	A-------	7.967	PantallaSelectorTextura.kt
+----------------------------------------------------------------------------------------------------
+Carpetas: "screens"          Número de archivos: 4          Tamaño de los archivos: 21.477
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\java\com\example\paratiapp\ui\theme
+2025.04.10 13:45:12	A-------	354	Color.kt
+2025.04.10 13:47:43	A-------	2.025	Theme.kt
+2025.04.10 13:46:01	A-------	617	Type.kt
+----------------------------------------------------------------------------------------------------
+Carpetas: "theme"          Número de archivos: 3          Tamaño de los archivos: 2.996
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\java\com\example\paratiapp\ui\viewmodel
+2025.04.17 12:50:04	A-------	6.054	RegaloViewModel.kt
+----------------------------------------------------------------------------------------------------
+Carpetas: "viewmodel"          Número de archivos: 1          Tamaño de los archivos: 6.054
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\res
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\res\drawable
+2025.04.12 14:07:10	A-------	2.027.451	bg_bienvenida.png
+2025.04.16 18:20:25	A-------	1.071.968	bg_formulario.png
+2025.04.12 14:08:24	A-------	1.857.907	bg_preview.png
+2025.04.16 18:16:29	A-------	761.586	bg_receptor_apertura.png
+2025.04.12 14:08:40	A-------	1.834.832	bg_receptor_carga.png
+2025.04.16 18:18:20	A-------	61.467	bg_seleccion.png
+2025.04.10 08:00:46	A-------	0	caja01.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "drawable"          Número de archivos: 7          Tamaño de los archivos: 7.615.211
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\res\layout
+2025.04.10 08:00:46	A-------	569	activity_main.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "layout"          Número de archivos: 1          Tamaño de los archivos: 569
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\res\mipmap-anydpi-v26
+2025.04.10 09:33:10	--------	328	ic_launcher.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-anydpi-v26"          Número de archivos: 1          Tamaño de los archivos: 328
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\res\mipmap-hdpi
+2025.04.10 09:33:10	--------	11.281	ic_launcher.png
+2025.04.10 09:33:10	--------	1.964	ic_launcher_background.png
+2025.04.10 09:33:10	--------	28.992	ic_launcher_foreground.png
+2025.04.10 09:33:10	--------	28.782	ic_launcher_monochrome.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-hdpi"          Número de archivos: 4          Tamaño de los archivos: 71.019
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\res\mipmap-mdpi
+2025.04.10 09:33:10	--------	5.671	ic_launcher.png
+2025.04.10 09:33:10	--------	1.425	ic_launcher_background.png
+2025.04.10 09:33:10	--------	14.342	ic_launcher_foreground.png
+2025.04.10 09:33:10	--------	14.058	ic_launcher_monochrome.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-mdpi"          Número de archivos: 4          Tamaño de los archivos: 35.496
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\res\mipmap-xhdpi
+2025.04.10 09:33:10	--------	19.105	ic_launcher.png
+2025.04.10 09:33:10	--------	2.598	ic_launcher_background.png
+2025.04.10 09:33:10	--------	49.865	ic_launcher_foreground.png
+2025.04.10 09:33:10	--------	50.012	ic_launcher_monochrome.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-xhdpi"          Número de archivos: 4          Tamaño de los archivos: 121.580
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\res\mipmap-xxhdpi
+2025.04.10 09:33:10	--------	38.233	ic_launcher.png
+2025.04.10 09:33:10	--------	4.176	ic_launcher_background.png
+2025.04.10 09:33:10	--------	101.147	ic_launcher_foreground.png
+2025.04.10 09:33:10	--------	102.081	ic_launcher_monochrome.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-xxhdpi"          Número de archivos: 4          Tamaño de los archivos: 245.637
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\res\mipmap-xxxhdpi
+2025.04.10 09:33:10	--------	65.319	ic_launcher.png
+2025.04.10 09:33:10	--------	6.096	ic_launcher_background.png
+2025.04.10 09:33:10	--------	176.249	ic_launcher_foreground.png
+2025.04.10 09:33:10	--------	177.525	ic_launcher_monochrome.png
+----------------------------------------------------------------------------------------------------
+Carpetas: "mipmap-xxxhdpi"          Número de archivos: 4          Tamaño de los archivos: 425.189
+
+        D:\Pedro\Documents\androidestudio\ParaTiApp03\app\src\main\res\values
+2025.04.10 08:00:46	A-------	199	colors.xml
+2025.04.10 08:00:46	A-------	69	strings.xml
+2025.04.10 13:54:48	A-------	239	themes.xml
+----------------------------------------------------------------------------------------------------
+Carpetas: "values"          Número de archivos: 3          Tamaño de los archivos: 507
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Resumen - Carpetas: 286          Archivos: 505          Tamaño de los archivos: 90.388.866 Bytes

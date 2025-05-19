@@ -1,0 +1,106 @@
+Checklist del Proyecto: ParaTiApp03 (App Android Regalos 3D)
+Última Actualización: 04/05/2025
+Objetivo General: Crear una app Android nativa (Kotlin/Compose/Material 3) con una experiencia 3D (WebView+Three.js) para enviar regalos virtuales personalizados por WhatsApp.
+
+I. CONFIGURACIÓN Y BASE DEL PROYECTO ✅ (HECHO)
+[✅] Proyecto Android ParaTiApp03 creado y abierto en Android Studio/Cursor.
+[✅] Configuración de Gradle (build.gradle.kts raíz y app, settings.gradle, gradle.properties) corregida y funcional.
+[✅] Dependencias esenciales añadidas (Compose BOM, Material 3, Navigation Compose, Coil, Coroutines, Hilt, Webkit, Firebase).
+[✅] Hilt configurado completamente (Plugins, dependencias, @HiltAndroidApp, AndroidManifest.xml, AppModule.kt).
+[✅] Firebase conectado y SDK de Cloud Firestore añadido.
+[✅] El proyecto compila sin errores de Kotlin/Gradle.
+[✅] Emulador configurado y dispositivo físico disponible para pruebas.
+[✅] Tema base Material 3 (Color.kt, Type.kt, Theme.kt) creado y aplicado.
+[✅] Icono de la App y fondos de pantalla personalizados añadidos.
+
+II. ESTRUCTURA DE DATOS Y LÓGICA ✅ (HECHO)
+[✅] data class Regalo definida (pendiente revisión final de campos).
+[✅] Interfaz RegaloRepository y RegaloRepositoryImpl creadas (lógica básica Firestore).
+[✅] RegaloViewModel creado (@HiltViewModel) con StateFlows para datos y EstadoGuardado.
+[✅] Funciones actualizar... en ViewModel creadas (con logs de depuración).
+[✅] Función guardarRegalo() en ViewModel implementada (llama al Repository).
+[✅] ViewModel compartido correctamente entre PantallaFormulario, PantallaSelectorTextura y PantallaPreview3D usando scope de NavGraph.
+
+III. PANTALLAS Y NAVEGACIÓN (Emisor) ✅ (MAYORMENTE HECHO)
+[✅] PantallaBienvenida.kt creada y funcional.
+[✅] PantallaFormulario.kt creada, funcional, conectada al ViewModel (datos básicos se actualizan).
+[✅] PantallaSelectorTextura.kt creada, funcional, conectada al ViewModel (texturas base se actualizan).
+[✅] Navegación configurada en MainActivity.kt (AppNavigation con NavHost) para el flujo: Bienvenida -> Formulario -> SelectorTexturas -> Preview3D.
+[✅] Componente SelectorDeTexturas.kt creado y funcional (carga imágenes desde assets, maneja selección).
+[✅] PantallaPreview3D.kt creada, muestra WebView.
+
+IV. INTEGRACIÓN 3D / WEBVIEW ✅ (MAYORMENTE HECHO)
+[✅] Estructura de carpetas en `assets/` definida (html3d, libs, texturas).
+[✅] Archivos de Three.js (core, GLTFLoader, OrbitControls, DRACOLoader.js, decodificadores Draco) servidos localmente desde `assets/`.
+[✅] `viewer.html` configurado para cargar estos archivos JS locales (sin importmap problemático, usando imports directos con rutas relativas/virtuales).
+[✅] Modelo `caja_base.glb` (con todas sus partes, incluyendo los dos tipos de lazos) se carga y visualiza en el WebView en `PantallaPreview3D`.
+[✅] `WebViewAssetLoader` configurado y funcionando para servir HTML, JS y el modelo GLB.
+[✅] Comunicación Kotlin -> JS establecida:
+    [✅] Se llama a funciones JS desde `PantallaPreview3D.kt`.
+    [✅] Se implementó sincronización (bandera `window.modeloEstaListo` y reintentos desde Kotlin) para aplicar personalizaciones DESPUÉS de que el modelo 3D esté listo.
+[✅] Funciones JS básicas (`aplicarTexturaCaja`, `aplicarTexturaPapel`, `aplicarTexturaTarjeta`) aplican las texturas seleccionadas a las mallas correspondientes (Caja, Papel, Tarjeta).
+
+V. TAREAS PENDIENTES DETALLADAS ⏳ (EN PROGRESO / TODO)
+
+    A. LAZOS (Forma y Textura/Color) - ¡PRIORIDAD ACTUAL!
+        [ ] Nombres de Objetos de Lazo en Blender: Confirmar/establecer nombres únicos (ej: "LazoEstrella", "LazoFlor").
+        [ ] Materiales Únicos para Lazos en Blender: Asignar materiales (ej: "MaterialLazoEstrella", "MaterialLazoFlor" o un "MaterialLazo" compartido si la textura/color siempre es la misma independientemente de la forma).
+        [ ] UVs para Lazos en Blender: Asegurar que ambos objetos de lazo tengan UVs correctos.
+        [ ] Re-exportar `caja_base.glb` con los lazos nombrados y con materiales/UVs correctos.
+        [ ] ViewModel (`RegaloViewModel.kt`):
+            [✅] Añadir `_formaLazoSeleccionada: MutableStateFlow<String>` y su `StateFlow` público.
+            [✅] Añadir `fun actualizarFormaLazo(forma: String)` con log.
+            [✅] `_texturaLazoSeleccionada` ya existe (para el archivo .png del lazo).
+            [✅] `_colorLazoSeleccionado` ya existe (para el color hexadecimal).
+        [ ] PantallaSelectorTextura.kt:
+            [ ] Modificar la lógica de `onTexturaSeleccionada` para el selector de lazos:
+                [ ] Que determine la FORMA del lazo (ej: "LazoEstrella" o "LazoFlor") a partir del nombre del archivo PNG seleccionado (ej: `lazo_estrella.png` -> "LazoEstrella").
+                [ ] Que llame a `viewModel.actualizarFormaLazo()` con el nombre de la forma.
+                [ ] Que llame a `viewModel.actualizarTexturaLazo()` con el nombre del archivo PNG.
+        [ ] viewer.html (JavaScript):
+            [✅] En `init()` -> `loader.load` -> `onSuccess` -> `traverse`: Ocultar AMBOS objetos de lazo (`LazoEstrella`, `LazoFlor`) inicialmente.
+            [✅] Crear función `window.cambiarFormaLazo(nombreLazoActivo)`:
+                [✅] Recorrer `gltfModel`.
+                [✅] Hacer `child.visible = (child.name === nombreLazoActivo)` para `LazoEstrella` y `LazoFlor`.
+            [ ] Modificar `window.aplicarTexturaLazo(nombreArchivoTextura)`:
+                [ ] Debe aplicar la textura al material del lazo que esté *actualmente visible* (determinado por `_formaLazoSeleccionada` y `cambiarFormaLazo`).
+                [ ] O, si los lazos tienen materiales separados, aplicar al material de la forma activa, o a ambos si se prefiere.
+                [ ] La función `applyTexture` actual busca por `meshName`. Considerar si se necesita `applyTextureToMaterial(materialName, texturePath)`.
+            [ ] Modificar `window.aplicarColorLazo(colorHex)`: Lógica similar a `aplicarTexturaLazo` pero para el color.
+        [ ] PantallaPreview3D.kt (`onPageFinished` -> `intentarAplicarTexturas`):
+            [✅] Leer `formaLazo` del ViewModel.
+            [✅] Llamar a `webView.evaluateJavascript("javascript:cambiarFormaLazo('$formaLazo')", null)` **ANTES** de aplicar textura/color al lazo.
+            [ ] Asegurar que `aplicarTexturaLazo` y `aplicarColorLazo` (JS) funcionen correctamente con el lazo activo.
+
+    B. RESTO DE FUNCIONALIDADES
+        [ ] ViewModel y Flujo de Datos:
+            [ ] Ajustar data class `Regalo` para incluir definitivamente `archivoUrl`.
+            [ ] Implementar `actualizarColorLazo` en `PantallaSelectorTextura.kt` (UI y llamada al ViewModel).
+        [ ] Selección de Archivo:
+            [ ] Implementar lógica del botón "Seleccionar archivo" en `PantallaFormulario` (ActivityResult API).
+            [ ] Guardar `Uri` del archivo en ViewModel.
+            [ ] Mostrar vista previa del archivo seleccionado.
+        [ ] Cloud Storage (Firebase):
+            [ ] Añadir SDK de Cloud Storage.
+            [ ] Implementar subida de archivo en `RegaloRepository` al llamar a `guardarRegalo`.
+            [ ] Obtener URL de descarga.
+            [ ] Guardar `archivoUrl` en Firestore.
+        [ ] Pantallas Restantes (UI Compose):
+            [ ] Crear `PantallaResumenEnviar.kt`.
+            [ ] Aplicar fondos restantes.
+        [ ] Navegación Completa:
+            [ ] Hacer que botón "Enviar" en última pantalla llame a `viewModel.guardarRegalo()`.
+            [ ] Manejar estados de `EstadoGuardado` (Loading, Success, Error) visualmente.
+        [ ] Experiencia del Receptor (Futuro):
+            [ ] Firebase Hosting/App Hosting.
+            [ ] Página receptora lee ID de regalo, consulta Firestore, muestra animación y contenido.
+        [ ] Pulido y Extras:
+            [ ] Splash Screen.
+            [ ] Transiciones.
+            [ ] Indicadores de carga.
+            [ ] Mejorar manejo de errores visual.
+            [ ] Optimizar rendimiento (WebP, Draco).
+            [ ] Sonidos, feedback háptico.
+            [ ] Pruebas.
+            [ ] Firestore Security Rules.
+            [ ] Publicación.

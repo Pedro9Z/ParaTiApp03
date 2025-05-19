@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.example.paratiapp" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ¡¡EL PERMISO VA AQUÍ!! -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".ParaTiApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="ParaTiApp"
+        android:theme="@style/Theme.ParaTiApp">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- Otras activities, services, etc. -->
+
+    </application>
+
+</manifest>

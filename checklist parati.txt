@@ -1,0 +1,78 @@
+Checklist del Proyecto: ParaTiApp03 (App Android Regalos 3D)
+Última Actualización: 13/04/2025 (Basado en chat10 Para Ti.txt y nuestra conversación actual)
+Objetivo General: Crear una app Android nativa (Kotlin/Compose/Material 3) con una experiencia 3D (WebView+Three.js) para enviar regalos virtuales personalizados por WhatsApp.
+I. CONFIGURACIÓN Y BASE DEL PROYECTO ✅ (HECHO)
+[✅] Proyecto Android ParaTiApp03 creado y abierto en Android Studio/Cursor.
+[✅] Configuración de Gradle (build.gradle.kts raíz y app, settings.gradle, gradle.properties) corregida y funcional (Kotlin DSL, memoria aumentada, AndroidX, Jetifier).
+[✅] Dependencias esenciales añadidas (Compose BOM, Material 3, Navigation Compose, Coil, Coroutines Tasks/Play Services).
+[✅] Hilt configurado completamente (Plugins, dependencias, @HiltAndroidApp en ParaTiApplication.kt, AndroidManifest.xml actualizado, AppModule.kt con provisión de Repository).
+[✅] Firebase conectado al proyecto (Asistente de Firebase).
+[✅] SDK de Cloud Firestore añadido al proyecto.
+[✅] El proyecto compila sin errores (BUILD SUCCESSFUL).
+[✅] Emulador configurado (Medium Phone API 36) y funcionando.
+[✅] Tema base Material 3 (ui/theme/Color.kt, Type.kt, Theme.kt) creado y aplicado en MainActivity.
+[✅] Icono de la App configurado (eliminando error de ic_launcher_round).
+[✅] Fondos de pantalla personalizados generados y añadidos a res/drawable/.
+II. ESTRUCTURA DE DATOS Y LÓGICA ✅ (HECHO)
+[✅] data class Regalo definida (aunque necesita revisión final de campos como archivoUrl).
+[✅] Interfaz RegaloRepository definida.
+[✅] Implementación RegaloRepositoryImpl creada (con lógica básica para guardar en Firestore usando await y serverTimestamp).
+[✅] RegaloViewModel creado (@HiltViewModel) con StateFlow para datos básicos (nombre, teléfono, mensaje, texturaCaja) y estados de guardado (EstadoGuardado sealed class).
+[✅] Funciones actualizar... en ViewModel creadas.
+[✅] Función guardarRegalo() en ViewModel creada (llama al Repository).
+III. PANTALLAS Y NAVEGACIÓN (Emisor) ✅ (PARCIALMENTE HECHO)
+[✅] PantallaBienvenida.kt creada, funcional y con fondo aplicado.
+[✅] PantallaFormulario.kt creada, funcional, conectada al ViewModel, con validaciones (teléfono, campos vacíos), manejo de cursor TextFieldValue, y fondo aplicado.
+[✅] PantallaSelectorTextura.kt creada, conectada al ViewModel (para texturaCaja), y mostrando miniaturas desde assets/ usando SelectorDeTexturas.
+[✅] Navegación básica configurada en MainActivity.kt (AppNavigation con NavHost) para el flujo: Bienvenida -> Formulario -> SelectorTexturas.
+[✅] Componente SelectorDeTexturas.kt creado y funcional (carga imágenes desde assets/ con Coil, maneja selección).
+IV. ASSETS Y 3D ✅ (PREPARADO)
+[✅] Estructura de carpetas definida en app/src/main/assets/texturas/ (packages, paper, bows, cards, backgrounds).
+[✅] Texturas .png para miniaturas y fondos colocadas en res/drawable y assets/.
+[✅] Modelo caja_base.glb exportado desde Blender sin texturas embebidas, con nombres de malla correctos (verificado) y con animaciones NLA (Solapa_Anim, Tarjeta_Anim).
+V. TAREAS PENDIENTES ⏳ (TODO)
+ViewModel y Flujo de Datos:
+[⏳] Añadir StateFlows y funciones actualizar... restantes al RegaloViewModel (papel, lazo, color, archivo adjunto).
+[⏳] Ajustar data class Regalo para incluir definitivamente archivoUrl.
+[⏳] Conectar SelectorDeTexturas en PantallaSelectorTextura para actualizar texturaPapel y nombreLazo en el ViewModel.
+[⏳] Añadir selector de color para el lazo en PantallaSelectorTextura y conectar al ViewModel.
+Selección de Archivo:
+[⏳] Implementar la lógica REAL del botón "Seleccionar archivo" en PantallaFormulario usando rememberLauncherForActivityResult (Activity Result API) para abrir el selector de archivos del sistema.
+[⏳] Guardar la Uri del archivo seleccionado en el ViewModel.
+[⏳] Mostrar una vista previa del archivo seleccionado (nombre o miniatura si es imagen) en el formulario.
+Cloud Storage (Firebase):
+[⏳] Añadir SDK de Cloud Storage al proyecto.
+[⏳] Implementar la lógica en RegaloRepository para subir el archivo seleccionado a Cloud Storage al llamar a guardarRegalo.
+[⏳] Obtener la URL de descarga del archivo subido.
+[⏳] Guardar esa archivoUrl en el documento de Firestore junto con los demás datos del Regalo.
+Pantallas Restantes (UI Compose):
+[⏳] Crear PantallaPreview3D.kt (inicialmente como placeholder).
+[⏳] Crear PantallaResumenEnviar.kt (mostrará resumen y tendrá el botón final).
+[⏳] Aplicar los fondos restantes (bg_seleccion, bg_preview, etc.) a sus pantallas.
+Navegación Completa:
+[⏳] Hacer que PantallaSelectorTextura navegue a PantallaPreview3D (o PantallaResumenEnviar).
+[⏳] Hacer que el botón "Enviar" en la última pantalla llame a viewModel.guardarRegalo().
+Integración 3D / WebView:
+[⏳] Preparar el HTML/JS/Three.js (html3d/ en assets) para la escena del regalo.
+[⏳] Implementar la carga del caja_base.glb en Three.js.
+[⏳] Implementar la lógica en JS para recibir parámetros (texturaCaja, texturaPapel, colorLazo, mensaje, archivoUrl) desde Kotlin/WebView.
+[⏳] Aplicar las texturas y colores recibidos al modelo 3D.
+[⏳] Implementar la reproducción de animaciones (Solapa_Anim, Tarjeta_Anim) desde JS.
+[⏳] Configurar PantallaPreview3D.kt para mostrar el WebView cargando el HTML y pasarle los datos desde el ViewModel (vía evaluateJavascript o addJavascriptInterface).
+Experiencia del Receptor:
+[⏳] Configurar Firebase Hosting (o App Hosting) para alojar la página web del receptor.
+[⏳] Asegurar que la página del receptor pueda leer el ID del regalo desde la URL.
+[⏳] Implementar la consulta a Firestore desde el JS del receptor para obtener los datos del regalo.
+[⏳] Implementar la animación completa de apertura en la web del receptor.
+[⏳] Mostrar el mensaje y el archivo adjunto al final.
+Pulido y Extras:
+[⏳] Implementar Splash Screen personalizado.
+[⏳] Mejorar transiciones entre pantallas.
+[⏳] Añadir indicadores de carga (especialmente al guardar en Firestore y cargar el 3D).
+[⏳] Añadir manejo de errores visual (Snackbars o diálogos).
+[⏳] Optimizar rendimiento (imágenes WebP, compresión GLB con Draco?).
+[⏳] Añadir sonidos y feedback háptico.
+[⏳] Pruebas unitarias y de interfaz.
+[⏳] Configurar Firestore Security Rules.
+[⏳] Preparar para publicación (firmar APK/AAB).
+¡Espero que este checklist te dé una visión clara de nuestro progreso y de lo que viene! Como ves, hemos sentado unas bases MUY sólidas.
