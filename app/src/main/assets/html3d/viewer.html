@@ -26,406 +26,414 @@
 <div id="loading-indicator">Cargando visor v16.1...</div>
 
 <script type="module">
-    console.log("VIEWER.HTML: Script module started (v16.1).");
-    const loadingIndicator = document.getElementById('loading-indicator');
-    loadingIndicator.textContent = 'Importando módulos JS (v16.1)...';
+    (async () => {
+        console.log("VIEWER.HTML: Script module started (v16.1).");
+        const loadingIndicator = document.getElementById('loading-indicator');
+        loadingIndicator.textContent = 'Importando módulos JS (v16.1)...';
 
-    try {
-        const THREE = await import('three');
-        const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
-        const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
-        const { DRACOLoader } = await import('three/addons/libs/draco/gltf/DRACOLoader.js');
-        console.log("VIEWER.HTML: Módulos importados OK (v16.1).");
-        loadingIndicator.textContent = 'Módulos JS OK. Inicializando 3D...';
+        try {
+            const THREE = await import('three');
+            const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+            const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+            const { DRACOLoader } = await import('three/addons/libs/draco/gltf/DRACOLoader.js');
+            console.log("VIEWER.HTML: Módulos importados OK (v16.1).");
+            loadingIndicator.textContent = 'Módulos JS OK. Inicializando 3D...';
 
-        if (!THREE || !GLTFLoader || !OrbitControls || !DRACOLoader) {
-             throw new Error("VIEWER.HTML: ¡Fallo al importar módulos!");
-        }
+            if (!THREE || !GLTFLoader || !OrbitControls || !DRACOLoader) {
+                 throw new Error("VIEWER.HTML: ¡Fallo al importar módulos!");
+            }
 
-        let scene, camera, renderer, controls, gltfModel = null;
-        let mixer, clock, animations = [];
-        const textureLoader = new THREE.TextureLoader();
+            let scene, camera, renderer, controls, gltfModel = null;
+            let mixer, clock, animations = [];
+            const textureLoader = new THREE.TextureLoader();
 
-        // ----- INICIO BLOQUE A AÑADIR 1 -----
-        // --- Para Raycasting ---
-        const raycaster = new THREE.Raycaster();
-        const pointer = new THREE.Vector2();
-        // --- Estado de la aplicación 3D ---
-        let estadoApp3D = "INICIO"; // Posibles: INICIO, ANIMANDO_SOLAPA, ANIMANDO_TARJETA, TARJETA_MOSTRADA, TARJETA_LEIDA, ABRIENDO_REGALO
-        // ----- FIN BLOQUE A AÑADIR 1 -----
+            // ----- INICIO BLOQUE A AÑADIR 1 -----
+            // --- Para Raycasting ---
+            const raycaster = new THREE.Raycaster();
+            const pointer = new THREE.Vector2();
+            // --- Estado de la aplicación 3D ---
+            let estadoApp3D = "INICIO"; // Posibles: INICIO, ANIMANDO_SOLAPA, ANIMANDO_TARJETA, TARJETA_MOSTRADA, TARJETA_LEIDA, ABRIENDO_REGALO
+            // ----- FIN BLOQUE A AÑADIR 1 -----
 
-        // --- NOMBRES DE OBJETOS ---
-        const NOMBRE_CAJA = "Caja";
-        const NOMBRE_MESA = "Mesa_Apoyo";
-        const NOMBRE_PAPEL_FRONTAL = "Papel_Frontal";
-        const NOMBRE_PAPEL_TRASERO = "Papel_Trasero";
-        const NOMBRE_PAPEL_IZQUIERDO = "Papel_Izquierdo";
-        const NOMBRE_PAPEL_DERECHO = "Papel_Derecho";
-        const NOMBRE_PAPEL_INFERIOR = "Papel_Inferior";
-        const NOMBRE_PAPEL_SUPERIOR = "Papel_Superior";
-        const NOMBRE_SOBRE = "Sobre";
-        const NOMBRE_SOLAPA = "Solapa";
-        const NOMBRE_TARJETA = "Tarjeta";
-        const NOMBRE_TAPA = "Tapa";
-        const NOMBRE_CINTA1 = "Cinta1";
-        const NOMBRE_CINTA2 = "Cinta2";
-        const NOMBRE_LAZO_ESTRELLA = "Lazoestrella";
-        const NOMBRE_LAZO_FLOR = "Lazoflor";
+            // --- NOMBRES DE OBJETOS ---
+            const NOMBRE_CAJA = "Caja";
+            const NOMBRE_MESA = "Mesa_Apoyo";
+            const NOMBRE_PAPEL_FRONTAL = "Papel_Frontal";
+            const NOMBRE_PAPEL_TRASERO = "Papel_Trasero";
+            const NOMBRE_PAPEL_IZQUIERDO = "Papel_Izquierdo";
+            const NOMBRE_PAPEL_DERECHO = "Papel_Derecho";
+            const NOMBRE_PAPEL_INFERIOR = "Papel_Inferior";
+            const NOMBRE_PAPEL_SUPERIOR = "Papel_Superior";
+            const NOMBRE_SOBRE = "Sobre";
+            const NOMBRE_SOLAPA = "Solapa";
+            const NOMBRE_TARJETA = "Tarjeta";
+            const NOMBRE_TAPA = "Tapa";
+            const NOMBRE_CINTA1 = "Cinta1";
+            const NOMBRE_CINTA2 = "Cinta2";
+            const NOMBRE_LAZO_ESTRELLA = "Lazoestrella";
+            const NOMBRE_LAZO_FLOR = "Lazoflor";
 
-        init();
-        animate();
+            init();
+            animate();
 
-        function init() {
-            console.log("VIEWER.HTML: init() v16.1.");
-            scene = new THREE.Scene();
-            scene.background = null;
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            clock = new THREE.Clock();
+            function init() {
+                console.log("VIEWER.HTML: init() v16.1.");
+                scene = new THREE.Scene();
+                scene.background = null;
+                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                clock = new THREE.Clock();
 
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 1.8, 5); camera.lookAt(0, 0.5, 0);
+                camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.set(0, 1.8, 5); camera.lookAt(0, 0.5, 0);
 
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.outputColorSpace = THREE.SRGBColorSpace;
-            document.body.appendChild(renderer.domElement);
-
-            const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); scene.add(ambientLight);
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0); directionalLight.position.set(5, 10, 7); scene.add(directionalLight);
-
-            controls = new OrbitControls(camera, renderer.domElement); controls.enableDamping = true; controls.target.set(0, 0.5, 0);
-
-            const dracoLoader = new DRACOLoader();
-            dracoLoader.setDecoderPath('/assets/html3d/libs/three/examples/jsm/libs/draco/gltf/');
-
-            const loader = new GLTFLoader();
-            loader.setDRACOLoader(dracoLoader);
-
-            const modelPath = '/assets/texturas/packages/caja_base.glb';
-            console.log(`VIEWER.HTML: Cargando GLB: ${modelPath} (v16.1)`);
-            loadingIndicator.textContent = 'Cargando modelo 3D (v16.1)...';
-            loader.load( modelPath,
-                 function (gltf) {
-                     console.log("VIEWER.HTML: GLB cargado (v16.1).");
-                     loadingIndicator.style.display = 'none';
-                     gltfModel = gltf.scene;
-                     scene.add(gltfModel);
-
-                     const cajaObj = gltfModel.getObjectByName(NOMBRE_CAJA);
-                     if (cajaObj) {
-                        const box = new THREE.Box3().setFromObject(cajaObj);
-                        const center = box.getCenter(new THREE.Vector3());
-                        gltfModel.position.y -= center.y;
-                        controls.target.copy(cajaObj.position);
-                        controls.target.y += box.getSize(new THREE.Vector3()).y / 2;
-                     } else {
-                        console.warn("Caja no encontrada para centrar (v16.1).");
-                        const box = new THREE.Box3().setFromObject(gltf.scene);
-                        const center = box.getCenter(new THREE.Vector3());
-                        gltfModel.position.y -= center.y;
-                     }
-                     console.log("VIEWER.HTML: Modelo posicionado (v16.1).");
-
-                     const piezasPapelNombres = [
-                        NOMBRE_PAPEL_FRONTAL, NOMBRE_PAPEL_TRASERO, NOMBRE_PAPEL_IZQUIERDO,
-                        NOMBRE_PAPEL_DERECHO, NOMBRE_PAPEL_INFERIOR, NOMBRE_PAPEL_SUPERIOR
-                     ];
-                     const visiblesPorDefecto = [
-                        NOMBRE_CAJA, NOMBRE_MESA, NOMBRE_SOBRE, NOMBRE_SOLAPA,
-                        NOMBRE_TAPA, NOMBRE_CINTA1, NOMBRE_CINTA2
-                     ];
-                     const ocultosPorDefecto = [
-                        NOMBRE_TARJETA, ...piezasPapelNombres, NOMBRE_LAZO_ESTRELLA, NOMBRE_LAZO_FLOR
-                     ];
-
-                     gltf.scene.traverse(function(child){
-                         if(child.isMesh){
-                             if (visiblesPorDefecto.includes(child.name)) {
-                                 child.visible = true;
-                             } else if (ocultosPorDefecto.includes(child.name)) {
-                                 child.visible = false;
-                             }
-                         }
-                     });
-
-                     if(gltf.animations && gltf.animations.length > 0){
-                         mixer = new THREE.AnimationMixer(gltf.scene);
-                         animations = gltf.animations;
-                         console.log("Animaciones encontradas (v16.1):", animations.map(a => a.name));
-                     } else { console.log("No se encontraron animaciones (v16.1)."); }
-
-                     window.modeloEstaListo = true;
-                     console.log("VIEWER.HTML: Modelo listo (v16.1).");
-                 },
-                 (xhr) => { loadingIndicator.textContent = `Cargando: ${(xhr.loaded / xhr.total * 100).toFixed(0)}% (v16.1)`; },
-                 (error) => {
-                      console.error('VIEWER.HTML: Error cargando GLB (v16.1):', JSON.stringify(error, Object.getOwnPropertyNames(error)));
-                      loadingIndicator.textContent = 'Error al cargar modelo (v16.1).';
-                  }
-            );
-            // --- NUEVO: Event Listener para Clics/Toques en el Canvas ---
-            renderer.domElement.addEventListener('pointerdown', onCanvasPointerDown, false);
-            // --- FIN NUEVO ---
-            window.addEventListener('resize', onWindowResize, false);
-            console.log("VIEWER.HTML: init() finalizado (v16.1).");
-        }
-
-        function onWindowResize() {
-            if(camera && renderer) {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.outputColorSpace = THREE.SRGBColorSpace;
+                document.body.appendChild(renderer.domElement);
+
+                const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); scene.add(ambientLight);
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0); directionalLight.position.set(5, 10, 7); scene.add(directionalLight);
+
+                controls = new OrbitControls(camera, renderer.domElement); controls.enableDamping = true; controls.target.set(0, 0.5, 0);
+
+                const dracoLoader = new DRACOLoader();
+                dracoLoader.setDecoderPath('/assets/html3d/libs/three/examples/jsm/libs/draco/gltf/');
+
+                const loader = new GLTFLoader();
+                loader.setDRACOLoader(dracoLoader);
+
+                const modelPath = '/assets/texturas/packages/caja_base.glb';
+                console.log(`VIEWER.HTML: Cargando GLB: ${modelPath} (v16.1)`);
+                loadingIndicator.textContent = 'Cargando modelo 3D (v16.1)...';
+                loader.load( modelPath,
+                     function (gltf) {
+                         console.log("VIEWER.HTML: GLB cargado (v16.1).");
+                         loadingIndicator.style.display = 'none';
+                         gltfModel = gltf.scene;
+                         scene.add(gltfModel);
+
+                         const cajaObj = gltfModel.getObjectByName(NOMBRE_CAJA);
+                         if (cajaObj) {
+                            const box = new THREE.Box3().setFromObject(cajaObj);
+                            const center = box.getCenter(new THREE.Vector3());
+                            gltfModel.position.y -= center.y;
+                            controls.target.copy(cajaObj.position);
+                            controls.target.y += box.getSize(new THREE.Vector3()).y / 2;
+                         } else {
+                            console.warn("Caja no encontrada para centrar (v16.1).");
+                            const box = new THREE.Box3().setFromObject(gltf.scene);
+                            const center = box.getCenter(new THREE.Vector3());
+                            gltfModel.position.y -= center.y;
+                         }
+                         console.log("VIEWER.HTML: Modelo posicionado (v16.1).");
+
+                         const piezasPapelNombres = [
+                            NOMBRE_PAPEL_FRONTAL, NOMBRE_PAPEL_TRASERO, NOMBRE_PAPEL_IZQUIERDO,
+                            NOMBRE_PAPEL_DERECHO, NOMBRE_PAPEL_INFERIOR, NOMBRE_PAPEL_SUPERIOR
+                         ];
+                         const visiblesPorDefecto = [
+                            NOMBRE_CAJA, NOMBRE_MESA, NOMBRE_SOBRE, NOMBRE_SOLAPA,
+                            NOMBRE_TAPA, NOMBRE_CINTA1, NOMBRE_CINTA2
+                         ];
+                         const ocultosPorDefecto = [
+                            NOMBRE_TARJETA, ...piezasPapelNombres, NOMBRE_LAZO_ESTRELLA, NOMBRE_LAZO_FLOR
+                         ];
+
+                         gltf.scene.traverse(function(child){
+                             if(child.isMesh){
+                                 if (visiblesPorDefecto.includes(child.name)) {
+                                     child.visible = true;
+                                 } else if (ocultosPorDefecto.includes(child.name)) {
+                                     child.visible = false;
+                                 }
+                             }
+                         });
+
+                         if(gltf.animations && gltf.animations.length > 0){
+                             mixer = new THREE.AnimationMixer(gltf.scene);
+                             animations = gltf.animations;
+                             console.log("Animaciones encontradas (v16.1):", animations.map(a => a.name));
+                         } else { console.log("No se encontraron animaciones (v16.1)."); }
+
+                         window.modeloEstaListo = true;
+                         console.log("VIEWER.HTML: Modelo listo (v16.1).");
+                     },
+                     (xhr) => { loadingIndicator.textContent = `Cargando: ${(xhr.loaded / xhr.total * 100).toFixed(0)}% (v16.1)`; },
+                     (error) => {
+                          console.error('VIEWER.HTML: Error cargando GLB (v16.1):', JSON.stringify(error, Object.getOwnPropertyNames(error)));
+                          loadingIndicator.textContent = 'Error al cargar modelo (v16.1).';
+                      }
+                );
+                // --- NUEVO: Event Listener para Clics/Toques en el Canvas ---
+                renderer.domElement.addEventListener('pointerdown', onCanvasPointerDown, false);
+                // --- FIN NUEVO ---
+                window.addEventListener('resize', onWindowResize, false);
+                console.log("VIEWER.HTML: init() finalizado (v16.1).");
             }
-        }
 
-        function animate() {
-            requestAnimationFrame(animate);
-            const delta = clock.getDelta();
-            if (controls) controls.update();
-            if (mixer) mixer.update(delta);
-            if (renderer && scene && camera) renderer.render(scene, camera);
-        }
+            function onWindowResize() {
+                if(camera && renderer) {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                }
+            }
 
-        // --- NUEVA FUNCIÓN: Manejador de Clics/Toques ---
-        function onCanvasPointerDown(event) {
-            // Normalizar coordenadas del puntero
-            pointer.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-            pointer.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+            function animate() {
+                requestAnimationFrame(animate);
+                const delta = clock.getDelta();
+                if (controls) controls.update();
+                if (mixer) mixer.update(delta);
+                if (renderer && scene && camera) renderer.render(scene, camera);
+            }
 
-            raycaster.setFromCamera(pointer, camera);
-            if (!gltfModel) return;
-            const intersects = raycaster.intersectObject(gltfModel, true); // true para recursivo
+            // --- NUEVA FUNCIÓN: Manejador de Clics/Toques ---
+            function onCanvasPointerDown(event) {
+                // Normalizar coordenadas del puntero
+                pointer.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+                pointer.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
 
-            if (intersects.length > 0) {
-                const primerObjetoTocado = intersects[0].object;
-                // Solo reaccionar si el objeto tocado es una malla y es visible
-                if (!primerObjetoTocado.isMesh || !primerObjetoTocado.visible) return;
+                raycaster.setFromCamera(pointer, camera);
+                if (!gltfModel) return;
+                const intersects = raycaster.intersectObject(gltfModel, true); // true para recursivo
 
-                console.log(`JS: Tocado objeto: ${primerObjetoTocado.name} en estado: ${estadoApp3D}`);
+                if (intersects.length > 0) {
+                    const primerObjetoTocado = intersects[0].object;
+                    // Solo reaccionar si el objeto tocado es una malla y es visible
+                    if (!primerObjetoTocado.isMesh || !primerObjetoTocado.visible) return;
 
-                               // Dentro de onCanvasPointerDown, después de if (intersects.length > 0) { ... }
-                // ... (el console.log que ya tenías)
+                    console.log(`JS: Tocado objeto: ${primerObjetoTocado.name} en estado: ${estadoApp3D}`);
 
-                // Dentro de onCanvasPointerDown
-                if (estadoApp3D === "INICIO" && (primerObjetoTocado.name === NOMBRE_SOBRE || primerObjetoTocado.name === NOMBRE_SOLAPA) ) {
-                    console.log("JS: Interacción INICIO -> Reproduciendo Solapa_Abrir y Tarjeta_Salir.");
-                    estadoApp3D = "ANIMANDO_SOBRE_TARJETA";
+                    // Dentro de onCanvasPointerDown, después de if (intersects.length > 0) { ... }
+                    // ... (el console.log que ya tenías)
 
-                    // Hacer visible la tarjeta si no lo está ya (la animación la moverá)
-                    const tarjetaObj = gltfModel.getObjectByName(NOMBRE_TARJETA);
-                    if (tarjetaObj && !tarjetaObj.visible) {
-                        tarjetaObj.visible = true;
-                        console.log("JS: Tarjeta hecha visible para animación.");
-                    }
+                    // Dentro de onCanvasPointerDown
+                    if (estadoApp3D === "INICIO" && (primerObjetoTocado.name === NOMBRE_SOBRE || primerObjetoTocado.name === NOMBRE_SOLAPA) ) {
+                        console.log("JS: Interacción INICIO -> Reproduciendo Solapa_Abrir y Tarjeta_Salir.");
+                        estadoApp3D = "ANIMANDO_SOBRE_TARJETA";
 
-                    // Reproducir ambas acciones. Los nombres vienen de tus capturas.
-                    const accionSolapa = window.playAnimacion("Solapa_Abrir");
-                    const accionTarjeta = window.playAnimacion("Tarjeta_Salir");
+                        // Hacer visible la tarjeta si no lo está ya (la animación la moverá)
+                        const tarjetaObj = gltfModel.getObjectByName(NOMBRE_TARJETA);
+                        if (tarjetaObj && !tarjetaObj.visible) {
+                            tarjetaObj.visible = true;
+                            console.log("JS: Tarjeta hecha visible para animación.");
+                        }
 
-                    if (accionSolapa && accionTarjeta) {
-                        // Para saber cuándo la secuencia completa ha terminado, necesitamos
-                        // escuchar el evento 'finished' de la acción MÁS LARGA.
-                        // Asumimos que ambas terminan alrededor del mismo tiempo (ej: fotograma 50).
-                        // O podemos tomar la duración de una de ellas si son iguales.
+                        // Reproducir ambas acciones. Los nombres vienen de tus capturas.
+                        const accionSolapa = window.playAnimacion("Solapa_Abrir");
+                        const accionTarjeta = window.playAnimacion("Tarjeta_Salir");
 
-                        let animacionesTerminadas = 0;
-                        const totalAnimaciones = 2;
+                        if (accionSolapa && accionTarjeta) {
+                            // Para saber cuándo la secuencia completa ha terminado, necesitamos
+                            // escuchar el evento 'finished' de la acción MÁS LARGA.
+                            // Asumimos que ambas terminan alrededor del mismo tiempo (ej: fotograma 50).
+                            // O podemos tomar la duración de una de ellas si son iguales.
 
-                        const onAnimFinished = () => {
-                            animacionesTerminadas++;
-                            if (animacionesTerminadas === totalAnimaciones) {
-                                // Solo cambiar estado si aún estamos en el proceso de esta animación
-                                if (estadoApp3D === "ANIMANDO_SOBRE_TARJETA") {
-                                    console.log("JS: Animaciones Solapa_Abrir y Tarjeta_Salir finalizadas. Estado -> TARJETA_MOSTRADA.");
-                                    estadoApp3D = "TARJETA_MOSTRADA";
+                            let animacionesTerminadas = 0;
+                            const totalAnimaciones = 2;
+
+                            const onAnimFinished = () => {
+                                animacionesTerminadas++;
+                                if (animacionesTerminadas === totalAnimaciones) {
+                                    // Solo cambiar estado si aún estamos en el proceso de esta animación
+                                    if (estadoApp3D === "ANIMANDO_SOBRE_TARJETA") {
+                                        console.log("JS: Animaciones Solapa_Abrir y Tarjeta_Salir finalizadas. Estado -> TARJETA_MOSTRADA.");
+                                        estadoApp3D = "TARJETA_MOSTRADA";
+                                    }
+                                    // Quitar listeners para evitar múltiples llamadas si se reproducen de nuevo
+                                    if (mixer) { // Verificar que mixer exista
+                                        mixer.removeEventListener('finished', onSolapaFinished);
+                                        mixer.removeEventListener('finished', onTarjetaFinished);
+                                    }
                                 }
-                                // Quitar listeners para evitar múltiples llamadas si se reproducen de nuevo
-                                if (mixer) { // Verificar que mixer exista
-                                    mixer.removeEventListener('finished', onSolapaFinished);
-                                    mixer.removeEventListener('finished', onTarjetaFinished);
+                            };
+
+                            const onSolapaFinished = (event) => {
+                                if (event.action === accionSolapa) {
+                                    console.log("JS: Solapa_Abrir (acción individual) finalizada.");
+                                    onAnimFinished();
                                 }
-                            }
-                        };
+                            };
+                            const onTarjetaFinished = (event) => {
+                                if (event.action === accionTarjeta) {
+                                    console.log("JS: Tarjeta_Salir (acción individual) finalizada.");
+                                    onAnimFinished();
+                                }
+                            };
 
-                        const onSolapaFinished = (event) => {
-                            if (event.action === accionSolapa) {
-                                console.log("JS: Solapa_Abrir (acción individual) finalizada.");
-                                onAnimFinished();
+                            if (mixer) { // Verificar que mixer exista antes de añadir listeners
+                                 mixer.addEventListener('finished', onSolapaFinished);
+                                 mixer.addEventListener('finished', onTarjetaFinished);
+                            } else {
+                                console.warn("JS: Mixer no está inicializado, no se pueden añadir listeners de 'finished'. El estado podría no actualizarse correctamente.");
+                                // Como fallback, si el mixer no está, podríamos usar un setTimeout basado en la duración esperada
+                                // const duracionEstimadaMs = (50 / 30) * 1000; // Asumiendo 50 frames a 30fps
+                                // setTimeout(() => {
+                                //     if (estadoApp3D === "ANIMANDO_SOBRE_TARJETA") {
+                                //         estadoApp3D = "TARJETA_MOSTRADA";
+                                //         console.log("JS: Estado cambiado a TARJETA_MOSTRADA (por timeout).");
+                                //     }
+                                // }, duracionEstimadaMs + 200); // +200ms de margen
                             }
-                        };
-                        const onTarjetaFinished = (event) => {
-                            if (event.action === accionTarjeta) {
-                                console.log("JS: Tarjeta_Salir (acción individual) finalizada.");
-                                onAnimFinished();
-                            }
-                        };
 
-                        if (mixer) { // Verificar que mixer exista antes de añadir listeners
-                             mixer.addEventListener('finished', onSolapaFinished);
-                             mixer.addEventListener('finished', onTarjetaFinished);
                         } else {
-                            console.warn("JS: Mixer no está inicializado, no se pueden añadir listeners de 'finished'. El estado podría no actualizarse correctamente.");
-                            // Como fallback, si el mixer no está, podríamos usar un setTimeout basado en la duración esperada
-                            // const duracionEstimadaMs = (50 / 30) * 1000; // Asumiendo 50 frames a 30fps
-                            // setTimeout(() => {
-                            //     if (estadoApp3D === "ANIMANDO_SOBRE_TARJETA") {
-                            //         estadoApp3D = "TARJETA_MOSTRADA";
-                            //         console.log("JS: Estado cambiado a TARJETA_MOSTRADA (por timeout).");
-                            //     }
-                            // }, duracionEstimadaMs + 200); // +200ms de margen
+                            console.error("JS: No se pudieron iniciar una o ambas animaciones (Solapa_Abrir o Tarjeta_Salir).");
+                            estadoApp3D = "INICIO";
                         }
 
+                    // ... el resto de tu lógica de onCanvasPointerDown ...
+                    } else if (estadoApp3D === "TARJETA_MOSTRADA" && primerObjetoTocado.name === NOMBRE_TARJETA) {
+                        // ... (tu lógica existente para cuando se toca la tarjeta mostrada) ...
+                        // Esta parte no cambia por ahora
+                        console.log("JS: Interacción TARJETA_MOSTRADA -> Mostrar Tarjeta en Grande");
+                        if (window.AndroidBridge && typeof window.AndroidBridge.onTarjeta3DTocada === 'function') {
+                            window.AndroidBridge.onTarjeta3DTocada();
+                        } else {
+                            console.log("JS: AndroidBridge no disponible. Simulando flujo...");
+                            window.ocultarTarjetaYSobre();
+                            window.actualizarEstado3DDesdeKotlin("TARJETA_LEIDA");
+                        }
+
+                    } else if (estadoApp3D === "TARJETA_LEIDA" &&
+                               (primerObjetoTocado.name === NOMBRE_LAZO_ESTRELLA ||
+                                primerObjetoTocado.name === NOMBRE_LAZO_FLOR ||
+                                primerObjetoTocado.name === NOMBRE_CINTA1 ||
+                                primerObjetoTocado.name === NOMBRE_CINTA2)) {
+
+                        // ... (tu lógica existente para cuando se toca el lazo) ...
+                        // Esta parte no cambia por ahora
+                        console.log("JS: Interacción TARJETA_LEIDA -> Abrir Regalo Principal");
+                        estadoApp3D = "ABRIENDO_REGALO";
+                        const lazoE = gltfModel.getObjectByName(NOMBRE_LAZO_ESTRELLA);
+                        const lazoF = gltfModel.getObjectByName(NOMBRE_LAZO_FLOR);
+                        if(lazoE) lazoE.visible = false;
+                        if(lazoF) lazoF.visible = false;
+                        console.log("JS: TODO - Ocultar lazos y reproducir secuencia de apertura principal (LazosCintas_Caer, Papel_Caer, Tapa_Abrir).");
+
                     } else {
-                        console.error("JS: No se pudieron iniciar una o ambas animaciones (Solapa_Abrir o Tarjeta_Salir).");
-                        estadoApp3D = "INICIO";
+                        console.log(`JS: Toque en '${primerObjetoTocado.name}' ignorado en estado '${estadoApp3D}'.`);
                     }
-                }
-                // ... el resto de tu lógica de onCanvasPointerDown ...
-                } else if (estadoApp3D === "TARJETA_MOSTRADA" && primerObjetoTocado.name === NOMBRE_TARJETA) {
-                    // ... (tu lógica existente para cuando se toca la tarjeta mostrada) ...
-                    // Esta parte no cambia por ahora
-                    console.log("JS: Interacción TARJETA_MOSTRADA -> Mostrar Tarjeta en Grande");
-                    if (window.AndroidBridge && typeof window.AndroidBridge.onTarjeta3DTocada === 'function') {
-                        window.AndroidBridge.onTarjeta3DTocada();
-                    } else {
-                        console.log("JS: AndroidBridge no disponible. Simulando flujo...");
-                        window.ocultarTarjetaYSobre();
-                        window.actualizarEstado3DDesdeKotlin("TARJETA_LEIDA");
-                    }
-
-                } else if (estadoApp3D === "TARJETA_LEIDA" &&
-                           (primerObjetoTocado.name === NOMBRE_LAZO_ESTRELLA ||
-                            primerObjetoTocado.name === NOMBRE_LAZO_FLOR ||
-                            primerObjetoTocado.name === NOMBRE_CINTA1 ||
-                            primerObjetoTocado.name === NOMBRE_CINTA2)) {
-
-                    // ... (tu lógica existente para cuando se toca el lazo) ...
-                    // Esta parte no cambia por ahora
-                    console.log("JS: Interacción TARJETA_LEIDA -> Abrir Regalo Principal");
-                    estadoApp3D = "ABRIENDO_REGALO";
-                    const lazoE = gltfModel.getObjectByName(NOMBRE_LAZO_ESTRELLA);
-                    const lazoF = gltfModel.getObjectByName(NOMBRE_LAZO_FLOR);
-                    if(lazoE) lazoE.visible = false;
-                    if(lazoF) lazoF.visible = false;
-                    console.log("JS: TODO - Ocultar lazos y reproducir secuencia de apertura principal (LazosCintas_Caer, Papel_Caer, Tapa_Abrir).");
-
-                } else {
-                    console.log(`JS: Toque en '${primerObjetoTocado.name}' ignorado en estado '${estadoApp3D}'.`);
                 }
             }
+            // --- FIN NUEVA FUNCIÓN ---
+
+            // --- FUNCIONES GLOBALES (COMO EN TU v14 - ASIGNADAS A WINDOW) ---
+            window.applyTexture = function(meshName, relativeTexturePath, makeVisible = false) {
+                 // console.log(`JS: applyTexture: ${meshName}, ${relativeTexturePath}`);
+                 if (!gltfModel || !relativeTexturePath) return;
+                 const fullTexturePath = `/assets/texturas/${relativeTexturePath}`;
+                 textureLoader.load(fullTexturePath, (texture) => {
+                     texture.flipY = false; texture.colorSpace = THREE.SRGBColorSpace;
+                     const targetObject = gltfModel.getObjectByName(meshName);
+                     if (targetObject && targetObject.isMesh) {
+                         if (!targetObject.material) targetObject.material = new THREE.MeshStandardMaterial({ color: 0xFFFFFF });
+                         else if (!targetObject.material.map && targetObject.material.color) targetObject.material.color.set(0xFFFFFF);
+
+                         if (targetObject.material.map !== undefined) {
+                             targetObject.material.map = texture;
+                             targetObject.material.needsUpdate = true;
+                             if(makeVisible && !targetObject.visible) targetObject.visible = true;
+                         } else console.warn(`JS: Material de '${meshName}' no soporta .map`);
+                     } else {
+                         // console.warn(`JS: Malla '${meshName}' no encontrada para textura.`);
+                     }
+                 }, undefined, (err) => console.error(`JS: Error cargando textura '${fullTexturePath}' para ${meshName}:`, err));
+             };
+
+            window.applyColor = function(meshName, colorHex, makeVisible = false, roughnessValue = 0.2) {
+                // console.log(`JS: applyColor: ${meshName}, ${colorHex}, rough: ${roughnessValue}`);
+                if (!gltfModel) return;
+                const targetObject = gltfModel.getObjectByName(meshName);
+                if (targetObject && targetObject.isMesh) {
+                    if (!targetObject.material || !targetObject.material.isMeshStandardMaterial) {
+                        const oldColorHex = targetObject.material && targetObject.material.color ? targetObject.material.color.getHex() : 0xFFFFFF;
+                        if(targetObject.material) targetObject.material.dispose();
+                        targetObject.material = new THREE.MeshStandardMaterial({
+                            color: colorHex ? new THREE.Color(colorHex) : oldColorHex,
+                            roughness: roughnessValue
+                        });
+                    } else {
+                        if (colorHex) {
+                            try {
+                                targetObject.material.color.set(new THREE.Color(colorHex));
+                                if (targetObject.material.map) targetObject.material.map = null;
+                            } catch (e) { console.error(`JS: Error color '${colorHex}' en '${meshName}':`, e); return; }
+                        }
+                        targetObject.material.roughness = roughnessValue;
+                    }
+                    targetObject.material.needsUpdate = true;
+                    if(makeVisible && !targetObject.visible) targetObject.visible = true;
+                } else {
+                    // console.warn(`JS: Malla '${meshName}' no encontrada para color/roughness.`);
+                }
+            };
+
+            window.cambiarFormaLazo = function(nombreFormaLazoActiva) { /* ... tu código v14 ... */ };
+            window.ocultarTarjetaYSobre = function() { /* ... tu código v14 ... */ };
+            window.aplicarTexturaCaja = function(t) { window.applyTexture(NOMBRE_CAJA, `packages/${t}`, true); };
+            window.aplicarTexturaSobre = function(t) { window.applyTexture(NOMBRE_SOBRE, `cards/${t}`, true); };
+            window.aplicarTexturaPapel = function(texturaPathRelativa) {
+                const piezasPapel = [NOMBRE_PAPEL_FRONTAL, NOMBRE_PAPEL_TRASERO, NOMBRE_PAPEL_IZQUIERDO, NOMBRE_PAPEL_DERECHO, NOMBRE_PAPEL_INFERIOR, NOMBRE_PAPEL_SUPERIOR];
+                piezasPapel.forEach(pieza => window.applyTexture(pieza, `paper/${texturaPathRelativa}`, true));
+            };
+            window.aplicarTexturaTarjeta = function(t) { window.applyTexture(NOMBRE_TARJETA, `cards/${t}`, false); };
+            window.aplicarColorYAcabadoLazoYCintas = function(nombreObjetoLazoActivo, colorHex, acabadoString) {
+                if (!gltfModel || !colorHex || !acabadoString) return;
+                let roughnessTarget = (acabadoString.toLowerCase() === "mate") ? 0.85 : 0.15;
+                if(nombreObjetoLazoActivo) window.applyColor(nombreObjetoLazoActivo, colorHex, true, roughnessTarget);
+                window.applyColor(NOMBRE_CINTA1, colorHex, true, roughnessTarget);
+                window.applyColor(NOMBRE_CINTA2, colorHex, true, roughnessTarget);
+            };
+            window.playAnimacion = function(nombreAnim, onFinishedCallback) {
+                console.log(`JS: playAnimacion('${nombreAnim}') solicitado.`);
+                if (!mixer || !animations || !nombreAnim) {
+                    console.warn('JS: playAnimacion saltada (sin mixer/animations/nombre).');
+                    if (onFinishedCallback) onFinishedCallback(false);
+                    return null;
+                }
+
+                const clip = THREE.AnimationClip.findByName(animations, nombreAnim);
+                if (clip) {
+                    const action = mixer.clipAction(clip);
+                    action.reset();
+                    action.loop = THREE.LoopOnce;
+                    action.clampWhenFinished = true;
+
+                    if (onFinishedCallback) {
+                        const listener = (event) => {
+                            if (event.action === action) {
+                                console.log(`JS: Animación '${nombreAnim}' finalizada.`);
+                                mixer.removeEventListener('finished', listener);
+                                onFinishedCallback(true);
+                            }
+                        };
+                        mixer.addEventListener('finished', listener);
+                    }
+
+                    action.play();
+                    console.log(`JS: Animación '${nombreAnim}' iniciada.`);
+                    return action;
+                } else {
+                    console.warn(`JS: Animación '${nombreAnim}' no encontrada.`);
+                    if (onFinishedCallback) onFinishedCallback(false);
+                    return null;
+                }
+            };
+
+
+            window.actualizarEstado3DDesdeKotlin = function(nuevoEstado) {
+                console.log(`JS: Kotlin actualizó estado3D de '${estadoApp3D}' a '${nuevoEstado}'`);
+                estadoApp3D = nuevoEstado;
+            };
+
+            console.log("VIEWER.HTML: Funciones globales listas (v16.1).");
+
+        } catch (error) {
+            console.error("VIEWER.HTML: Error FATAL (v16.1):", error);
+            loadingIndicator.textContent = 'Error crítico JS!';
+            if (error.stack) console.error("Stack (v16.1):", error.stack);
         }
-        // --- FIN NUEVA FUNCIÓN ---
-
-        // --- FUNCIONES GLOBALES (COMO EN TU v14 - ASIGNADAS A WINDOW) ---
-        window.applyTexture = function(meshName, relativeTexturePath, makeVisible = false) {
-             // console.log(`JS: applyTexture: ${meshName}, ${relativeTexturePath}`);
-             if (!gltfModel || !relativeTexturePath) return;
-             const fullTexturePath = `/assets/texturas/${relativeTexturePath}`;
-             textureLoader.load(fullTexturePath, (texture) => {
-                 texture.flipY = false; texture.colorSpace = THREE.SRGBColorSpace;
-                 const targetObject = gltfModel.getObjectByName(meshName);
-                 if (targetObject && targetObject.isMesh) {
-                     if (!targetObject.material) targetObject.material = new THREE.MeshStandardMaterial({ color: 0xFFFFFF });
-                     else if (!targetObject.material.map && targetObject.material.color) targetObject.material.color.set(0xFFFFFF);
-
-                     if (targetObject.material.map !== undefined) {
-                         targetObject.material.map = texture;
-                         targetObject.material.needsUpdate = true;
-                         if(makeVisible && !targetObject.visible) targetObject.visible = true;
-                     } else console.warn(`JS: Material de '${meshName}' no soporta .map`);
-                 } else {
-                     // console.warn(`JS: Malla '${meshName}' no encontrada para textura.`);
-                 }
-             }, undefined, (err) => console.error(`JS: Error cargando textura '${fullTexturePath}' para ${meshName}:`, err));
-         };
-
-        window.applyColor = function(meshName, colorHex, makeVisible = false, roughnessValue = 0.2) {
-            // console.log(`JS: applyColor: ${meshName}, ${colorHex}, rough: ${roughnessValue}`);
-            if (!gltfModel) return;
-            const targetObject = gltfModel.getObjectByName(meshName);
-            if (targetObject && targetObject.isMesh) {
-                if (!targetObject.material || !targetObject.material.isMeshStandardMaterial) {
-                    const oldColorHex = targetObject.material && targetObject.material.color ? targetObject.material.color.getHex() : 0xFFFFFF;
-                    if(targetObject.material) targetObject.material.dispose();
-                    targetObject.material = new THREE.MeshStandardMaterial({
-                        color: colorHex ? new THREE.Color(colorHex) : oldColorHex,
-                        roughness: roughnessValue
-                    });
-                } else {
-                    if (colorHex) {
-                        try {
-                            targetObject.material.color.set(new THREE.Color(colorHex));
-                            if (targetObject.material.map) targetObject.material.map = null;
-                        } catch (e) { console.error(`JS: Error color '${colorHex}' en '${meshName}':`, e); return; }
-                    }
-                    targetObject.material.roughness = roughnessValue;
-                }
-                targetObject.material.needsUpdate = true;
-                if(makeVisible && !targetObject.visible) targetObject.visible = true;
-            } else {
-                // console.warn(`JS: Malla '${meshName}' no encontrada para color/roughness.`);
-            }
-        };
-
-        window.cambiarFormaLazo = function(nombreFormaLazoActiva) { /* ... tu código v14 ... */ };
-        window.ocultarTarjetaYSobre = function() { /* ... tu código v14 ... */ };
-        window.aplicarTexturaCaja = function(t) { window.applyTexture(NOMBRE_CAJA, `packages/${t}`, true); };
-        window.aplicarTexturaSobre = function(t) { window.applyTexture(NOMBRE_SOBRE, `cards/${t}`, true); };
-        window.aplicarTexturaPapel = function(texturaPathRelativa) {
-            const piezasPapel = [NOMBRE_PAPEL_FRONTAL, NOMBRE_PAPEL_TRASERO, NOMBRE_PAPEL_IZQUIERDO, NOMBRE_PAPEL_DERECHO, NOMBRE_PAPEL_INFERIOR, NOMBRE_PAPEL_SUPERIOR];
-            piezasPapel.forEach(pieza => window.applyTexture(pieza, `paper/${texturaPathRelativa}`, true));
-        };
-        window.aplicarTexturaTarjeta = function(t) { window.applyTexture(NOMBRE_TARJETA, `cards/${t}`, false); };
-        window.aplicarColorYAcabadoLazoYCintas = function(nombreObjetoLazoActivo, colorHex, acabadoString) {
-            if (!gltfModel || !colorHex || !acabadoString) return;
-            let roughnessTarget = (acabadoString.toLowerCase() === "mate") ? 0.85 : 0.15;
-            if(nombreObjetoLazoActivo) window.applyColor(nombreObjetoLazoActivo, colorHex, true, roughnessTarget);
-            window.applyColor(NOMBRE_CINTA1, colorHex, true, roughnessTarget);
-            window.applyColor(NOMBRE_CINTA2, colorHex, true, roughnessTarget);
-        };
-        window.playAnimacion = function(nombreAnim, onFinishedCallback) {
-            console.log(`JS: playAnimacion('${nombreAnim}') solicitado.`);
-            if (!mixer || !animations || !nombreAnim) {
-                console.warn('JS: playAnimacion saltada (sin mixer/animations/nombre).');
-                if (onFinishedCallback) onFinishedCallback(false);
-                return null;
-            }
-
-            const clip = THREE.AnimationClip.findByName(animations, nombreAnim);
-            if (clip) {
-                const action = mixer.clipAction(clip);
-                action.reset();
-                action.loop = THREE.LoopOnce;
-                action.clampWhenFinished = true;
-
-                if (onFinishedCallback) {
-                    const listener = (event) => {
-                        if (event.action === action) {
-                            console.log(`JS: Animación '${nombreAnim}' finalizada.`);
-                            mixer.removeEventListener('finished', listener);
-                            onFinishedCallback(true);
-                        }
-                    };
-                    mixer.addEventListener('finished', listener);
-                }
-
-                action.play();
-                console.log(`JS: Animación '${nombreAnim}' iniciada.`);
-                return action;
-            } else {
-                console.warn(`JS: Animación '${nombreAnim}' no encontrada.`);
-                if (onFinishedCallback) onFinishedCallback(false);
-                return null;
-            }
-        };
-
-        console.log("VIEWER.HTML: Funciones globales listas (v16.1).");
-
-    } catch (error) {
-        console.error("VIEWER.HTML: Error FATAL (v16.1):", error);
-        loadingIndicator.textContent = 'Error crítico JS!';
-        if (error.stack) console.error("Stack (v16.1):", error.stack);
-    }
+    })();
 </script>
 </body>
 </html>
