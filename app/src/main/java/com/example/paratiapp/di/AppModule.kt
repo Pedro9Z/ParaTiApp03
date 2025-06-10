@@ -3,25 +3,27 @@ package com.example.paratiapp.di
 // --- Imports Necesarios ---
 import com.example.paratiapp.data.RegaloRepository
 import com.example.paratiapp.data.RegaloRepositoryImpl
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Binds // Usamos Binds para simplificar cuando la implementación tiene @Inject constructor
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Module
+@Module // Sigue siendo un módulo
 @InstallIn(SingletonComponent::class) // Instalar en el componente Singleton
-abstract class AppModule { // Mejor usar clase abstracta con @Binds
+object AppModule { // Lo convertimos en un 'object' para métodos @Provides
 
-    // Hilt sabrá cómo crear RegaloRepositoryImpl porque tiene @Inject constructor()
-    // Usamos @Binds para decirle a Hilt que cuando alguien pida RegaloRepository,
-    // debe proporcionar una instancia de RegaloRepositoryImpl.
-    @Binds
-    @Singleton // Para que la instancia sea única en toda la app
-    abstract fun bindRegaloRepository(
-        regaloRepositoryImpl: RegaloRepositoryImpl
-    ): RegaloRepository
+    // Le decimos a Hilt cómo proveer instancias de Firebase
+    @Provides
+    @Singleton
+    fun provideFirestoreInstance() = FirebaseFirestore.getInstance()
 
+    @Provides
+    @Singleton
+    fun provideStorageInstance() = FirebaseStorage.getInstance()
     // No necesitamos proveer FirebaseFirestore explícitamente aquí
     // porque RegaloRepositoryImpl ya lo obtiene con Firebase.firestore
     // Si quisiéramos inyectarlo en RegaloRepositoryImpl, sí lo añadiríamos:

@@ -1,9 +1,11 @@
 package com.example.paratiapp.data // Asegúrate que el package es el correcto
 
 // --- Imports Necesarios ---
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.firestore.ktx.firestore // KTX para sintaxis más limpia
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await // Para usar await en Tasks de Firebase
@@ -12,7 +14,10 @@ import javax.inject.Singleton
 
 // Implementación concreta del Repositorio usando Firestore
 @Singleton // Asegura que solo haya una instancia (inyectada por Hilt)
-class RegaloRepositoryImpl @Inject constructor() : RegaloRepository {
+class RegaloRepositoryImpl @Inject constructor(
+    private val firestore: FirebaseFirestore,
+    private val storage: FirebaseStorage
+) : RegaloRepository {
 
     // Obtener la instancia de Firestore
     private val db: FirebaseFirestore = Firebase.firestore
@@ -66,5 +71,25 @@ class RegaloRepositoryImpl @Inject constructor() : RegaloRepository {
             Log.e("RegaloRepository", "ERROR al guardar el regalo en Firestore", e)
             null // Devolver null para indicar fallo
         }
+    }
+
+    override suspend fun subirArchivo(uri: Uri, regaloId: String): String? {
+        return try {
+            val fileName = uri.lastPathSegment ?: "archivo_regalo"
+            val storageRef = storage.reference.child("uploads/$regaloId/$fileName")
+            storageRef.putFile(uri).await() // Sube el archivo
+            val downloadUrl = storageRef.downloadUrl.await().toString() // Obtiene la URL de descarga
+            Log.d("RegaloRepositoryImpl", "Archivo subido. URL: $downloadUrl")
+            downloadUrl
+        } catch (e: Exception) {
+            Log.e("RegaloRepositoryImpl", "Error al subir archivo: ", e)
+            null
+        }
+    }
+
+    override suspend fun actualizarUrlArchivo(regaloId: String, url: String) {
+        firestore.collection("regalos").document(regaloId)
+            .update("archivoUrl", url)
+            .await()
     }
 }

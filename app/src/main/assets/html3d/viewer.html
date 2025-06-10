@@ -72,6 +72,8 @@
             const NOMBRE_CINTA2 = "Cinta2";
             const NOMBRE_LAZO_ESTRELLA = "Lazoestrella";
             const NOMBRE_LAZO_FLOR = "Lazoflor";
+            const NOMBRE_LAZO_NORMAL = "Lazonormal"; // Añadido
+            const NOMBRE_LAZO_DORADO = "Lazodorado"; // Añadido
 
             init();
             animate();
@@ -136,7 +138,8 @@
                             NOMBRE_TAPA, NOMBRE_CINTA1, NOMBRE_CINTA2
                          ];
                          const ocultosPorDefecto = [
-                            NOMBRE_TARJETA, ...piezasPapelNombres, NOMBRE_LAZO_ESTRELLA, NOMBRE_LAZO_FLOR
+                            NOMBRE_TARJETA, ...piezasPapelNombres, NOMBRE_LAZO_ESTRELLA, NOMBRE_LAZO_FLOR,
+                            NOMBRE_LAZO_NORMAL, NOMBRE_LAZO_DORADO // Asegurar que estén ocultos
                          ];
 
                          gltf.scene.traverse(function(child){
@@ -298,7 +301,7 @@
                                (primerObjetoTocado.name === NOMBRE_LAZO_ESTRELLA ||
                                 primerObjetoTocado.name === NOMBRE_LAZO_FLOR ||
                                 primerObjetoTocado.name === NOMBRE_CINTA1 ||
-                                primerObjetoTocado.name === NOMBRE_CINTA2)) {
+                                primerObjetoTocado.name === NOMBRE_CINTA2 || primerObjetoTocado.name === NOMBRE_LAZO_NORMAL || primerObjetoTocado.name === NOMBRE_LAZO_DORADO)) { // Incluir por si acaso son visibles
 
                         // ... (tu lógica existente para cuando se toca el lazo) ...
                         // Esta parte no cambia por ahora
@@ -306,10 +309,70 @@
                         estadoApp3D = "ABRIENDO_REGALO";
                         const lazoE = gltfModel.getObjectByName(NOMBRE_LAZO_ESTRELLA);
                         const lazoF = gltfModel.getObjectByName(NOMBRE_LAZO_FLOR);
-                        if(lazoE) lazoE.visible = false;
-                        if(lazoF) lazoF.visible = false;
-                        console.log("JS: TODO - Ocultar lazos y reproducir secuencia de apertura principal (LazosCintas_Caer, Papel_Caer, Tapa_Abrir).");
+                        const lazoN = gltfModel.getObjectByName(NOMBRE_LAZO_NORMAL);
+                        const lazoD = gltfModel.getObjectByName(NOMBRE_LAZO_DORADO);
+                        const cinta1 = gltfModel.getObjectByName(NOMBRE_CINTA1);
+                        const cinta2 = gltfModel.getObjectByName(NOMBRE_CINTA2);
 
+                        // 1. Ocultar todos los lazos y cintas
+                        [lazoE, lazoF, lazoN, lazoD, cinta1, cinta2].forEach(obj => {
+                            if (obj) obj.visible = false;
+                        });
+                        console.log("JS: Lazos y cintas ocultados.");
+
+                        // Pequeña demora antes de que caigan los papeles
+                        setTimeout(() => {
+                            console.log("JS: Iniciando caída de papeles.");
+                            const animacionesPapel = [
+                                "Papel_Superior_Caer", "Papel_Frontal_Caer", "Papel_Trasero_Caer",
+                                "Papel_Izquierdo_Caer", "Papel_Derecho_Caer", "Papel_Inferior_Caer"
+                            ].map(nombreAnim => {
+                                const papelObj = gltfModel.getObjectByName(nombreAnim.replace("_Caer", ""));
+                                if (papelObj) papelObj.visible = true;
+                                return window.playAnimacion(nombreAnim);
+                            }).filter(Boolean); // Filtrar nulos si alguna anim no se encuentra
+
+                            // Usamos una promesa para esperar a que todas las animaciones de papel terminen
+                            const onAllPapersFallen = new Promise(resolve => {
+                                let completed = 0;
+                                const total = animacionesPapel.length;
+                                if (total === 0) resolve();
+
+                                animacionesPapel.forEach(action => {
+                                    const listener = (event) => {
+                                        if (event.action === action) {
+                                            completed++;
+                                            if (completed === total) {
+                                                mixer.removeEventListener('finished', listener);
+                                                resolve();
+                                            }
+                                        }
+                                    };
+                                    mixer.addEventListener('finished', listener);
+                                });
+                            });
+
+                            onAllPapersFallen.then(() => {
+                                            console.log("JS: Todos los papeles han caído.");
+                                            // 3. Abrir la tapa
+                                            const tapaObj = gltfModel.getObjectByName(NOMBRE_TAPA);
+                                            if (tapaObj) tapaObj.visible = true; // Asegurar visibilidad
+
+                                            window.playAnimacion("Tapa_Abrir", (tapaSuccess) => {
+                                                if (tapaSuccess) {
+                                                    console.log("JS: Tapa abierta. ¡Regalo completamente abierto!");
+                                                    estadoApp3D = "REGALO_ABIERTO";
+                                                    // AVISAR A KOTLIN QUE LA ANIMACIÓN TERMINÓ
+                                                    if (window.AndroidBridge && typeof window.AndroidBridge.onAnimacionAperturaCompleta === 'function') {
+                                                        window.AndroidBridge.onAnimacionAperturaCompleta();
+                                                    }
+                                                } else {
+                                                    console.error("JS: Falló la animación de apertura de tapa.");
+                                                    estadoApp3D = "TARJETA_LEIDA"; // Volver al estado anterior o manejar error
+                                                }
+                                            });
+                            });
+                        }, 500); // 500ms de espera
                     } else {
                         console.log(`JS: Toque en '${primerObjetoTocado.name}' ignorado en estado '${estadoApp3D}'.`);
                     }
@@ -340,8 +403,54 @@
                  }, undefined, (err) => console.error(`JS: Error cargando textura '${fullTexturePath}' para ${meshName}:`, err));
              };
 
+            // --- NUEVA FUNCIÓN PARA MAPAS DE DETALLE (NORMAL/ROUGHNESS) ---
+            window.applyDetailMap = function(meshName, relativeTexturePath, mapType = 'normal') {
+                console.log(`JS: applyDetailMap: ${meshName}, ${relativeTexturePath}, tipo: ${mapType}`);
+                if (!gltfModel || !relativeTexturePath) return;
+                const fullTexturePath = `/assets/texturas/details/${relativeTexturePath}`;
+                textureLoader.load(fullTexturePath, (texture) => {
+                    texture.flipY = false;
+                    const targetObject = gltfModel.getObjectByName(meshName);
+                    if (targetObject && targetObject.isMesh && targetObject.material) {
+                        if (mapType === 'normal') {
+                            targetObject.material.normalMap = texture;
+                            // Ajusta la intensidad del normal map si es necesario
+                            targetObject.material.normalScale = new THREE.Vector2(0.5, 0.5);
+                        } else if (mapType === 'roughness') {
+                            targetObject.material.roughnessMap = texture;
+                        }
+                        targetObject.material.needsUpdate = true;
+                    } else {
+                        console.warn(`JS: Malla '${meshName}' o su material no encontrada para detail map.`);
+                    }
+                }, undefined, (err) => console.error(`JS: Error cargando detail map '${fullTexturePath}':`, err));
+            };
+
+            // Definición de window.cambiarFormaLazo
+            window.cambiarFormaLazo = function(nombreFormaLazoActiva) {
+                console.log(`JS: cambiarFormaLazo a: ${nombreFormaLazoActiva}`);
+                if (!gltfModel) return;
+                const todosLosLazosPosibles = [NOMBRE_LAZO_ESTRELLA, NOMBRE_LAZO_FLOR, NOMBRE_LAZO_NORMAL, NOMBRE_LAZO_DORADO];
+
+                todosLosLazosPosibles.forEach(nombreLazo => {
+                    const lazoObj = gltfModel.getObjectByName(nombreLazo);
+                    if (lazoObj) {
+                        lazoObj.visible = (nombreLazo === nombreFormaLazoActiva);
+                    }
+                });
+
+                const cinta1Obj = gltfModel.getObjectByName(NOMBRE_CINTA1);
+                const cinta2Obj = gltfModel.getObjectByName(NOMBRE_CINTA2);
+                const hayLazoActivo = nombreFormaLazoActiva && nombreFormaLazoActiva.length > 0 && todosLosLazosPosibles.includes(nombreFormaLazoActiva);
+
+                if (cinta1Obj) cinta1Obj.visible = hayLazoActivo;
+                if (cinta2Obj) cinta2Obj.visible = hayLazoActivo;
+                 console.log(`JS: Lazo activo: ${nombreFormaLazoActiva}, Cintas visibles: ${hayLazoActivo}`);
+            };
+
+
             window.applyColor = function(meshName, colorHex, makeVisible = false, roughnessValue = 0.2) {
-                // console.log(`JS: applyColor: ${meshName}, ${colorHex}, rough: ${roughnessValue}`);
+                // console.log(`JS: applyColor: ${meshName}, ${colorHex}, visible: ${makeVisible}, rough: ${roughnessValue}`);
                 if (!gltfModel) return;
                 const targetObject = gltfModel.getObjectByName(meshName);
                 if (targetObject && targetObject.isMesh) {
@@ -368,21 +477,51 @@
                 }
             };
 
-            window.cambiarFormaLazo = function(nombreFormaLazoActiva) { /* ... tu código v14 ... */ };
-            window.ocultarTarjetaYSobre = function() { /* ... tu código v14 ... */ };
+            // Definición de window.ocultarTarjetaYSobre
+            window.ocultarTarjetaYSobre = function() {
+                console.log("JS: ocultarTarjetaYSobre() llamado.");
+                if (!gltfModel) return;
+                const tarjetaObj = gltfModel.getObjectByName(NOMBRE_TARJETA);
+                const sobreObj = gltfModel.getObjectByName(NOMBRE_SOBRE);
+                const solapaObj = gltfModel.getObjectByName(NOMBRE_SOLAPA); // La solapa también debería ocultarse
+
+                if (tarjetaObj) tarjetaObj.visible = false;
+                if (sobreObj) sobreObj.visible = false;
+                if (solapaObj) solapaObj.visible = false;
+                console.log("JS: Tarjeta, Sobre y Solapa ocultados.");
+            };
+
+
             window.aplicarTexturaCaja = function(t) { window.applyTexture(NOMBRE_CAJA, `packages/${t}`, true); };
-            window.aplicarTexturaSobre = function(t) { window.applyTexture(NOMBRE_SOBRE, `cards/${t}`, true); };
-            window.aplicarTexturaPapel = function(texturaPathRelativa) {
+            window.aplicarTexturaMesa = function(t) { window.applyTexture(NOMBRE_MESA, `table/${t}`, true); }; // Nueva función para la mesa
+            window.aplicarTexturaPapel = function(texturaPathRelativa, detalleTexturaPath) {
                 const piezasPapel = [NOMBRE_PAPEL_FRONTAL, NOMBRE_PAPEL_TRASERO, NOMBRE_PAPEL_IZQUIERDO, NOMBRE_PAPEL_DERECHO, NOMBRE_PAPEL_INFERIOR, NOMBRE_PAPEL_SUPERIOR];
-                piezasPapel.forEach(pieza => window.applyTexture(pieza, `paper/${texturaPathRelativa}`, true));
+                piezasPapel.forEach(pieza => {
+                    window.applyTexture(pieza, `paper/${texturaPathRelativa}`, true);
+                    if (detalleTexturaPath) {
+                        // Asumimos que los detalles de papel son normal maps
+                        window.applyDetailMap(pieza, detalleTexturaPath, 'normal');
+                    }
+                });
             };
             window.aplicarTexturaTarjeta = function(t) { window.applyTexture(NOMBRE_TARJETA, `cards/${t}`, false); };
-            window.aplicarColorYAcabadoLazoYCintas = function(nombreObjetoLazoActivo, colorHex, acabadoString) {
+            window.aplicarColorYAcabadoLazoYCintas = function(nombreObjetoLazoActivo, colorHex, acabadoString, detalleTexturaPath) {
                 if (!gltfModel || !colorHex || !acabadoString) return;
+                console.log(`JS: aplicando color ${colorHex} y acabado ${acabadoString} a lazo ${nombreObjetoLazoActivo} y cintas.`);
                 let roughnessTarget = (acabadoString.toLowerCase() === "mate") ? 0.85 : 0.15;
+
+                // Aplicar al lazo activo (si existe y es uno de los que manejamos)
                 if(nombreObjetoLazoActivo) window.applyColor(nombreObjetoLazoActivo, colorHex, true, roughnessTarget);
                 window.applyColor(NOMBRE_CINTA1, colorHex, true, roughnessTarget);
                 window.applyColor(NOMBRE_CINTA2, colorHex, true, roughnessTarget);
+
+                // Aplicar textura de detalle a las cintas y al lazo
+                if (detalleTexturaPath) {
+                    // Asumimos que los detalles de cinta son normal maps
+                    if(nombreObjetoLazoActivo) window.applyDetailMap(nombreObjetoLazoActivo, detalleTexturaPath, 'normal');
+                    window.applyDetailMap(NOMBRE_CINTA1, detalleTexturaPath, 'normal');
+                    window.applyDetailMap(NOMBRE_CINTA2, detalleTexturaPath, 'normal');
+                }
             };
             window.playAnimacion = function(nombreAnim, onFinishedCallback) {
                 console.log(`JS: playAnimacion('${nombreAnim}') solicitado.`);

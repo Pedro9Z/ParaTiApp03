@@ -1,25 +1,33 @@
 package com.example.paratiapp.ui.screens
 
 // --- Imports ---
+import android.content.Intent
 import android.annotation.SuppressLint
 import android.util.Log
 import android.webkit.ConsoleMessage
 import android.webkit.JavascriptInterface // Necesario para AndroidBridge
 import android.webkit.WebChromeClient
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner // Para postear al hilo principal
 import androidx.compose.ui.res.painterResource
@@ -33,6 +41,8 @@ import androidx.webkit.WebViewAssetLoader
 import com.example.paratiapp.R
 import com.example.paratiapp.ui.theme.ParaTiAppTheme
 import com.example.paratiapp.ui.viewmodel.RegaloViewModel
+import androidx.compose.ui.unit.dp
+import com.example.paratiapp.ui.viewmodel.EstadoGuardado
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -59,14 +69,20 @@ fun PantallaPreview3D(
     val colorLazo by viewModel.colorLazoSeleccionado.collectAsState()
     val acabadoLazo by viewModel.acabadoLazoSeleccionado.collectAsState()
     val texturaTarjeta by viewModel.texturaTarjetaSeleccionada.collectAsState()
+    // --- LEER NUEVOS ESTADOS ALEATORIOS ---
+    val texturaMesa by viewModel.texturaMesaAleatoria.collectAsState()
+    val detallePapel by viewModel.detalleTexturaPapelAleatoria.collectAsState()
+    val detalleCinta by viewModel.detalleTexturaCintaAleatoria.collectAsState()
     val mensajeTarjeta by viewModel.mensaje.collectAsState() // Para mostrar en el AlertDialog
+    val estadoGuardado by viewModel.estadoGuardado.collectAsState()
 
     // --- Estado local para simular la vista de tarjeta grande ---
     var mostrarTarjetaGrande by remember { mutableStateOf(false) }
+    var animacionAperturaCompleta by remember { mutableStateOf(false) } // <-- NUEVO ESTADO
     var webViewRef by remember { mutableStateOf<WebView?>(null) }
 
     LaunchedEffect(texturaCaja, texturaPapel, formaLazo, colorLazo, acabadoLazo, texturaTarjeta) {
-        Log.d("PantallaPreview3D", "[VM ID: ${viewModel.hashCode()}] State updated: Caja='$texturaCaja', Papel='$texturaPapel', FormaLazo='$formaLazo', ColorLazo='$colorLazo', AcabadoLazo='$acabadoLazo', Tarjeta='$texturaTarjeta'")
+        Log.d("PantallaPreview3D", "[VM ID: ${viewModel.hashCode()}] State updated: Caja='$texturaCaja', Papel='$texturaPapel' (Detalle: '$detallePapel'), FormaLazo='$formaLazo', ColorLazo='$colorLazo' (Detalle: '$detalleCinta'), AcabadoLazo='$acabadoLazo', Tarjeta='$texturaTarjeta', Mesa='$texturaMesa'")
     }
 
     val assetLoader = remember {
@@ -79,13 +95,22 @@ fun PantallaPreview3D(
     // --- JavascriptInterface ---
     class AndroidBridge(
         private val lifecycleOwner: androidx.lifecycle.LifecycleOwner,
-        private val onTarjetaTocadaCallback: () -> Unit
+        private val onTarjetaTocadaCallback: () -> Unit,
+        private val onAnimacionAperturaCompletaCallback: () -> Unit // <-- NUEVO CALLBACK
     ) {
         @JavascriptInterface
         fun onTarjeta3DTocada() {
             Log.d("AndroidBridge", "onTarjeta3DTocada llamada desde JS")
             lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) { // Ejecutar en el hilo principal
                 onTarjetaTocadaCallback()
+            }
+        }
+
+        @JavascriptInterface
+        fun onAnimacionAperturaCompleta() {
+            Log.d("AndroidBridge", "onAnimacionAperturaCompleta llamada desde JS")
+            lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+                onAnimacionAperturaCompletaCallback()
             }
         }
     }
@@ -96,11 +121,25 @@ fun PantallaPreview3D(
                 title = { Text("Vista Previa del Regalo") },
                 navigationIcon = {
                     IconButton(onClick = {
+                        // Al volver, reseteamos el estado por si el usuario quiere cambiar algo
+                        viewModel.resetearEstadoGuardado()
                         Log.d("PantallaPreview3D", "Botón Atrás pulsado.")
                         navController.navigateUp()
                     }) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Atrás") }
                 }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { viewModel.guardarRegalo() },
+                // Deshabilitar el botón si ya se está guardando/subiendo
+                // Deshabilitar si no se ha abierto la caja O si ya se está guardando
+                modifier = if (!animacionAperturaCompleta || estadoGuardado is EstadoGuardado.Loading || estadoGuardado is EstadoGuardado.UploadingFile) Modifier.padding(0.dp) else Modifier
+            ) {
+                // El botón estará visible pero no será clickeable si la condición no se cumple
+                // Podríamos ocultarlo completamente si quisiéramos
+                Icon(Icons.Default.Send, contentDescription = "Guardar y Generar Enlace")
+            }
         }
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize()) {
@@ -117,24 +156,40 @@ fun PantallaPreview3D(
                         WebView(ctx).apply {
                             webViewRef = this // Guardar referencia
                             settings.apply {
-                                javaScriptEnabled = true; allowFileAccess = true; allowContentAccess = true
-                                mediaPlaybackRequiresUserGesture = false; databaseEnabled = true; domStorageEnabled = true
+                                javaScriptEnabled = true
+                                allowFileAccess = true
+                                allowContentAccess = true
+                                mediaPlaybackRequiresUserGesture = false
+                                databaseEnabled = true
+                                domStorageEnabled = true
                                 cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE
                                 WebView.setWebContentsDebuggingEnabled(true)
                             }
-                            clearCache(true); clearFormData(); clearHistory(); clearSslPreferences()
+                            clearCache(true)
+                            clearFormData()
+                            clearHistory()
+                            clearSslPreferences()
 
-                            // Añadir JavascriptInterface
-                            addJavascriptInterface(AndroidBridge(lifecycleOwner) {
-                                Log.i("PantallaPreview3D", "Kotlin: La tarjeta 3D fue tocada! Mostrando tarjeta grande...")
-                                mostrarTarjetaGrande = true
-                            }, "AndroidBridge")
-
+                            // Añadir JavascriptInterface correctamente
+                            addJavascriptInterface(
+                                AndroidBridge(
+                                    lifecycleOwner = lifecycleOwner,
+                                    onTarjetaTocadaCallback = {
+                                        Log.i("PantallaPreview3D", "Kotlin: La tarjeta 3D fue tocada! Mostrando tarjeta grande...")
+                                        mostrarTarjetaGrande = true
+                                    },
+                                    onAnimacionAperturaCompletaCallback = {
+                                        Log.i("PantallaPreview3D", "Animación de apertura completa. Habilitando botón de enviar.")
+                                        animacionAperturaCompleta = true
+                                    }
+                                ), "AndroidBridge"
+                            )
 
                             webViewClient = object : WebViewClient() {
                                 override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
                                     return request?.url?.let { assetLoader.shouldInterceptRequest(it) }
                                 }
+
                                 override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
                                     Log.e("PantallaPreview3D_WebView", "HTTP Error: ${errorResponse?.statusCode} for ${request?.url}")
                                     super.onReceivedHttpError(view, request, errorResponse)
@@ -158,11 +213,15 @@ fun PantallaPreview3D(
 
                                                     val nombreObjSobre = "Sobre"
 
+                                                    texturaMesa.takeIf { it.isNotBlank() }?.let { tm ->
+                                                        view.evaluateJavascript("javascript:aplicarTexturaMesa('$tm')", null)
+                                                    }
                                                     texturaCaja.takeIf { it.isNotBlank() }?.let { tc ->
                                                         view.evaluateJavascript("javascript:aplicarTexturaCaja('$tc')", null)
                                                     }
                                                     texturaPapel.takeIf { it.isNotBlank() }?.let { tp ->
-                                                        view.evaluateJavascript("javascript:aplicarTexturaPapel('$tp')", null)
+                                                        val dp = detallePapel.takeIf { it.isNotBlank() } ?: ""
+                                                        view.evaluateJavascript("javascript:aplicarTexturaPapel('$tp', '$dp')", null)
                                                     }
 
                                                     val colorDefectoSobre = "#E8E8E8"
@@ -180,9 +239,10 @@ fun PantallaPreview3D(
                                                     if (formaLazoActual != null && formaLazoActual.isNotBlank()) {
                                                         Log.d("PantallaPreview3D", "Aplicando forma de lazo: $formaLazoActual")
                                                         view.evaluateJavascript("javascript:cambiarFormaLazo('$formaLazoActual')") {
-                                                            if (colorLazoActual != null && colorLazoActual.isNotBlank()) {
+                                                            if (colorLazoActual != null && colorLazoActual.isNotBlank() && detalleCinta.isNotBlank()) {
                                                                 Log.d("PantallaPreview3D", "Aplicando color '$colorLazoActual' y acabado '$acabadoLazoActual' al lazo '$formaLazoActual'")
-                                                                view.evaluateJavascript("javascript:aplicarColorYAcabadoLazoYCintas('$formaLazoActual', '$colorLazoActual', '$acabadoLazoActual')", null)
+                                                                val dc = detalleCinta.takeIf { it.isNotBlank() } ?: ""
+                                                                view.evaluateJavascript("javascript:aplicarColorYAcabadoLazoYCintas('$formaLazoActual', '$colorLazoActual', '$acabadoLazoActual', '$dc')", null)
                                                             } else {
                                                                 Log.w("PantallaPreview3D", "Lazo '$formaLazoActual' no tiene color seleccionado.")
                                                             }
@@ -206,16 +266,20 @@ fun PantallaPreview3D(
                                     }
                                 }
                             }
+
                             webChromeClient = object : WebChromeClient() {
                                 override fun onConsoleMessage(cm: ConsoleMessage?): Boolean {
-                                    cm?.let { Log.println(logPriority(it.messageLevel()), "PantallaPreview3D_JSConsole", "[${it.lineNumber()}] ${it.message()}") }; return true
+                                    cm?.let { Log.println(logPriority(it.messageLevel()), "PantallaPreview3D_JSConsole", "[${it.lineNumber()}] ${it.message()}") }
+                                    return true
                                 }
+
                                 fun logPriority(level: ConsoleMessage.MessageLevel?): Int = when (level) {
                                     ConsoleMessage.MessageLevel.ERROR -> Log.ERROR
                                     ConsoleMessage.MessageLevel.WARNING -> Log.WARN
                                     else -> Log.INFO
                                 }
                             }
+
                             val htmlUrl = "https://appassets.androidplatform.net/assets/html3d/viewer.html"
                             Log.d("PantallaPreview3D Factory", "Loading URL in WebView: $htmlUrl")
                             loadUrl(htmlUrl)
@@ -248,6 +312,68 @@ fun PantallaPreview3D(
                 )
             }
             // --- Fin Simulación ---
+
+            // --- DIÁLOGO DE ESTADO DE GUARDADO ---
+            when (val estado = estadoGuardado) {
+                is EstadoGuardado.Loading -> {
+                    AlertDialog(
+                        onDismissRequest = { /* No se puede cerrar */ },
+                        title = { Text("Guardando Regalo...") },
+                        text = { Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) { CircularProgressIndicator() } },
+                        confirmButton = {}
+                    )
+                }
+                is EstadoGuardado.UploadingFile -> {
+                    AlertDialog(
+                        onDismissRequest = { /* No se puede cerrar */ },
+                        title = { Text("Subiendo Archivo...") },
+                        text = { Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) { CircularProgressIndicator() } },
+                        confirmButton = {}
+                    )
+                }
+                is EstadoGuardado.Success -> {
+                    val regaloUrl = "https://parati.app/gift?id=${estado.id}" // URL de ejemplo
+                    AlertDialog(
+                        onDismissRequest = { viewModel.resetearEstadoGuardado() },
+                        title = { Text("¡Regalo Creado!") },
+                        text = {
+                            Column {
+                                Text("Tu regalo está listo. Comparte este enlace con el destinatario:")
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(regaloUrl, style = MaterialTheme.typography.bodyMedium)
+                            }
+                        },
+                        confirmButton = {
+                            Button(onClick = {
+                                val sendIntent: Intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, "¡Te he enviado un regalo virtual! Ábrelo aquí: $regaloUrl")
+                                    type = "text/plain"
+                                }
+                                val shareIntent = Intent.createChooser(sendIntent, null)
+                                context.startActivity(shareIntent)
+                                viewModel.resetearEstadoGuardado()
+                            }) {
+                                Text("Compartir")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { viewModel.resetearEstadoGuardado() }) {
+                                Text("Cerrar")
+                            }
+                        }
+                    )
+                }
+                is EstadoGuardado.Error -> {
+                    AlertDialog(
+                        onDismissRequest = { viewModel.resetearEstadoGuardado() },
+                        title = { Text("Error") },
+                        text = { Text(estado.mensaje) },
+                        confirmButton = { Button(onClick = { viewModel.resetearEstadoGuardado() }) { Text("Aceptar") } }
+                    )
+                }
+                is EstadoGuardado.Idle -> { /* No mostrar nada */ }
+            }
         }
     }
 }

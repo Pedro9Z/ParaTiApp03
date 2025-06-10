@@ -16,6 +16,7 @@ import javax.inject.Inject
 sealed class EstadoGuardado {
     object Idle : EstadoGuardado()
     object Loading : EstadoGuardado()
+    object UploadingFile : EstadoGuardado() // Nuevo estado para la subida
     data class Success(val id: String) : EstadoGuardado()
     data class Error(val mensaje: String) : EstadoGuardado()
 }
@@ -60,6 +61,16 @@ class RegaloViewModel @Inject constructor(
     private val _texturaTarjetaSeleccionada = MutableStateFlow("")
     val texturaTarjetaSeleccionada: StateFlow<String> = _texturaTarjetaSeleccionada.asStateFlow()
 
+    // --- NUEVOS ESTADOS PARA TEXTURAS ALEATORIAS ---
+    private val _texturaMesaAleatoria = MutableStateFlow("")
+    val texturaMesaAleatoria: StateFlow<String> = _texturaMesaAleatoria.asStateFlow()
+
+    private val _detalleTexturaPapelAleatoria = MutableStateFlow("")
+    val detalleTexturaPapelAleatoria: StateFlow<String> = _detalleTexturaPapelAleatoria.asStateFlow()
+
+    private val _detalleTexturaCintaAleatoria = MutableStateFlow("")
+    val detalleTexturaCintaAleatoria: StateFlow<String> = _detalleTexturaCintaAleatoria.asStateFlow()
+
     private val _estadoGuardado = MutableStateFlow<EstadoGuardado>(EstadoGuardado.Idle)
     val estadoGuardado: StateFlow<EstadoGuardado> = _estadoGuardado.asStateFlow()
 
@@ -84,7 +95,11 @@ class RegaloViewModel @Inject constructor(
     }
 
     fun actualizarTexturaPapel(textura: String) {
+        // Lógica para elegir detalle de papel aleatorio
+        val detallesPapel = listOf("PaperText06.png", "PaperText07.jpg", "PaperText08.jpg", "PaperText09.jpg", "PaperText10.jpg")
+        _detalleTexturaPapelAleatoria.value = detallesPapel.random()
         _texturaPapelSeleccionada.value = textura
+        Log.d("RegaloViewModel", "Papel seleccionado: $textura, Detalle aleatorio: ${_detalleTexturaPapelAleatoria.value}")
     }
 
     fun actualizarFormaLazo(forma: String?) {
@@ -96,8 +111,12 @@ class RegaloViewModel @Inject constructor(
     // Ya que el lazo solo tendrá color y acabado.
 
     fun actualizarColorLazo(color: String?) {
+        // Lógica para elegir detalle de cinta aleatorio
+        val detallesCinta = listOf("CintaText01.j", "CintaText02.j", "CintaText03.j", "CintaText04.j", "CintaText05.j")
+        _detalleTexturaCintaAleatoria.value = detallesCinta.random()
         Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] ACTUALIZANDO ColorLazo -> '$color'")
         _colorLazoSeleccionado.value = color
+        Log.d("RegaloViewModel", "Color de lazo seleccionado. Detalle de cinta aleatorio: ${_detalleTexturaCintaAleatoria.value}")
         // Ya no necesitamos limpiar texturaLazo porque no existe.
     }
 
@@ -110,18 +129,26 @@ class RegaloViewModel @Inject constructor(
         _texturaTarjetaSeleccionada.value = textura
     }
 
-    fun guardarRegalo() {
-        val archivoUrlTemporal = _archivoUriSeleccionado.value?.toString() // Placeholder
+    // --- NUEVA FUNCIÓN PARA INICIALIZAR VALORES ALEATORIOS ---
+    init {
+        // Lógica para elegir textura de mesa aleatoria al crear el ViewModel
+        val texturasMesa = listOf("MesaColor01.jpg", "MesaColor02.jpg", "MesaColor03.jpg", "MesaColor04.jpg")
+        _texturaMesaAleatoria.value = texturasMesa.random()
+        Log.d("RegaloViewModel", "ViewModel inicializado. Textura de mesa aleatoria: ${_texturaMesaAleatoria.value}")
+        // Inicializar también las de detalle por si el usuario no cambia nada
+        actualizarTexturaPapel(_texturaPapelSeleccionada.value)
+        actualizarColorLazo(_colorLazoSeleccionado.value)
+    }
 
+    fun guardarRegalo() {
         viewModelScope.launch {
             _estadoGuardado.value = EstadoGuardado.Loading
             Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] Intentando guardar regalo...")
             try {
                 val regaloParaGuardar = Regalo(
-                    destinatarioNombre = _nombreDestinatario.value,
+                    destinatarioNombre = _nombreDestinatario.value.trim(),
                     destinatarioWhatsApp = _telefonoDestinatario.value,
                     mensaje = _mensaje.value,
-                    archivoUrl = archivoUrlTemporal,
                     texturaCaja = _texturaCajaSeleccionada.value,
                     texturaPapel = _texturaPapelSeleccionada.value,
                     formaLazo = _formaLazoSeleccionada.value,
@@ -132,10 +159,24 @@ class RegaloViewModel @Inject constructor(
                 )
                 Log.d("RegaloViewModel_DEBUG", "Regalo a guardar: $regaloParaGuardar")
 
-                val idDevuelto: String? = regaloRepository.guardarRegaloEnFirestore(regaloParaGuardar)
+                val regaloId: String? = regaloRepository.guardarRegaloEnFirestore(regaloParaGuardar)
 
-                if (idDevuelto != null) {
-                    _estadoGuardado.value = EstadoGuardado.Success(idDevuelto)
+                if (regaloId != null) {
+                    // Si hay un archivo para subir, lo hacemos ahora
+                    val uri = _archivoUriSeleccionado.value
+                    if (uri != null) {
+                        _estadoGuardado.value = EstadoGuardado.UploadingFile
+                        val downloadUrl = regaloRepository.subirArchivo(uri, regaloId)
+                        if (downloadUrl != null) {
+                            regaloRepository.actualizarUrlArchivo(regaloId, downloadUrl)
+                            _estadoGuardado.value = EstadoGuardado.Success(regaloId)
+                        } else {
+                            _estadoGuardado.value = EstadoGuardado.Error("Error al subir el archivo.")
+                        }
+                    } else {
+                        // No hay archivo, el proceso termina con éxito aquí
+                        _estadoGuardado.value = EstadoGuardado.Success(regaloId)
+                    }
                 } else {
                     _estadoGuardado.value = EstadoGuardado.Error("Error al guardar en Firestore (ID nulo devuelto por Repo)")
                 }

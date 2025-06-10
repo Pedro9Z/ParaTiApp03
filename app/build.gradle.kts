@@ -72,6 +72,7 @@ dependencies {
 
     // Declara Firestore KTX SIN versión (el BOM se encarga)
     implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     // Coroutines Tasks/Play Services (para await())
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0") // O la última versión

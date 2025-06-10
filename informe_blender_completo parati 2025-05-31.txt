@@ -1,0 +1,91 @@
+📦 INFORME COMPLETO DEL ARCHIVO BLENDER
+============================================================
+
+🗂️ COLECCIONES Y OBJETOS:
+🔹 Colección: Caja_regalo
+    ▫️ Cinta1 (MESH)
+    ▫️ Lazodorado (MESH)
+    ▫️ Lazonormal (MESH)
+    ▫️ Cinta2 (MESH)
+    ▫️ Lazoestrella (MESH)
+    ▫️ Lazoflor (MESH)
+
+🚫 OBJETOS NO ASIGNADOS A UNA COLECCIÓN ESPECÍFICA (O EN COLECCIÓN RAÍZ DE ESCENA):
+    ▫️ Caja (MESH)
+    ▫️ Tapa (MESH)
+    ▫️ Papel_Superior (MESH)
+    ▫️ Solapa (MESH)
+    ▫️ Sobre (MESH)
+    ▫️ Tarjeta (MESH)
+    ▫️ Papel_Frontal (MESH)
+    ▫️ Papel_Trasero (MESH)
+    ▫️ Papel_Izquierdo (MESH)
+    ▫️ Papel_Derecho (MESH)
+    ▫️ Papel_Inferior (MESH)
+    ▫️ Mesa_Apoyo (MESH)
+    ▫️ Vacio_LazosCintas (GREASEPENCIL)
+    ▫️ Vacío_Solapa (EMPTY)
+    ▫️ Vacío_Tapa (EMPTY)
+
+🔷 MALLAS (Datos de Geometría):
+    ▫️ MallaCaja (Usada por: Caja) (Vértices: 16, Caras: 13)
+    ▫️ MallaCinta1 (Usada por: Cinta1) (Vértices: 16, Caras: 16)
+    ▫️ MallaCinta2 (Usada por: Cinta2) (Vértices: 16, Caras: 16)
+    ▫️ Mallalazoestrella (Usada por: Lazoestrella) (Vértices: 2916, Caras: 3952)
+    ▫️ MallaLazoflor (Usada por: Lazoflor) (Vértices: 1020, Caras: 2040)
+    ▫️ MallaLazonormal (Usada por: Lazonormal) (Vértices: 595, Caras: 1037)
+    ▫️ MallaMesa_Apoyo (Usada por: Mesa_Apoyo) (Vértices: 4, Caras: 1)
+    ▫️ MallaPapel_Derecho (Usada por: Papel_Derecho) (Vértices: 4, Caras: 1)
+    ▫️ MallaPapel_Frontal (Usada por: Papel_Frontal) (Vértices: 4, Caras: 1)
+    ▫️ MallaPapel_Inferior (Usada por: Papel_Inferior) (Vértices: 4, Caras: 1)
+    ▫️ MallaPapel_Izquierdo (Usada por: Papel_Izquierdo) (Vértices: 4, Caras: 1)
+    ▫️ MallaPapel_Superior (Usada por: Papel_Superior) (Vértices: 4, Caras: 1)
+    ▫️ MallaPapel_Trasero (Usada por: Papel_Trasero) (Vértices: 4, Caras: 1)
+    ▫️ MallaSobre (Usada por: Sobre) (Vértices: 8, Caras: 6)
+    ▫️ MallaSolapa (Usada por: Solapa) (Vértices: 4, Caras: 1)
+    ▫️ MallaTapa (Usada por: Tapa) (Vértices: 8, Caras: 6)
+    ▫️ MallaTarjeta (Usada por: Tarjeta) (Vértices: 8, Caras: 6)
+    ▫️ Object_1 (Usada por: Lazodorado) (Vértices: 10048, Caras: 16512)
+
+🎨 MATERIALES:
+    ▫️ GoldBow (Usado por: Cinta1, Lazoflor, Lazodorado, Cinta2, Lazonormal, Lazoestrella)
+    ▫️ MaterialCaja (Usado por: Tapa, Caja)
+    ▫️ MaterialCintaLazo (Usado por: Cinta2, Cinta1, Lazoestrella, Lazoflor)
+    ▫️ Materialmesa (Usado por: Mesa_Apoyo)
+    ▫️ Materialpapel (Usado por: Papel_Frontal, Papel_Trasero, Papel_Derecho, Papel_Inferior, Papel_Superior, Papel_Izquierdo)
+    ▫️ Materialsobre (Usado por: Sobre, Solapa)
+    ▫️ Materialtarjeta (Usado por: Tarjeta)
+    ▫️ Negro (No usado por objetos de malla en escena activa)
+    ▫️ Scene_-_Root (Usado por: Lazonormal)
+
+🖼️ IMÁGENES (Texturas Cargadas en Blender):
+    ▫️ card06.png (Fuente: //..\..\..\..\..\androidestudio\ParaTiApp03\app\src\main\assets\texturas\cards\card06.png, Tamaño: 1024x1536)
+    ▫️ paper_arrugado_normal_opengl_1k.png (Fuente: //..\..\..\..\..\androidestudio\paper_arrugado_normal_opengl_1k.png, Tamaño: 1024x1024)
+    ▫️ Render Result (Fuente: VIEWER, Tamaño: 0x0)
+
+📄 TEXTOS INTERNOS (Scripts, Notas):
+    ▫️ Informe estado (147 líneas)
+    ▫️ LazosCintas_Caer (70 líneas)
+    ▫️ Papel_Caer (102 líneas)
+    ▫️ Solapa_Abrir (45 líneas)
+    ▫️ Tapa_Abrir (73 líneas)
+    ▫️ Tarjeta_Salir (86 líneas)
+    ▫️ Texto (36 líneas)
+
+🎬 ESCENAS EN EL ARCHIVO .BLEND:
+    ▫️ Scene (Objetos en esta escena: 21)
+
+🎞️ ACCIONES (Animaciones Definidas):
+    ▫️ LazosCintas_Caer (Usada por: Vacio_LazosCintas) - Fotogramas: 1 a 20 (Duración: 20)
+    ▫️ Papel_Derecho_Caer (Usada por: Papel_Derecho) - Fotogramas: 1 a 25 (Duración: 25)
+    ▫️ Papel_Frontal_Caer (Usada por: Papel_Frontal) - Fotogramas: 1 a 25 (Duración: 25)
+    ▫️ Papel_Inferior_Caer (Usada por: Papel_Inferior) - Fotogramas: 1 a 25 (Duración: 25)
+    ▫️ Papel_Izquierdo_Caer (Usada por: Papel_Izquierdo) - Fotogramas: 1 a 25 (Duración: 25)
+    ▫️ Papel_Superior_Caer (Usada por: Papel_Superior) - Fotogramas: 1 a 25 (Duración: 25)
+    ▫️ Papel_Trasero_Caer (Usada por: Papel_Trasero) - Fotogramas: 1 a 25 (Duración: 25)
+    ▫️ Solapa_Abrir (Usada por: Vacío_Solapa) - Fotogramas: 0 a 50 (Duración: 51)
+    ▫️ Solapa_Abrir.001 (Tiene usuario falso, no asignada activamente) - Fotogramas: 0 a 50 (Duración: 51)
+    ▫️ Tapa_Abrir (Usada por: Vacío_Tapa) - Fotogramas: 0 a 25 (Duración: 26)
+    ▫️ Tapa_Abrir.001 (Tiene usuario falso, no asignada activamente) - Fotogramas: 0 a 0 (Duración: 1)
+    ▫️ Tarjeta_Salir (Usada por: Tarjeta) - Fotogramas: 0 a 50 (Duración: 51)
+

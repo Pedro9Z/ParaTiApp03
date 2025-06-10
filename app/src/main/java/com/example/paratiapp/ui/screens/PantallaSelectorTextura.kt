@@ -62,9 +62,11 @@ fun PantallaSelectorTextura(
 
     val NOMBRE_OBJETO_LAZO_ESTRELLA = "Lazoestrella"
     val NOMBRE_OBJETO_LAZO_FLOR = "Lazoflor"
+    val NOMBRE_OBJETO_LAZO_NORMAL = "Lazonormal" // Nombre del objeto en Blender
     val opcionesFormaLazo = listOf(
-        "Lazo Estrella" to NOMBRE_OBJETO_LAZO_ESTRELLA,
-        "Lazo Flor" to NOMBRE_OBJETO_LAZO_FLOR
+        "Normal" to NOMBRE_OBJETO_LAZO_NORMAL, // Nueva opción
+        "Estrella" to NOMBRE_OBJETO_LAZO_ESTRELLA,
+        "Flor" to NOMBRE_OBJETO_LAZO_FLOR
     )
     val coloresDisponiblesLazo = listOf(
         "Rojo" to "#FF0000", "Azul" to "#0000FF", "Verde" to "#00FF00",

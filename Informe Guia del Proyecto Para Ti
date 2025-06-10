@@ -1,0 +1,70 @@
+📦 Informe del Proyecto "Para Ti"
+Este informe establece la estructura, estado actual, y plan de acción para el desarrollo de la aplicación "Para Ti", siguiendo la metodología propuesta.
+════════════════════════════════════════════════════
+🔹 1. SYSTEM ROLE
+════════════════════════════════════════════════════
+Asistente senior en programación full-stack, DevOps y UX.
+════════════════════════════════════════════════════
+🔹 2. CONTEXTO DEL PROYECTO
+════════════════════════════════════════════════════
+Nombre: Para Ti
+Objetivo de negocio: Aplicación móvil que permite a los usuarios crear y enviar archivos envueltos en un regalo virtual 3D interactivo.
+Público objetivo: Usuarios de WhatsApp que deseen enviar regalos personalizados y únicos.
+Plataformas previstas: Inicialmente Android, con planes a futuro para una versión Web (PWA) para la visualización del regalo por el destinatario.
+Tecnologías preferidas: Kotlin (Jetpack Compose), Hilt, Firebase (Firestore, Storage), WebView (con Three.js para 3D).
+Restricciones especiales: El desarrollo se enfoca en soluciones gratuitas y/o de código abierto.
+════════════════════════════════════════════════════
+🔹 3. ARQUITECTURA – “Vibe Planning / Architecture”
+(No incluyas código real; solo descripciones claras)
+Front-end (Android):
+Framework: Jetpack Compose para la construcción de la interfaz de usuario.
+Lenguaje: Kotlin.
+Rutas clave: Utiliza androidx.navigation.compose.NavHost para gestionar la navegación entre pantallas: Bienvenida → Formulario → SelectorTexturas → Preview3D.
+Estado: Gestión del estado de la aplicación centralizada a través de ViewModel (Jetpack ViewModel) y StateFlow para datos reactivos. Hilt para inyección de dependencias de ViewModels.
+Módulo 3D: Integración de un WebView para cargar una escena 3D interactiva (viewer.html). La comunicación entre Kotlin y JavaScript se realiza mediante AndroidBridge (para llamadas JS a Kotlin) y evaluateJavascript (para llamadas Kotlin a JS). La carga de assets 3D (modelos GLB, texturas) se maneja a través de WebViewAssetLoader.
+Back-end/API:
+Base de datos: Firebase Firestore para el almacenamiento de la información del regalo (metadatos del remitente, destinatario, mensaje, texturas seleccionadas y URLs de archivos adjuntos).
+Almacenamiento de archivos: Firebase Storage para los archivos multimedia adjuntos por el usuario.
+Autenticación: No implementada en el MVP actual; se podría integrar Firebase Authentication a futuro si se requieren funciones de usuario registrado.
+DevOps:
+Control de versiones: Git (ya en uso).
+Compilación/Build: Gradle (estándar de Android).
+CI/CD: No implementado actualmente.
+Escalabilidad & Seguridad básicas:
+Escalabilidad: Firebase Firestore y Storage son servicios escalables por diseño, adecuados para un crecimiento inicial de usuarios.
+Seguridad: Las reglas de seguridad de Firestore y Storage son cruciales para proteger los datos y los archivos. Actualmente, la seguridad se basa en que los IDs de regalo son difíciles de adivinar, pero se necesitaría una lógica de autenticación para acceso restringido a regalos privados.
+════════════════════════════════════════════════════
+🔹 4. CARACTERÍSTICAS / “FILTERS” (MVP)
+════════════════════════════════════════════════════
+US-1 «Como usuario, quiero poder crear un regalo virtual personalizado, especificando el nombre y teléfono de WhatsApp del destinatario, un mensaje personalizado y adjuntar un archivo (imagen/video).»
+US-2 «Como usuario, quiero seleccionar diversas opciones de personalización para el regalo 3D, incluyendo la textura de la caja, el diseño del papel de regalo, la forma, color y acabado del lazo, y la textura de la tarjeta.»
+US-3 «Como usuario, quiero previsualizar mi regalo 3D en tiempo real, pudiendo interactuar con él haciendo clic en el sobre para abrirlo, en la tarjeta para leer el mensaje y en el lazo para revelar el interior del regalo.»
+US-4 «Como usuario, quiero guardar la configuración de mi regalo en una base de datos para generar un enlace único que pueda compartir con el destinatario.»
+US-5 «Como destinatario, quiero recibir un enlace por WhatsApp que me permita visualizar el regalo 3D interactivo en un navegador web (MVP futuro: PWA simple).»
+════════════════════════════════════════════════════
+🔹 5. PLAN DE ACCIÓN – “Vibe Coding / Task List”
+════════════════════════════════════════════════════
+Estado Actual (Resumen):
+Hemos configurado el proyecto Android con Compose y Hilt. Las pantallas de formulario, selección de texturas y previsualización 3D están implementadas con sus respectivos ViewModels. La visualización 3D en viewer.html carga el modelo .glb, aplica texturas y hemos integrado la lógica de interacción de clics y secuenciación de animaciones (abrir sobre/tarjeta, leer mensaje, abrir regalo principal) en viewer.html y su comunicación con PantallaPreview3D.kt.
+Archivos y Proyectos Clave en Uso:
+Proyecto Android: D:\Pedro\Documents\androidestudio\ParaTiApp03
+app/src/main/java/com/example/paratiapp/MainActivity.kt: Punto de entrada y gestión de navegación.
+app/src/main/java/com/example/paratiapp/ParaTiApplication.kt: Clase Application para Hilt.
+app/src/main/java/com/example/paratiapp/data/Regalo.kt: Clase de datos para el regalo.
+app/src/main/java/com/example/paratiapp/data/RegaloRepository.kt: Interfaz del repositorio de datos.
+app/src/main/java/com/example/paratiapp/data/RegaloRepositoryImpl.kt: Implementación del repositorio (Firestore).
+app/src/main/java/com/example/paratiapp/ui/screens/*.kt: Archivos de las pantallas Compose (Bienvenida, Formulario, SelectorTextura, Preview3D).
+app/src/main/java/com/example/paratiapp/ui/components/SelectorDeTexturas.kt: Componente reutilizable para la selección de texturas.
+app/src/main/java/com/example/paratiapp/ui/viewmodel/RegaloViewModel.kt: ViewModel principal para el estado del regalo.
+app/src/main/assets/html3d/viewer.html: Archivo HTML con la lógica Three.js para la visualización 3D y animaciones.
+app/src/main/assets/texturas/packages/caja_base.glb: Modelo 3D base del regalo.
+app/build.gradle.kts (módulo app): Configuración de dependencias (Compose, Hilt, Firebase, WebView).
+google-services.json: Configuración de Firebase.
+Herramienta de Modelado 3D: Blender (para crear caja_base.glb y sus animaciones). El archivo informe_blender_completo parati 2025-05-31.txt detalla la estructura del modelo.
+Próximas Tareas (Vibe Coding):
+Verificación Post-Patch: Validar que la interacción 3D (Clic en Sobre/Solapa → Tarjeta Visible y Mensaje; Clic en Tarjeta → AlertDialog con Mensaje; Clic en Lazo/Cintas → Lazos y Papel Caen, Tapa se Abre) y la secuenciación de animaciones en PantallaPreview3D (via viewer.html) funcionan correctamente tras aplicar el último patch. (Esta es la tarea inmediata).
+Mejora de Animaciones 3D: Evaluar y refinar el realismo de las animaciones de "caída de papel" y "ocultar cintas/lazos". Esto requerirá, en primera instancia, ajustes en Blender (curvas de animación, físicas) y luego una actualización del .glb y posiblemente de las llamadas en viewer.html.
+Gestión de Archivo Adjunto: Implementar la funcionalidad para seleccionar y adjuntar un archivo (imagen/video) desde la galería del dispositivo en PantallaFormulario, manejar su subida a Firebase Storage, y guardar la URL resultante en el campo archivoUrl del objeto Regalo en Firestore.
+Funcionalidad de Compartir: Desarrollar la lógica para que, una vez guardado el regalo, se genere un enlace único (https://tua.app/gift?id=<ID_REGALO>) y se pueda compartir a través de WhatsApp. Esto implica integrar el ACTION_SEND de Android o la API de WhatsApp si es posible.
+Recepción del Regalo (Prototipo Web): Crear una mini-PWA o una vista web simple (fuera del proyecto Android principal por ahora) que, al abrir el enlace compartido, lea el ID del regalo de la URL, recupere los datos de Firestore y muestre el regalo 3D personalizado al destinatario, incluyendo el archivo adjunto.
+Nota para el usuario: Por favor, procede con la Tarea 1: Verificación Post-Patch. Una vez que hayas probado el comportamiento de la aplicación tras aplicar los cambios en viewer.html, házmelo saber. Indica si funciona como esperas o si encuentras algún problema específico (con logs, si los hay).
