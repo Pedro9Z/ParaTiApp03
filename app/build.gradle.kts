@@ -68,7 +68,7 @@ dependencies {
     implementation("androidx.webkit:webkit:1.10.0")
 
      // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:33.0.0")) // <-- AÑADE EL BOM (usa la última versión)
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1")) // <-- AÑADE EL BOM (usa la última versión)
 
     // Declara Firestore KTX SIN versión (el BOM se encarga)
     implementation("com.google.firebase:firebase-firestore-ktx")
