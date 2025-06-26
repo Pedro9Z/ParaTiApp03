@@ -12,6 +12,9 @@
              background-color: rgba(255, 255, 255, 0.8);
              padding: 10px; border-radius: 5px; text-align: center;
         }
+        /* --- ESTILOS DEL CONFETI --- */
+        #texto-confeti { position:absolute; top: 0; left: 0; z-index:10; pointer-events:none; }
+        #entrada-confeti { display:none; /* Oculto por ahora */ }
     </style>
     <script type="importmap">
         {
@@ -24,6 +27,110 @@
 </head>
 <body>
 <div id="loading-indicator">Cargando visor v16.1...</div>
+
+<!-- --- ELEMENTOS HTML Y SHADERS DEL CONFETI --- -->
+<canvas id="texto-confeti" width="800" height="200"></canvas>
+<input id="entrada-confeti" type="text" value="DESEAMOS QUE HAYAS DISFRUTADO ESTA EXPERIENCIA" />
+
+<script id="vs-confeti" type="x-shader/x-vertex">
+
+    attribute vec2 anim;
+    attribute vec3 desplazamiento;
+    attribute vec3 control0;
+    attribute vec3 control1;
+    attribute vec4 giro;
+    attribute vec3 colorF;
+    attribute vec3 colorT;
+    uniform float tiempo;
+    varying vec3 vColorF;
+    varying vec3 vColorT;
+
+    vec3 rotar(vec4 q, vec3 v){
+      return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v);
+    }
+
+    vec4 ejeAngulo(vec3 eje, float ang){
+      float ha = ang * 0.5;
+      return vec4(eje.xyz * sin(ha), cos(ha));
+    }
+
+    vec3 bezier(vec3 p0, vec3 p1, vec3 c0, vec3 c1, float t){
+      float inv = 1.0 - t;
+      return inv*inv*inv*p0 + 3.0*inv*inv*t*c0 + 3.0*inv*t*t*c1 + t*t*t*p1;
+    }
+
+    float ease(float t, float d){
+      t = clamp(t/d, 0.0, 1.0) - 1.0;
+      return -(t*t*t*t - 1.0);
+    }
+
+    void main(){
+      float tt = clamp(tiempo - anim.x, 0.0, anim.y);
+      float prog = ease(tt, anim.y);
+
+      vec3 pos = position;
+      vec4 q = ejeAngulo(giro.xyz, giro.w * prog);
+      pos = rotar(q, pos);
+
+      vec3 p0 = pos;
+      vec3 p1 = pos + desplazamiento;
+      pos = bezier(p0, p1, pos + control0, pos + control1, prog);
+
+      vColorF = colorF;
+      vColorT = colorT;
+
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+    }
+  </script>
+
+<script id="fs-confeti" type="x-shader/x-fragment">
+
+    varying vec3 vColorF;
+    varying vec3 vColorT;
+    void main(){
+      gl_FragColor = gl_FrontFacing ? vec4(vColorF,1.0) : vec4(vColorT,1.0);
+    }
+  </script>
+<!-- --- FIN ELEMENTOS DEL CONFETI --- -->
+
+<!-- ================================================================== -->
+<!-- === FUNCIONES DEL CONFETI ADAPTADAS Y AÑADIDAS A WINDOW ========== -->
+<!-- ================================================================== -->
+<script>
+    // Ponemos las funciones aquí, en un script normal, para que estén disponibles globalmente
+    // antes de que el script de tipo "module" se ejecute.
+
+    window.crearMeshConfeti = function() {
+        // ... (El código de la función crearMeshConfeti que ya tienes) ...
+        // ... No cambia nada dentro de la función ...
+    };
+
+    window.prepararTextoConfeti = function() {
+        // ... (El código de la función prepararTextoConfeti que ya tienes) ...
+    };
+
+    window.actualizarTextoConfeti = function() {
+        // ... (El código de la función actualizarTextoConfeti que ya tienes) ...
+    };
+
+    window.crearCubosConfeti = function() {
+        // ... (El código de la función crearCubosConfeti que ya tienes) ...
+    };
+
+    window.actualizarCubosConfeti = function() {
+        // ... (El código de la función actualizarCubosConfeti que ya tienes) ...
+    };
+
+    window.iniciarAnimacionConfetiCompleta = function() {
+        // ... (El código de la función iniciarAnimacionConfetiCompleta que ya tienes) ...
+    };
+
+    window.detenerAnimacionConfeti = function() {
+        // ... (El código de la función detenerAnimacionConfeti que ya tienes) ...
+    };
+
+    function rand(a,b){ return Math.random()*(b-a)+a; }
+</script>
 
 <script type="module">
     (async () => {
@@ -46,6 +153,15 @@
             let scene, camera, renderer, controls, gltfModel = null;
             let mixer, clock, animations = [];
             const textureLoader = new THREE.TextureLoader();
+
+            // --- VARIABLES GLOBALES PARA EL CONFETI ---
+            var pasoConfeti = 1/60,
+                totalConfeti = 150000,
+                lienzoTextoConfeti, ctxTextoConfeti, pixelesConfeti=[],
+                grupoTextoConfeti, cubosConfeti=[],
+                mostrarConfeti=false,
+                tiempoConfeti=0,
+                meshConfeti;
 
             // ----- INICIO BLOQUE A AÑADIR 1 -----
             // --- Para Raycasting ---
@@ -87,6 +203,11 @@
 
                 camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
                 camera.position.set(0, 1.8, 5); camera.lookAt(0, 0.5, 0);
+
+                // --- INICIALIZACIÓN DEL CONFETI ---
+                window.crearMeshConfeti(); // Creamos el objeto de confeti
+                window.prepararTextoConfeti(); // Preparamos el canvas del texto
+                // --- FIN INICIALIZACIÓN CONFETI ---
 
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(window.devicePixelRatio);
@@ -159,6 +280,14 @@
                          } else { console.log("No se encontraron animaciones (v16.1)."); }
 
                          window.modeloEstaListo = true;
+
+                         // !!!!! LÍNEA DE DEPURACIÓN !!!!!
+                         // Forzamos el inicio del confeti aquí para ver si se renderiza
+                         window.iniciarAnimacionConfetiCompleta(() => { console.log("Callback de prueba del confeti ejecutado después de 14s"); });
+
+                         // !!!!! BORRA LA LÍNEA DE DEPURACIÓN ANTERIOR !!!!!
+                         // window.iniciarAnimacionConfetiCompleta(() => { console.log("Callback de prueba del confeti ejecutado después de 14s"); });
+
                          console.log("VIEWER.HTML: Modelo listo (v16.1).");
                      },
                      (xhr) => { loadingIndicator.textContent = `Cargando: ${(xhr.loaded / xhr.total * 100).toFixed(0)}% (v16.1)`; },
@@ -187,6 +316,19 @@
                 const delta = clock.getDelta();
                 if (controls) controls.update();
                 if (mixer) mixer.update(delta);
+
+                // --- LÓGICA DE ANIMACIÓN DEL CONFETI ---
+                if (mostrarConfeti) {
+                    tiempoConfeti += pasoConfeti;
+                    if (meshConfeti) meshConfeti.material.uniforms.tiempo.value = tiempoConfeti;
+                    // La animación de los cubos de texto también se actualiza aquí
+                    if (cubosConfeti.length > 0) {
+                        window.actualizarCubosConfeti();
+                    }
+
+                }
+                // --- FIN LÓGICA CONFETI ---
+
                 if (renderer && scene && camera) renderer.render(scene, camera);
             }
 
@@ -295,13 +437,11 @@
                             console.log("JS: AndroidBridge no disponible. Simulando flujo...");
                             window.ocultarTarjetaYSobre();
                             window.actualizarEstado3DDesdeKotlin("TARJETA_LEIDA");
+                            if (controls) controls.reset(); // FIX MOVIMIENTO
                         }
 
-                    } else if (estadoApp3D === "TARJETA_LEIDA" &&
-                               (primerObjetoTocado.name === NOMBRE_LAZO_ESTRELLA ||
-                                primerObjetoTocado.name === NOMBRE_LAZO_FLOR ||
-                                primerObjetoTocado.name === NOMBRE_CINTA1 ||
-                                primerObjetoTocado.name === NOMBRE_CINTA2 || primerObjetoTocado.name === NOMBRE_LAZO_NORMAL || primerObjetoTocado.name === NOMBRE_LAZO_DORADO)) { // Incluir por si acaso son visibles
+                    } else if (estadoApp3D === "TARJETA_LEIDA" && LAZOS.includes(primerObjetoTocado.name)) {
+                        // FIX INTERACCIÓN: Solo reacciona a los lazos
 
                         // ... (tu lógica existente para cuando se toca el lazo) ...
                         // Esta parte no cambia por ahora
@@ -313,7 +453,7 @@
                         const lazoD = gltfModel.getObjectByName(NOMBRE_LAZO_DORADO);
                         const cinta1 = gltfModel.getObjectByName(NOMBRE_CINTA1);
                         const cinta2 = gltfModel.getObjectByName(NOMBRE_CINTA2);
-
+                        
                         // 1. Ocultar todos los lazos y cintas
                         [lazoE, lazoF, lazoN, lazoD, cinta1, cinta2].forEach(obj => {
                             if (obj) obj.visible = false;
@@ -322,37 +462,29 @@
 
                         // Pequeña demora antes de que caigan los papeles
                         setTimeout(() => {
-                            console.log("JS: Iniciando caída de papeles.");
-                            const animacionesPapel = [
-                                "Papel_Superior_Caer", "Papel_Frontal_Caer", "Papel_Trasero_Caer",
-                                "Papel_Izquierdo_Caer", "Papel_Derecho_Caer", "Papel_Inferior_Caer"
-                            ].map(nombreAnim => {
-                                const papelObj = gltfModel.getObjectByName(nombreAnim.replace("_Caer", ""));
+                            console.log("JS: Iniciando caída de papeles.");                            
+                            let papelesCaidos = 0;
+                            PAPELES.forEach(nombrePapel => {
+                                const papelObj = gltfModel.getObjectByName(nombrePapel);
                                 if (papelObj) papelObj.visible = true;
-                                return window.playAnimacion(nombreAnim);
-                            }).filter(Boolean); // Filtrar nulos si alguna anim no se encuentra
-
-                            // Usamos una promesa para esperar a que todas las animaciones de papel terminen
-                            const onAllPapersFallen = new Promise(resolve => {
-                                let completed = 0;
-                                const total = animacionesPapel.length;
-                                if (total === 0) resolve();
-
-                                animacionesPapel.forEach(action => {
-                                    const listener = (event) => {
-                                        if (event.action === action) {
-                                            completed++;
-                                            if (completed === total) {
-                                                mixer.removeEventListener('finished', listener);
-                                                resolve();
-                                            }
-                                        }
-                                    };
-                                    mixer.addEventListener('finished', listener);
+                                playAnimacion(`${nombrePapel}_Caer`, () => {
+                                    papelesCaidos++;
+                                    if (papelesCaidos === PAPELES.length) {
+                                        // Cuando el último papel cae, abrimos la tapa
+                                        console.log("JS: Todos los papeles han caído.");
+                                        const tapaObj = gltfModel.getObjectByName(NOMBRES.TAPA);
+                                        if (tapaObj) tapaObj.visible = true;
+                                        playAnimacion("Tapa_Abrir", () => {
+                                            console.log("JS: Tapa abierta. Lanzando confeti...");
+                                            iniciarAnimacionConfeti(() => {
+                                                console.log("JS: Animación de confeti terminada. Notificando a Kotlin.");
+                                                if (window.AndroidBridge) window.AndroidBridge.onAnimacionAperturaCompleta();
+                                            });
+                                            estadoApp3D = "REGALO_ABIERTO";
+                                        });
+                                    }
                                 });
-                            });
-
-                            onAllPapersFallen.then(() => {
+                            })
                                             console.log("JS: Todos los papeles han caído.");
                                             // 3. Abrir la tapa
                                             const tapaObj = gltfModel.getObjectByName(NOMBRE_TAPA);
@@ -360,12 +492,14 @@
 
                                             window.playAnimacion("Tapa_Abrir", (tapaSuccess) => {
                                                 if (tapaSuccess) {
-                                                    console.log("JS: Tapa abierta. ¡Regalo completamente abierto!");
-                                                    estadoApp3D = "REGALO_ABIERTO";
-                                                    // AVISAR A KOTLIN QUE LA ANIMACIÓN TERMINÓ
-                                                    if (window.AndroidBridge && typeof window.AndroidBridge.onAnimacionAperturaCompleta === 'function') {
+                                                    console.log("JS: Tapa abierta. Lanzando confeti...");
+                                                    // 4. Iniciar la animación de confeti y pasarle un callback
+                                                    window.iniciarAnimacionConfetiCompleta(function() {
+                                                        // 5. Este código se ejecuta DESPUÉS de 14 segundos
+                                                        console.log("JS: Animación de confeti terminada. Notificando a Kotlin.");
                                                         window.AndroidBridge.onAnimacionAperturaCompleta();
-                                                    }
+                                                    });
+                                                    estadoApp3D = "REGALO_ABIERTO";
                                                 } else {
                                                     console.error("JS: Falló la animación de apertura de tapa.");
                                                     estadoApp3D = "TARJETA_LEIDA"; // Volver al estado anterior o manejar error
@@ -380,6 +514,122 @@
             }
             // --- FIN NUEVA FUNCIÓN ---
 
+            // ==================================================================
+            // === FUNCIONES DEL CONFETI ADAPTADAS Y AÑADIDAS A WINDOW ==========
+            // ==================================================================
+            // (Aquí pegaremos todo el bloque de funciones adaptadas)
+            // PEGA ESTE BLOQUE ENTERO EN viewer.html, en la línea 300 aprox.
+
+            window.crearMeshConfeti = function() {
+                var geo = new THREE.BufferGeometry();
+                var quads = totalConfeti, tris = quads*2, chunk = 21845;
+                var pos = new Float32Array(tris*3*3), anim = new Float32Array(tris*3*2), trans = new Float32Array(tris*3*3),
+                    c0 = new Float32Array(tris*3*3), c1 = new Float32Array(tris*3*3), giro = new Float32Array(tris*3*4),
+                    fcol = new Float32Array(tris*3*3), bcol = new Float32Array(tris*3*3), ind = new Uint16Array(tris*3);
+
+                geo.addAttribute('index', new THREE.BufferAttribute(ind,1));
+                geo.addAttribute('anim', new THREE.BufferAttribute(anim,2));
+                geo.addAttribute('position', new THREE.BufferAttribute(pos,3));
+                geo.addAttribute('desplazamiento', new THREE.BufferAttribute(trans,3));
+                geo.addAttribute('control0', new THREE.BufferAttribute(c0,3));
+                geo.addAttribute('control1', new THREE.BufferAttribute(c1,3));
+                geo.addAttribute('giro', new THREE.BufferAttribute(giro,4));
+                geo.addAttribute('colorF', new THREE.BufferAttribute(fcol,3));
+                geo.addAttribute('colorT', new THREE.BufferAttribute(bcol,3));
+
+                for(let i=0;i<ind.length;i++){ind[i]=i%(3*chunk);}
+                for(let i=0;i<anim.length;i+=12){ let d=Math.random()*4,l=6+Math.random()*4; for(let j=0;j<12;j+=2){anim[i+j]=d;anim[i+j+1]=l;} }
+                var hw=0.02,hh=hw*0.6, a=[-hw,hh,0], b=[hw,hh,0], c=[hw,-hh,0], d=[-hw,-hh,0], verts=[a,d,b,d,c,b];
+                for(let i=0,v=0;i<pos.length;i+=18){ v=0; for(let j=0;j<18;j+=3){pos[i+j]=verts[v][0];pos[i+j+1]=verts[v][1];pos[i+j+2]=verts[v][2];v++;} }
+                for(let i=0;i<trans.length;i+=18){ let phi=Math.random()*Math.PI*2,r=4,x=rand(-4,4),z=rand(-4,4),dx=x+r*Math.cos(phi)*Math.random(),dz=z+r*Math.sin(phi)*Math.random(); for(let j=0;j<18;j+=3){trans[i+j]=dx;trans[i+j+1]=0;trans[i+j+2]=dz;} }
+                for(let i=0;i<c0.length;i+=18){ let cp0=[rand(-1,1),rand(6,10),rand(-1,1)],cp1=[rand(-8,8),rand(2,10),rand(-8,8)]; for(let j=0;j<18;j+=3){c0[i+j]=cp0[0];c0[i+j+1]=cp0[1];c0[i+j+2]=cp0[2];c1[i+j]=cp1[0];c1[i+j+1]=cp1[1];c1[i+j+2]=cp1[2];} }
+                for(let i=0;i<giro.length;i+=24){ let ax=Math.random(),az=Math.random(),ang=Math.PI*rand(20,60),len=Math.sqrt(ax*ax+az*az);ax/=len;az/=len; for(let j=0;j<24;j+=4){giro[i+j]=ax;giro[i+j+1]=0;giro[i+j+2]=az;giro[i+j+3]=ang;} }
+                var f=new THREE.Color(),t=new THREE.Color();
+                for(let i=0;i<fcol.length;i+=18){ let h=Math.random();f.setHSL(h,1.0,0.5);t.setHSL(h,0.65,0.5); for(let j=0;j<18;j+=3){fcol[i+j]=f.r;fcol[i+j+1]=f.g;fcol[i+j+2]=f.b;bcol[i+j]=t.r;bcol[i+j+1]=t.g;bcol[i+j+2]=t.b;} }
+                for(let i=0;i<tris/chunk;i++){ geo.drawcalls.push({start:i*chunk*3,index:i*chunk*3,count:Math.min(tris-(i*chunk),chunk)*3}); }
+
+                var attr={anim:{type:"v2",value:null},desplazamiento:{type:"v3",value:null},control0:{type:"v3",value:null},control1:{type:"v3",value:null},giro:{type:"v4",value:null},colorF:{type:"c",value:null},colorT:{type:"c",value:null}},
+                    uni={tiempo:{type:"f",value:0}};
+                var material=new THREE.ShaderMaterial({attributes:attr,uniforms:uni,vertexShader:document.getElementById('vs-confeti').textContent,fragmentShader:document.getElementById('fs-confeti').textContent,side:THREE.DoubleSide});
+                meshConfeti=new THREE.Mesh(geo,material);
+                meshConfeti.material.uniforms=uni;
+                scene.add(meshConfeti);
+            };
+
+            window.prepararTextoConfeti = function() {
+                lienzoTextoConfeti=document.getElementById('texto-confeti');
+                ctxTextoConfeti=lienzoTextoConfeti.getContext('2d');
+                lienzoTextoConfeti.width=window.innerWidth;
+                lienzoTextoConfeti.height=200;
+            };
+
+            window.actualizarTextoConfeti = function() {
+                if(!ctxTextoConfeti)return;
+                var msg=document.getElementById('entrada-confeti').value||'¡DISFRUTA TU REGALO!';
+                var s=window.innerWidth/(msg.length*0.8); if(s>160)s=160;
+                ctxTextoConfeti.font='700 '+s+'px Arial';
+                ctxTextoConfeti.clearRect(0,0,lienzoTextoConfeti.width,lienzoTextoConfeti.height);
+                ctxTextoConfeti.textAlign='center'; ctxTextoConfeti.textBaseline='middle'; ctxTextoConfeti.fillStyle = '#000000';
+                ctxTextoConfeti.fillText(msg.toUpperCase(),lienzoTextoConfeti.width/2,lienzoTextoConfeti.height/2);
+                var datos=ctxTextoConfeti.getImageData(0,0,lienzoTextoConfeti.width,lienzoTextoConfeti.height).data;
+                pixelesConfeti=[];
+                for(let i=0;i<datos.length;i+=4){ if(datos[i+3] > 128){ let x=(i/4)%lienzoTextoConfeti.width, y=Math.floor((i/4)/lienzoTextoConfeti.width); if(x%2===0 && y%2===0){ pixelesConfeti.push({x: x, y: y}); } } }
+            };
+
+            window.crearCubosConfeti = function() {
+                if(grupoTextoConfeti){ scene.remove(grupoTextoConfeti); }
+                grupoTextoConfeti=new THREE.Object3D(); cubosConfeti=[];
+                for(let i=0;i<pixelesConfeti.length;i++){
+                    let c={};
+                    c.rotX=Math.random()*0.05; c.rotY=Math.random()*0.05;
+                    c.obj=new THREE.Mesh(new THREE.BoxGeometry(0.03,0.05,0.07), new THREE.MeshLambertMaterial({color:new THREE.Color().setHSL(Math.random(),0.8,0.7)}));
+                    c.destino=new THREE.Vector3();
+                    let pixel = pixelesConfeti[i];
+                    let x = (pixel.x - lienzoTextoConfeti.width/2) * (10 / window.innerWidth);
+                    let y = (lienzoTextoConfeti.height/2 - pixel.y) * (5 / 200);
+                    c.destino.set(x, y + 1.5, 0);
+                    let radio=15,r=5+radio*Math.random(),ang=Math.random()*Math.PI*2;
+                    c.obj.position.set(r*Math.cos(ang), r*Math.sin(ang), Math.random()*10-5);
+                    grupoTextoConfeti.add(c.obj); cubosConfeti.push(c);
+                }
+                scene.add(grupoTextoConfeti);
+            };
+
+            window.actualizarCubosConfeti = function() {
+                for(let i=0;i<cubosConfeti.length;i++){
+                    let c = cubosConfeti[i];
+                    if(c.obj.position.distanceTo(c.destino) > 0.05){
+                        c.obj.rotation.x+=c.rotX; c.obj.rotation.y+=c.rotY;
+                        c.obj.position.lerp(c.destino,0.03);
+                    } else {
+                        c.obj.position.copy(c.destino); c.obj.rotation.set(0,0,0);
+                        c.obj.material.color.set(0xff3333);
+                    }
+                }
+            };
+
+            window.iniciarAnimacionConfetiCompleta = function(callbackCuandoTermine) {
+                tiempoConfeti = 0;
+                if (meshConfeti) meshConfeti.visible = true; // Asegurarse de que sea visible
+                mostrarConfeti = true;
+                window.actualizarTextoConfeti();
+                window.crearCubosConfeti();
+
+                // Usamos setTimeout para simular la duración y llamar al callback
+                setTimeout(function() {
+                    window.detenerAnimacionConfeti();
+                    if (callbackCuandoTermine) callbackCuandoTermine();
+                }, 14000); // 14 segundos
+            };
+
+            window.detenerAnimacionConfeti = function() {
+
+                if (meshConfeti) scene.remove(meshConfeti);
+                if (grupoTextoConfeti) scene.remove(grupoTextoConfeti);
+                mostrarConfeti = false;
+            };
+
+            function rand(a,b){ return Math.random()*(b-a)+a; }
             // --- FUNCIONES GLOBALES (COMO EN TU v14 - ASIGNADAS A WINDOW) ---
             window.applyTexture = function(meshName, relativeTexturePath, makeVisible = false) {
                  // console.log(`JS: applyTexture: ${meshName}, ${relativeTexturePath}`);
@@ -405,10 +655,10 @@
 
             // --- NUEVA FUNCIÓN PARA MAPAS DE DETALLE (NORMAL/ROUGHNESS) ---
             window.applyDetailMap = function(meshName, relativeTexturePath, mapType = 'normal') {
-                console.log(`JS: applyDetailMap: ${meshName}, ${relativeTexturePath}, tipo: ${mapType}`);
+                const fullPath = `/app/src/main/assets/texturas/details/${relativeTexturePath}`; // <-- CORRECCIÓN
+                console.log(`JS: applyDetailMap: ${meshName}, Cargando desde: ${fullPath}, tipo: ${mapType}`);
                 if (!gltfModel || !relativeTexturePath) return;
-                const fullTexturePath = `/assets/texturas/details/${relativeTexturePath}`;
-                textureLoader.load(fullTexturePath, (texture) => {
+                textureLoader.load(fullPath, (texture) => {
                     texture.flipY = false;
                     const targetObject = gltfModel.getObjectByName(meshName);
                     if (targetObject && targetObject.isMesh && targetObject.material) {
@@ -423,7 +673,7 @@
                     } else {
                         console.warn(`JS: Malla '${meshName}' o su material no encontrada para detail map.`);
                     }
-                }, undefined, (err) => console.error(`JS: Error cargando detail map '${fullTexturePath}':`, err));
+                }, undefined, (err) => console.error(`JS: Error cargando detail map '${fullPath}':`, JSON.stringify(err)));
             };
 
             // Definición de window.cambiarFormaLazo
@@ -499,8 +749,7 @@
                 piezasPapel.forEach(pieza => {
                     window.applyTexture(pieza, `paper/${texturaPathRelativa}`, true);
                     if (detalleTexturaPath) {
-                        // Asumimos que los detalles de papel son normal maps
-                        window.applyDetailMap(pieza, detalleTexturaPath, 'normal');
+                        window.applyDetailMap(pieza, `details/${detalleTexturaPath}`);
                     }
                 });
             };
@@ -517,10 +766,9 @@
 
                 // Aplicar textura de detalle a las cintas y al lazo
                 if (detalleTexturaPath) {
-                    // Asumimos que los detalles de cinta son normal maps
-                    if(nombreObjetoLazoActivo) window.applyDetailMap(nombreObjetoLazoActivo, detalleTexturaPath, 'normal');
-                    window.applyDetailMap(NOMBRE_CINTA1, detalleTexturaPath, 'normal');
-                    window.applyDetailMap(NOMBRE_CINTA2, detalleTexturaPath, 'normal');
+                    if(nombreObjetoLazoActivo) window.applyDetailMap(nombreObjetoLazoActivo, `details/${detalleTexturaPath}`);
+                    window.applyDetailMap(NOMBRE_CINTA1, `details/${detalleTexturaPath}`);
+                    window.applyDetailMap(NOMBRE_CINTA2, `details/${detalleTexturaPath}`);
                 }
             };
             window.playAnimacion = function(nombreAnim, onFinishedCallback) {

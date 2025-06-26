@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>¡Has Recibido un Regalo!</title>
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; background-color: #f0f0f0; }
+        canvas { width: 100%; height: 100%; display: block; }
+        #loading-indicator {
+             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+             color: black; font-family: sans-serif; font-size: 1.2em; display: block;
+        }
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "/assets/html3d/libs/three/build/three.module.js",
+                "three/addons/": "/assets/html3d/libs/three/examples/jsm/"
+            }
+        }
+    </script>
+
+    <!-- Añadir los SDKs de Firebase para JavaScript -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    </script>
+</head>
+<body>
+<div id="loading-indicator">Cargando tu regalo...</div>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCquRXJVV6E3_M6p_EZortgqiRDGyUpIOQ",
+      authDomain: "para-ti-v02.firebaseapp.com",
+      projectId: "para-ti-v02",
+      storageBucket: "para-ti-v02.firebasestorage.app",
+      messagingSenderId: "168355699533",
+      appId: "1:168355699533:web:9972cc1625bba095b97504",
+      measurementId: "G-RL8NML8EKT"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+</script>
+
+<script type="module">
+    // Importaciones de Three.js (igual que en viewer.html)
+    const THREE = await import('three');
+    const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+    const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+    const { DRACOLoader } = await import('three/addons/libs/draco/gltf/DRACOLoader.js');
+
+    // Importar los módulos de Firebase que declaramos en el <head>
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js");
+    const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js");
+
+    // --- Lógica Principal ---
+    let scene, camera, renderer, controls, gltfModel, mixer, clock, animations;
+    const textureLoader = new THREE.TextureLoader();
+    let estadoApp3D = "INICIO"; // Estado inicial
+
+    // --- NOMBRES DE OBJETOS (Copiados de viewer.html) ---
+    const NOMBRE_SOBRE = "Sobre";
+    const NOMBRE_SOLAPA = "Solapa";
+    const NOMBRE_TARJETA = "Tarjeta";
+    const NOMBRE_TAPA = "Tapa";
+    const NOMBRE_CINTA1 = "Cinta1";
+    const NOMBRE_CINTA2 = "Cinta2";
+    const NOMBRE_LAZO_ESTRELLA = "Lazoestrella";
+    const NOMBRE_LAZO_FLOR = "Lazoflor";
+    const NOMBRE_LAZO_NORMAL = "Lazonormal";
+    const NOMBRE_LAZO_DORADO = "Lazodorado";
+    const NOMBRE_MESA = "Mesa_Apoyo"; // <-- AÑADIR CONSTANTE FALTANTE
+    const todosLosLazos = [NOMBRE_LAZO_ESTRELLA, NOMBRE_LAZO_FLOR, NOMBRE_LAZO_NORMAL, NOMBRE_LAZO_DORADO];
+    const piezasPapelNombres = ["Papel_Frontal", "Papel_Trasero", "Papel_Izquierdo", "Papel_Derecho", "Papel_Inferior", "Papel_Superior"];
+
+    // --- Para Raycasting ---
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    let datosRegalo = null; // Para guardar los datos del regalo
+
+    // 1. Leer el ID del regalo desde la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const regaloId = urlParams.get('id');
+
+    if (!regaloId) {
+        document.getElementById('loading-indicator').textContent = 'Error: ID de regalo no encontrado.';
+    } else {
+        document.getElementById('loading-indicator').textContent = `Cargando datos del regalo...`;
+
+        // 2. Configurar Firebase (necesitarás tus datos de configuración)
+        const firebaseConfig = {
+            // ¡¡¡ATENCIÓN!!! Debes reemplazar esto con la configuración de tu proyecto
+            // Ve a Firebase -> Configuración del proyecto -> Tus apps -> SDK de Firebase -> CDN
+            apiKey: "AIzaSyCquRXJVV6E3_M6p_EZortgqiRDGyUpIOQ",
+            authDomain: "para-ti-v02.firebaseapp.com",
+            projectId: "para-ti-v02",
+            storageBucket: "para-ti-v02.firebasestorage.app",
+            messagingSenderId: "168355699533",
+            appId: "1:168355699533:web:9972cc1625bba095b97504",
+            measurementId: "G-RL8NML8EKT"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 3. Obtener los datos del regalo desde Firestore
+        try {
+            const docRef = doc(db, "regalos", regaloId);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                datosRegalo = docSnap.data();
+                console.log("Datos del regalo obtenidos:", datosRegalo);
+
+                // 4. Ahora que tenemos los datos, inicializamos la escena 3D
+                init3D();
+                animate();
+
+            } else {
+                console.log("No se encontró un regalo con ese ID.");
+                document.getElementById('loading-indicator').textContent = 'Error: El regalo no existe o ha sido eliminado.';
+            }
+        } catch (error) {
+            console.error("Error al obtener el regalo de Firestore:", error);
+            document.getElementById('loading-indicator').textContent = 'Error al cargar los datos del regalo.';
+        }
+    }
+
+    // --- FUNCIONES 3D (Adaptadas de viewer.html) ---
+
+    function init3D() {
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 1.8, 5);
+        camera.lookAt(0, 0.5, 0);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        document.body.appendChild(renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
+        directionalLight.position.set(5, 10, 7);
+        scene.add(directionalLight);
+
+        controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.target.set(0, 0.5, 0);
+
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('/assets/html3d/libs/three/examples/jsm/libs/draco/gltf/');
+        const loader = new GLTFLoader();
+        loader.setDRACOLoader(dracoLoader);
+
+        loader.load('/assets/texturas/packages/caja_base.glb', (gltf) => {
+            document.getElementById('loading-indicator').style.display = 'none';
+            gltfModel = gltf.scene;
+            scene.add(gltfModel);
+
+            // Centrar modelo
+            const box = new THREE.Box3().setFromObject(gltf.scene);
+            const center = box.getCenter(new THREE.Vector3());
+            gltfModel.position.y -= center.y;
+
+            // Aplicar personalizaciones desde los datos de Firestore
+            aplicarPersonalizaciones(datosRegalo);
+
+            // Configurar animaciones
+            if (gltf.animations && gltf.animations.length > 0) {
+                mixer = new THREE.AnimationMixer(gltf.scene);
+                animations = gltf.animations;
+            }
+
+            // Añadir el listener para la interacción
+            renderer.domElement.addEventListener('pointerdown', onCanvasPointerDown, false);
+
+        }, undefined, (error) => {
+            console.error("Error cargando modelo 3D:", error);
+            document.getElementById('loading-indicator').textContent = 'Error al cargar el modelo 3D.';
+        });
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        if (controls) controls.update();
+        if (mixer) mixer.update(clock.getDelta()); // Necesitamos un clock
+        if (renderer) renderer.render(scene, camera);
+    }
+
+    function onCanvasPointerDown(event) {
+        pointer.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+        pointer.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+
+        raycaster.setFromCamera(pointer, camera);
+        if (!gltfModel) return;
+        const intersects = raycaster.intersectObject(gltfModel, true);
+
+        if (intersects.length > 0) {
+            const primerObjetoTocado = intersects[0].object;
+            if (!primerObjetoTocado.isMesh || !primerObjetoTocado.visible) return;
+
+            console.log(`JS: Tocado objeto: ${primerObjetoTocado.name} en estado: ${estadoApp3D}`);
+
+            if (estadoApp3D === "INICIO" && (primerObjetoTocado.name === NOMBRE_SOBRE || primerObjetoTocado.name === NOMBRE_SOLAPA)) {
+                console.log("JS: Interacción INICIO -> Reproduciendo Solapa_Abrir y Tarjeta_Salir.");
+                estadoApp3D = "ANIMANDO_SOBRE_TARJETA";
+
+                const tarjetaObj = gltfModel.getObjectByName(NOMBRE_TARJETA);
+                if (tarjetaObj) tarjetaObj.visible = true;
+
+                const accionSolapa = playAnimacion("Solapa_Abrir");
+                const accionTarjeta = playAnimacion("Tarjeta_Salir");
+
+                if (accionSolapa && accionTarjeta) {
+                    let animacionesTerminadas = 0;
+                    const onAnimFinished = () => {
+                        animacionesTerminadas++;
+                        if (animacionesTerminadas === 2) {
+                            if (estadoApp3D === "ANIMANDO_SOBRE_TARJETA") {
+                                estadoApp3D = "TARJETA_MOSTRADA";
+                                console.log("JS: Animaciones finalizadas. Estado -> TARJETA_MOSTRADA.");
+                            }
+                        }
+                    };
+                    accionSolapa.getMixer().addEventListener('finished', () => onAnimFinished());
+                    accionTarjeta.getMixer().addEventListener('finished', () => onAnimFinished());
+                }
+            } else if (estadoApp3D === "TARJETA_MOSTRADA" && primerObjetoTocado.name === NOMBRE_TARJETA) {
+                console.log("JS: Interacción TARJETA_MOSTRADA -> Mostrando mensaje.");
+                // En la web, simplemente mostramos una alerta de navegador con el mensaje
+                alert(datosRegalo.mensaje || "No hay mensaje.");
+                ocultarTarjetaYSobre();
+                estadoApp3D = "TARJETA_LEIDA";
+
+                // FIX MOVIMIENTO: Reseteamos los controles para evitar saltos
+                if (controls) controls.reset();
+
+            } else if (estadoApp3D === "TARJETA_LEIDA" && primerObjetoTocado.name === datosRegalo.formaLazo) {
+                console.log("JS: Interacción TARJETA_LEIDA -> Abrir Regalo Principal");
+                estadoApp3D = "ABRIENDO_REGALO";
+
+                // Ocultar lazos y cintas
+                [...todosLosLazos, NOMBRE_CINTA1, NOMBRE_CINTA2].forEach(nombre => {
+                    const obj = gltfModel.getObjectByName(nombre);
+                    if (obj) obj.visible = false;
+                });
+
+                setTimeout(() => {
+                    console.log("JS: Iniciando caída de papeles.");
+                    const animsPapel = piezasPapelNombres.map(nombre => playAnimacion(`${nombre}_Caer`));
+                    // TODO: Esperar a que terminen las animaciones de papel
+                    
+                    // Por ahora, abrimos la tapa después de un tiempo
+                    setTimeout(() => {
+                        playAnimacion("Tapa_Abrir", () => {
+                            console.log("JS: Tapa abierta. ¡Regalo completamente abierto!");
+                            estadoApp3D = "REGALO_ABIERTO";
+                            // Aquí podríamos mostrar el archivo adjunto
+                            if (datosRegalo.archivoUrl) {
+                                console.log("Mostrando archivo adjunto:", datosRegalo.archivoUrl);
+                                // Por ejemplo, abrir en una nueva pestaña
+                                window.open(datosRegalo.archivoUrl, '_blank');
+                            }
+                        });
+                    }, 1000); // Esperar 1 segundo a que los papeles caigan
+                }, 500);
+            }
+        }
+    }
+
+    function playAnimacion(nombreAnim, onFinishedCallback) {
+        if (!mixer || !animations) return null;
+        const clip = THREE.AnimationClip.findByName(animations, nombreAnim);
+        if (clip) {
+            const action = mixer.clipAction(clip);
+            action.reset().setLoop(THREE.LoopOnce, 1).play();
+            action.clampWhenFinished = true;
+
+            if (onFinishedCallback) {
+                const listener = (e) => {
+                    if (e.action === action) {
+                        mixer.removeEventListener('finished', listener);
+                        onFinishedCallback();
+                    }
+                };
+                mixer.addEventListener('finished', listener);
+            }
+            return action;
+        }
+        return null;
+    }
+
+    function aplicarPersonalizaciones(datos) {
+        if (!gltfModel || !datos) return;
+
+        // 1. Ocultar todos los lazos posibles primero
+        const todosLosLazos = ["Lazoestrella", "Lazoflor", "Lazonormal", "Lazodorado"];
+        todosLosLazos.forEach(nombreLazo => {
+            const lazoObj = gltfModel.getObjectByName(nombreLazo);
+            if (lazoObj) lazoObj.visible = false;
+        });
+
+        // Aplicar texturas y colores
+        if (datos.texturaCaja) applyTexture("Caja", `packages/${datos.texturaCaja}`);
+        if (datos.texturaPapel) applyTextureToGroup(["Papel_Frontal", "Papel_Trasero", "Papel_Izquierdo", "Papel_Derecho", "Papel_Inferior", "Papel_Superior"], `paper/${datos.texturaPapel}`);
+        // if (datos.texturaTarjeta) applyTexture("Tarjeta", `cards/${datos.texturaTarjeta}`); // Reemplazado por la textura con texto
+        if (datos.texturaTarjeta && datos.mensaje) {
+            crearTexturaTarjetaConTexto(datos.texturaTarjeta, datos.mensaje);
+        }
+
+        // 2. Mostrar y colorear solo el lazo seleccionado (y las cintas)
+        if (datos.formaLazo && datos.colorLazo) {
+            applyColor(datos.formaLazo, datos.colorLazo, true); // El 'true' lo hace visible
+            applyColor("Cinta1", datos.colorLazo);
+            applyColor("Cinta2", datos.colorLazo);
+        }
+
+        // Aplicar textura a la mesa al final para asegurar que todo esté listo
+        if (datos.texturaMesa) applyTexture(NOMBRE_MESA, `table/${datos.texturaMesa}`, true);
+    }
+
+    function ocultarTarjetaYSobre() {
+        const tarjetaObj = gltfModel.getObjectByName(NOMBRE_TARJETA);
+        const sobreObj = gltfModel.getObjectByName(NOMBRE_SOBRE);
+        const solapaObj = gltfModel.getObjectByName(NOMBRE_SOLAPA);
+        if (tarjetaObj) tarjetaObj.visible = false;
+        if (sobreObj) sobreObj.visible = false;
+        if (solapaObj) solapaObj.visible = false;
+    }
+
+    // --- FUNCIONES DE AYUDA (Simplificadas) ---
+
+    function applyTexture(meshName, relativePath, forceMaterial = false) {
+        const fullPath = `/assets/texturas/${relativePath}`;
+        textureLoader.load(fullPath, (texture) => {
+            texture.flipY = false;
+            texture.colorSpace = THREE.SRGBColorSpace;
+            const obj = gltfModel.getObjectByName(meshName);
+            if (obj && obj.isMesh) {
+                // FIX MESA: Si forzamos, creamos un material nuevo
+                if (forceMaterial && !obj.material.isMeshStandardMaterial) {
+                    obj.material = new THREE.MeshStandardMaterial();
+                }
+                obj.material.map = texture;
+                obj.material.needsUpdate = true;
+            }
+        });
+    }
+
+    function applyTextureToGroup(meshNames, relativePath) {
+        meshNames.forEach(name => applyTexture(name, relativePath));
+    }
+
+    function applyColor(meshName, colorHex, makeVisible = false) { // No necesita cambios
+        const obj = gltfModel.getObjectByName(meshName);
+        if (obj && obj.isMesh) {
+            obj.material.color.set(colorHex);
+            obj.material.map = null; // Quitar textura si la tuviera
+            obj.material.needsUpdate = true;
+            if (makeVisible) obj.visible = true;
+        }
+    }
+
+    function crearTexturaTarjetaConTexto(imagenFondo, texto) {
+        const tarjetaObj = gltfModel.getObjectByName(NOMBRE_TARJETA);
+        if (!tarjetaObj) return;
+
+        const rutaFondo = `/assets/texturas/cards/${imagenFondo}`;
+        const imgLoader = new THREE.ImageLoader();
+
+        imgLoader.load(rutaFondo, (image) => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Usamos la resolución de la imagen de fondo para el canvas
+            canvas.width = image.width;
+            canvas.height = image.height;
+
+            // 1. Dibujar la imagen de fondo
+            ctx.drawImage(image, 0, 0);
+
+            // 2. Configurar y dibujar el texto
+            ctx.fillStyle = 'black';
+            ctx.font = 'bold 48px Arial'; // Tamaño de fuente (ajustar si es necesario)
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Dividir el texto en líneas para que quepa en la tarjeta
+            const lineas = texto.split('\n');
+            const alturaLinea = 55; // Espacio entre líneas (ajustar)
+            const yInicial = (canvas.height / 2) - ((lineas.length - 1) * alturaLinea / 2);
+
+            lineas.forEach((linea, index) => {
+                ctx.fillText(linea, canvas.width / 2, yInicial + (index * alturaLinea));
+            });
+
+            // 3. Crear una textura de Three.js a partir del canvas
+            const texturaCanvas = new THREE.CanvasTexture(canvas);
+            texturaCanvas.flipY = false;
+            texturaCanvas.colorSpace = THREE.SRGBColorSpace;
+
+            // 4. Aplicar la nueva textura al material de la tarjeta
+            tarjetaObj.material.map = texturaCanvas;
+            tarjetaObj.material.needsUpdate = true;
+        });
+    }
+
+    // Inicializar el reloj para las animaciones
+    clock = new THREE.Clock();
+
+</script>
+</body>
+</html>
