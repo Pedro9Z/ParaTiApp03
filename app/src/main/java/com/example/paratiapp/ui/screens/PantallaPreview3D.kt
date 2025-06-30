@@ -162,8 +162,8 @@ fun PantallaPreview3D(
                                 mediaPlaybackRequiresUserGesture = false
                                 databaseEnabled = true
                                 domStorageEnabled = true
-                                cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE
-                                WebView.setWebContentsDebuggingEnabled(true)
+                                cacheMode = android.webkit.WebSettings.LOAD_DEFAULT
+                                WebView.setWebContentsDebuggingEnabled(false)
                             }
                             clearCache(true)
                             clearFormData()

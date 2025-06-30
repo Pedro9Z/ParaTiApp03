@@ -59,7 +59,7 @@ class RegaloRepositoryImpl @Inject constructor(
             // .add(nonNullRegaloData)
 
             // Añadir el documento a la colección "regalos"
-            val documentReference = db.collection("regalos")
+            val documentReference = firestore.collection("regalos")
                 .add(regaloData) // Usar regaloData (o nonNullRegaloData si filtras)
                 .await() // Esperar a que la operación termine
 

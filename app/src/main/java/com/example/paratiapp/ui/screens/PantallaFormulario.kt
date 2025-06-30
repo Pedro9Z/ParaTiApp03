@@ -50,6 +50,12 @@ val textFieldValueSaver: Saver<TextFieldValue, *> = listSaver(
     }
 )
 
+// --- Función de ayuda para formatear números de teléfono ---
+fun formatearNumero(numero: String): String {
+    val textoLimpio = numero.filter { it.isDigit() }
+    return if (numero.trim().startsWith("+")) "+$textoLimpio" else "+34$textoLimpio"
+}
+
 // --- Composable Principal ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
