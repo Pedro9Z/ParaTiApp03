@@ -1,26 +1,48 @@
 package com.example.paratiapp.ui.screens
 
-// --- Imports (Lista Completa y Correcta) ---
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.ContactsContract
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -34,7 +56,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.paratiapp.R
 import com.example.paratiapp.ui.theme.ParaTiAppTheme
 import com.example.paratiapp.ui.viewmodel.RegaloViewModel
@@ -50,28 +71,23 @@ val textFieldValueSaver: Saver<TextFieldValue, *> = listSaver(
     }
 )
 
-// --- Función de ayuda para formatear números de teléfono (sin cambios) ---
-fun formatearNumero(numero: String): String {
-    val textoLimpio = numero.filter { it.isDigit() }
-    return if (numero.trim().startsWith("+")) "+$textoLimpio" else "+34$textoLimpio"
-}
-
 // --- Composable Principal ---
-@OptIn(ExperimentalMaterial3Api::class)
+// *** CORRECCIÓN: Se elimina la anotación @OptIn por completo ***
 @Composable
 fun PantallaFormulario(
     navController: NavController,
     onSiguienteClick: () -> Unit
 ) {
-    // --- Lógica del ViewModel y Estados (sin cambios) ---
     val parentEntry = remember(navController.currentBackStackEntry) {
         navController.getBackStackEntry(navController.graph.id)
     }
     val viewModel: RegaloViewModel = hiltViewModel(parentEntry)
+
     val nombre by viewModel.nombreDestinatario.collectAsState()
     val telefono by viewModel.telefonoDestinatario.collectAsState()
     val mensaje by viewModel.mensaje.collectAsState()
     val archivoUri by viewModel.archivoUriSeleccionado.collectAsState()
+
     var telefonoTfv by rememberSaveable(stateSaver = textFieldValueSaver) {
         mutableStateOf(TextFieldValue(telefono, TextRange(telefono.length)))
     }
@@ -80,7 +96,9 @@ fun PantallaFormulario(
             telefonoTfv = TextFieldValue(telefono, TextRange(telefono.length))
         }
     }
+
     var telefonoError by rememberSaveable { mutableStateOf<String?>(null) }
+
     fun validarTelefono(texto: String): Boolean {
         val numeroReal = when {
             texto.startsWith("+34") -> texto.substring(3)
@@ -101,12 +119,14 @@ fun PantallaFormulario(
         }
         return nuevoError == null
     }
+
     val isFormValid = nombre.isNotBlank() &&
             telefono.isNotBlank() &&
             mensaje.isNotBlank() &&
             archivoUri != null &&
             telefonoError == null &&
             validarTelefono(telefono)
+
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -115,22 +135,31 @@ fun PantallaFormulario(
         }
     }
     val fileName = archivoUri?.pathSegments?.lastOrNull() ?: "Ningún archivo seleccionado"
+
+    fun formatearNumero(numero: String): String {
+        val textoLimpio = numero.filter { it.isDigit() }
+        return if (numero.trim().startsWith("+")) "+$textoLimpio" else "+34$textoLimpio"
+    }
+
     var mostrarDialogoSeleccionNumero by remember { mutableStateOf(false) }
     var numerosDeContacto by remember { mutableStateOf<List<String>>(emptyList()) }
     var nombreDeContacto by remember { mutableStateOf("") }
     val context = LocalContext.current
+
     val contactPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickContact()
     ) { contactUri: Uri? ->
         if (contactUri != null) {
             val contentResolver = context.contentResolver
             val cursor = contentResolver.query(contactUri, arrayOf(ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.HAS_PHONE_NUMBER), null, null, null)
+
             if (cursor?.moveToFirst() == true) {
                 val idIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID)
                 val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
                 val hasPhoneIndex = cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)
                 val contactId = cursor.getString(idIndex)
                 nombreDeContacto = cursor.getString(nameIndex)
+
                 if (cursor.getInt(hasPhoneIndex) > 0) {
                     val phoneNumbersList = mutableListOf<String>()
                     val phoneCursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", arrayOf(contactId), null)
@@ -139,6 +168,7 @@ fun PantallaFormulario(
                         phoneNumbersList.add(phoneCursor.getString(numberIndex))
                     }
                     phoneCursor?.close()
+
                     when {
                         phoneNumbersList.size == 1 -> {
                             viewModel.actualizarNombre(nombreDeContacto)
@@ -157,6 +187,7 @@ fun PantallaFormulario(
             cursor?.close()
         }
     }
+
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -165,14 +196,8 @@ fun PantallaFormulario(
         }
     }
 
-    // --- UI ---
     Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.bg_formulario),
-            contentDescription = "Fondo Formulario",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillHeight
-        )
+        Image(painter = painterResource(id = R.drawable.bg_formulario), contentDescription = "Fondo Formulario", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillHeight)
 
         Column(
             modifier = Modifier
@@ -181,7 +206,6 @@ fun PantallaFormulario(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // *** CAMBIO DE UI: Envolvemos los campos en una Card para mejorar la legibilidad ***
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -203,13 +227,12 @@ fun PantallaFormulario(
                         value = telefonoTfv,
                         onValueChange = { newValue ->
                             val textoEntrada = newValue.text
-                            var textoFormateado = ""
-                            if (textoEntrada.startsWith("+")) {
+                            val textoFormateado = if (textoEntrada.startsWith("+")) {
                                 val numeros = textoEntrada.substring(1).filter { it.isDigit() }
-                                textoFormateado = "+$numeros"
+                                "+$numeros"
                             } else {
                                 val numeros = textoEntrada.filter { it.isDigit() }
-                                textoFormateado = if (numeros.isNotEmpty()) "+34$numeros" else ""
+                                if (numeros.isNotEmpty()) "+34$numeros" else ""
                             }
                             telefonoTfv = TextFieldValue(textoFormateado, TextRange(textoFormateado.length))
                             viewModel.actualizarTelefono(textoFormateado)
@@ -251,7 +274,6 @@ fun PantallaFormulario(
                     ) {
                         Text("Seleccionar archivo")
                     }
-
                     Text(
                         text = "Archivo: $fileName",
                         style = MaterialTheme.typography.bodySmall,

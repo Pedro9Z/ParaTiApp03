@@ -3,14 +3,43 @@ package com.example.paratiapp.ui.screens
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
-import android.webkit.*
+import android.webkit.ConsoleMessage
+import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.automirrored.filled.Send // *** CAMBIO 1: Import del icono nuevo ***
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -62,6 +91,8 @@ fun PantallaPreview3D(
             .build()
     }
 
+    // *** CAMBIO 2: Se añade @Suppress("unused") para silenciar las advertencias ***
+    @Suppress("unused")
     class AndroidBridge(
         private val lifecycleOwner: androidx.lifecycle.LifecycleOwner,
         private val onTarjetaTocadaCallback: () -> Unit,
@@ -90,15 +121,13 @@ fun PantallaPreview3D(
                 put("colorLazo", viewModel.colorLazoSeleccionado.value)
                 put("acabadoLazo", viewModel.acabadoLazoSeleccionado.value)
                 put("texturaTarjeta", viewModel.texturaTarjetaSeleccionada.value)
-                put("mensaje", viewModel.mensaje.value) // No es necesario escapar \n aquí
+                put("mensaje", viewModel.mensaje.value)
                 put("texturaMesa", viewModel.texturaMesaAleatoria.value)
                 put("detallePapel", viewModel.detalleTexturaPapelAleatoria.value)
                 put("detalleCinta", viewModel.detalleTexturaCintaAleatoria.value)
             }.toString()
 
             lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                // *** CAMBIO CLAVE: Pasamos el JSON como un string dentro de la llamada a JS ***
-                // Las comillas simples ' ' aseguran que JS lo reciba como un string.
                 val script = "javascript:window.recibirYAplicarDatos($datosJsonString);"
                 Log.d("AndroidBridge", "Ejecutando script: $script")
                 webView?.evaluateJavascript(script, null)
@@ -127,7 +156,8 @@ fun PantallaPreview3D(
                         }
                     },
                 ) {
-                    Icon(Icons.Default.Send, contentDescription = "Guardar y Generar Enlace")
+                    // *** CAMBIO 1: Usar el icono AutoMirrored ***
+                    Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Guardar y Generar Enlace")
                 }
             }
         }
@@ -153,6 +183,11 @@ fun PantallaPreview3D(
                                 cacheMode = WebSettings.LOAD_NO_CACHE
                                 WebView.setWebContentsDebuggingEnabled(true)
                             }
+                            clearCache(true)
+                            clearFormData()
+                            clearHistory()
+                            clearSslPreferences()
+
                             addJavascriptInterface(
                                 AndroidBridge(
                                     lifecycleOwner,
@@ -249,8 +284,7 @@ fun PantallaPreview3D(
 @Composable
 fun PantallaPreview3DPreview() {
     ParaTiAppTheme {
-        val context = LocalContext.current
-        val previewNavController = remember(context) { NavController(context) }
+        val previewNavController = rememberNavController() // Simplificado
         PantallaPreview3D(navController = previewNavController)
     }
 }
