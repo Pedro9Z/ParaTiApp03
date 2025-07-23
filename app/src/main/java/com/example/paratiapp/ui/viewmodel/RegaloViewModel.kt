@@ -96,7 +96,7 @@ class RegaloViewModel @Inject constructor(
 
     fun actualizarTexturaPapel(textura: String) {
         // Lógica para elegir detalle de papel aleatorio
-        val detallesPapel = listOf("PaperText06.png", "PaperText07.jpg", "PaperText08.jpg", "PaperText09.jpg", "PaperText10.jpg")
+        val detallesPapel = listOf("PaperText01.jpg", "PaperText02.jpg", "PaperText03.jpg", "PaperText04.jpg", "PaperText05.jpg")
         _detalleTexturaPapelAleatoria.value = detallesPapel.random()
         _texturaPapelSeleccionada.value = textura
         Log.d("RegaloViewModel", "Papel seleccionado: $textura, Detalle aleatorio: ${_detalleTexturaPapelAleatoria.value}")
@@ -112,7 +112,7 @@ class RegaloViewModel @Inject constructor(
 
     fun actualizarColorLazo(color: String?) {
         // Lógica para elegir detalle de cinta aleatorio
-        val detallesCinta = listOf("CintaText01.j", "CintaText02.j", "CintaText03.j", "CintaText04.j", "CintaText05.j")
+        val detallesCinta = listOf("CintaText01.jpg", "CintaText02.jpg", "CintaText03.jpg", "CintaText04.jpg", "CintaText05.jpg")
         _detalleTexturaCintaAleatoria.value = detallesCinta.random()
         Log.d("RegaloViewModel_DEBUG", "[VM ID: ${this.hashCode()}] ACTUALIZANDO ColorLazo -> '$color'")
         _colorLazoSeleccionado.value = color

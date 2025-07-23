@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Visor 3D Regalo (v20 - Corregido y Unificado)</title>
+    <title>Visor 3D Regalo (v23 - Solución Final)</title>
     <style>
         body { margin: 0; padding: 0; overflow: hidden; background-color: transparent; }
         canvas { width: 100%; height: 100%; display: block; }
@@ -37,7 +37,7 @@
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     let estadoApp3D = "INICIO";
-    let datosDelRegalo = null; // Para guardar los datos que vienen de Kotlin
+    let datosDelRegalo = null;
 
     // --- NOMBRES DE OBJETOS ---
     const NOMBRES = {
@@ -73,7 +73,7 @@
         controls.enableDamping = true;
         controls.target.set(0, 0.5, 0);
         const dracoLoader = new DRACOLoader();
-        dracoLoader.setDecoderPath('/assets/html3d/libs/three/examples/jsm/libs/draco/gltf/');
+        dracoLoader.setDecoderPath('/assets/html3d/libs/draco/');
         const loader = new GLTFLoader();
         loader.setDRACOLoader(dracoLoader);
         const modelPath = '/assets/texturas/packages/caja_base.glb';
@@ -90,8 +90,12 @@
                 animations = gltf.animations;
             }
             renderer.domElement.addEventListener('pointerdown', onCanvasPointerDown, false);
-            window.modeloEstaListo = true;
-            console.log("Modelo listo.");
+            if (window.AndroidBridge && typeof window.AndroidBridge.getGiftData === 'function') {
+                console.log("Modelo 3D listo. Pidiendo datos a Kotlin...");
+                window.AndroidBridge.getGiftData();
+            } else {
+                console.warn("AndroidBridge no disponible. No se pueden cargar los datos de personalización.");
+            }
         }, undefined, (error) => {
             console.error('Error cargando GLB:', error);
             document.getElementById('loading-indicator').textContent = 'Error al cargar modelo.';
@@ -126,43 +130,59 @@
                 playAnimacion("Solapa_Abrir");
             } else if (estadoApp3D === "TARJETA_MOSTRADA" && primerObjetoTocado.name === NOMBRES.TARJETA) {
                 if (window.AndroidBridge) window.AndroidBridge.onTarjeta3DTocada();
+            // CÓDIGO NUEVO Y CORRECTO
+            // CÓDIGO NUEVO Y CORRECTO PARA TU ESTRUCTURA
             } else if (estadoApp3D === "TARJETA_LEIDA" && datosDelRegalo && primerObjetoTocado.name === datosDelRegalo.formaLazo) {
                 estadoApp3D = "ABRIENDO_REGALO";
-                // Asumimos que tienes una animación en Blender llamada "Animacion_Final"
-                // que se encarga de todo: ocultar lazos, papeles, abrir tapa y confeti.
-                playAnimacion("Animacion_Final", () => {
-                    console.log("Animación final completa.");
-                    if (window.AndroidBridge) window.AndroidBridge.onAnimacionAperturaCompleta();
+                console.log("Iniciando secuencia de apertura para estructura raíz...");
+
+                // 1. Animar la caída de los lazos y cintas.
+                //    Cuando termine, ocultamos el objeto Vacío que los contiene.
+                playAnimacion("LazosCintas_Caer", () => {
+                    console.log("Animación de lazos finalizada. Ocultando Vacio_LazosCintas.");
+                    const lazosContainer = gltfModel.getObjectByName("Vacio_LazosCintas");
+                    if (lazosContainer) lazosContainer.visible = false;
                 });
+
+                // 2. Un instante después, iniciamos la caída de todos los papeles.
+                setTimeout(() => {
+                    console.log("Iniciando animación de papeles...");
+                    PAPELES.forEach(nombrePapel => {
+                        // Cada papel se anima y se oculta a sí mismo cuando termina.
+                        playAnimacion(`${nombrePapel}_Caer`, () => {
+                            const papelObj = gltfModel.getObjectByName(nombrePapel);
+                            if (papelObj) papelObj.visible = false;
+                        });
+                    });
+                }, 100); // Retraso de 100ms para un efecto escalonado.
+
+                // 3. Después de un tiempo prudencial para que se despeje la tapa, la abrimos.
+                //    Ajusta este valor (en milisegundos) según la duración de tus animaciones de caída.
+                setTimeout(() => {
+                    console.log("Iniciando animación de la tapa...");
+                    playAnimacion("Tapa_Abrir", () => {
+                        console.log("¡Regalo completamente abierto!");
+                        estadoApp3D = "REGALO_ABIERTO";
+                        // 4. Notificamos a Kotlin que la secuencia ha terminado.
+                        if (window.AndroidBridge) {
+                            window.AndroidBridge.onAnimacionAperturaCompleta();
+                        }
+                    });
+                }, 500); // La tapa empieza a abrirse medio segundo después del inicio.
             }
         }
     }
 
-    // --- FUNCIONES DE AYUDA ---
-    // CÓDIGO CORREGIDO
+    // --- FUNCIONES DE AYUDA (Sin cambios) ---
     function playAnimacion(nombreAnim, onFinishedCallback) {
-        if (!mixer || !animations) {
-            if (onFinishedCallback) onFinishedCallback(); // Si no hay animador, llama al callback para no bloquear el flujo
-            return null;
-        }
+        if (!mixer || !animations) { if (onFinishedCallback) onFinishedCallback(); return null; }
         const clip = THREE.AnimationClip.findByName(animations, nombreAnim);
-        if (!clip) {
-            console.warn(`Animación '${nombreAnim}' no encontrada.`);
-            if (onFinishedCallback) onFinishedCallback(); // Llama al callback si la anim no existe
-            return null;
-        }
-
+        if (!clip) { console.warn(`Animación '${nombreAnim}' no encontrada.`); if (onFinishedCallback) onFinishedCallback(); return null; }
         const action = mixer.clipAction(clip);
         action.reset().setLoop(THREE.LoopOnce, 1).play();
         action.clampWhenFinished = true;
-
         if (onFinishedCallback) {
-            const listener = (e) => {
-                if (e.action === action) {
-                    mixer.removeEventListener('finished', listener);
-                    onFinishedCallback();
-                }
-            };
+            const listener = (e) => { if (e.action === action) { mixer.removeEventListener('finished', listener); onFinishedCallback(); } };
             mixer.addEventListener('finished', listener);
         }
         return action;
@@ -175,20 +195,21 @@
             texture.colorSpace = THREE.SRGBColorSpace;
             const obj = gltfModel.getObjectByName(meshName);
             if (obj && obj.isMesh) {
-                if (forceMaterial && !obj.material.isMeshStandardMaterial) {
-                    obj.material = new THREE.MeshStandardMaterial();
-                }
+                if (forceMaterial && !obj.material.isMeshStandardMaterial) { obj.material = new THREE.MeshStandardMaterial({ map: texture }); } else { obj.material.map = texture; }
+                obj.material.color.set(0xffffff);
                 obj.material.map = texture;
                 obj.material.needsUpdate = true;
             }
-        });
+        }, undefined, (err) => console.error(`Error cargando textura: ${fullPath}`, err));
     }
 
-    function applyColor(meshName, colorHex, makeVisible = false) {
+    function applyColorAndFinish(meshName, colorHex, acabado, detalleCintaPath, makeVisible = false) {
         const obj = gltfModel.getObjectByName(meshName);
         if (obj && obj.isMesh) {
             obj.material.color.set(colorHex);
-            obj.material.map = null;
+            obj.material.roughness = (acabado === 'mate') ? 0.9 : 0.1;
+            obj.material.metalness = (acabado === 'mate') ? 0.1 : 0.8;
+            if (detalleCintaPath && detalleCintaPath !== "") { applyTexture(meshName, `details/${detalleCintaPath}`); } else { obj.material.map = null; }
             obj.material.needsUpdate = true;
             if (makeVisible) obj.visible = true;
         }
@@ -202,22 +223,14 @@
         imgLoader.load(rutaFondo, (image) => {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = image.width;
-            canvas.height = image.height;
+            canvas.width = image.width; canvas.height = image.height;
             ctx.drawImage(image, 0, 0);
-            ctx.fillStyle = 'black';
-            ctx.font = 'bold 48px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            const lineas = texto.split('\\n'); // Usar \\n para escapar el salto de línea
-            const alturaLinea = 55;
-            const yInicial = (canvas.height / 2) - ((lineas.length - 1) * alturaLinea / 2);
-            lineas.forEach((linea, index) => {
-                ctx.fillText(linea, canvas.width / 2, yInicial + (index * alturaLinea));
-            });
+            ctx.fillStyle = '#2c2c2c'; ctx.font = 'bold 52px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            const lineas = texto.split('\\n');
+            const alturaLinea = 55; const yInicial = (canvas.height / 2) - ((lineas.length - 1) * alturaLinea / 2);
+            lineas.forEach((linea, index) => { ctx.fillText(linea, canvas.width / 2, yInicial + (index * alturaLinea)); });
             const texturaCanvas = new THREE.CanvasTexture(canvas);
-            texturaCanvas.flipY = false;
-            texturaCanvas.colorSpace = THREE.SRGBColorSpace;
+            texturaCanvas.flipY = false; texturaCanvas.colorSpace = THREE.SRGBColorSpace;
             tarjetaObj.material.map = texturaCanvas;
             tarjetaObj.material.needsUpdate = true;
         });
@@ -225,43 +238,48 @@
 
     // --- FUNCIONES LLAMADAS DESDE KOTLIN ---
     window.ocultarTarjetaYSobre = function() {
-        const tarjetaObj = gltfModel.getObjectByName(NOMBRES.TARJETA);
-        const sobreObj = gltfModel.getObjectByName(NOMBRES.SOBRE);
-        const solapaObj = gltfModel.getObjectByName(NOMBRES.SOLAPA);
-        if (tarjetaObj) tarjetaObj.visible = false;
-        if (sobreObj) sobreObj.visible = false;
-        if (solapaObj) solapaObj.visible = false;
+        [NOMBRES.TARJETA, NOMBRES.SOBRE, NOMBRES.SOLAPA].forEach(nombre => {
+            const obj = gltfModel.getObjectByName(nombre);
+            if(obj) obj.visible = false;
+        });
         if (controls) controls.reset();
     };
 
     window.actualizarEstado3DDesdeKotlin = function(nuevoEstado) {
         estadoApp3D = nuevoEstado;
+        console.log(`Estado JS actualizado desde Kotlin a: ${nuevoEstado}`);
     };
 
-    window.aplicarPersonalizaciones = function(datos) {
-        if (!gltfModel || !datos) return;
-        datosDelRegalo = datos; // Guardamos los datos para usarlos en la interacción
+    // *** CAMBIO CLAVE: Se elimina JSON.parse() ***
+    window.recibirYAplicarDatos = function(datos) { // <-- LÍNEA CORRECTA
+        if (!gltfModel || !datos) {
+            console.error("No se pudo aplicar personalizaciones: modelo o datos no disponibles.");
+            return;
+        }
+        console.log("Aplicando personalizaciones recibidas de Kotlin:", datos);
+        datosDelRegalo = datos;
 
-        // Aplicar texturas y colores
         applyTexture(NOMBRES.MESA, `table/${datos.texturaMesa}`, true);
-        applyColor(NOMBRES.SOBRE, "#E8E8E8", true);
-        applyColor(NOMBRES.SOLAPA, "#E8E8E8", true);
+        applyTexture(NOMBRES.SOBRE, "details/SobreText01.jpg", true);
+        applyTexture(NOMBRES.SOLAPA, "details/SobreText01.jpg", true);
         applyTexture(NOMBRES.CAJA, `packages/${datos.texturaCaja}`);
         PAPELES.forEach(p => applyTexture(p, `paper/${datos.texturaPapel}`));
-
         if (datos.texturaTarjeta && datos.mensaje) {
             crearTexturaTarjetaConTexto(datos.texturaTarjeta, datos.mensaje);
         }
-
-        // Ocultar todos los lazos y luego mostrar y colorear el correcto
         LAZOS.forEach(nombreLazo => {
             const lazoObj = gltfModel.getObjectByName(nombreLazo);
             if (lazoObj) lazoObj.visible = false;
         });
-        if (datos.formaLazo && datos.colorLazo) {
-            applyColor(datos.formaLazo, datos.colorLazo, true);
-            applyColor(NOMBRES.CINTA1, datos.colorLazo, true);
-            applyColor(NOMBRES.CINTA2, datos.colorLazo, true);
+        if (datos.formaLazo && datos.colorLazo && datos.acabadoLazo) {
+            applyColorAndFinish(datos.formaLazo, datos.colorLazo, datos.acabadoLazo, datos.detalleCinta, true);
+            applyColorAndFinish(NOMBRES.CINTA1, datos.colorLazo, datos.acabadoLazo, datos.detalleCinta, true);
+            applyColorAndFinish(NOMBRES.CINTA2, datos.colorLazo, datos.acabadoLazo, datos.detalleCinta, true);
+        } else {
+            [NOMBRES.CINTA1, NOMBRES.CINTA2].forEach(n => {
+                const o = gltfModel.getObjectByName(n);
+                if(o) o.visible = false;
+            });
         }
     };
 
